@@ -32,6 +32,11 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	//MairaDB 관련 설정
+	implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.4.1'
+	//swegger 관련 설정
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.0.2'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.0.2'
 }
 
 tasks.named('test') {
