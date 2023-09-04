@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
         info = @Info(title = "START LION",
                 description = "start lion api명세",
                 version = "v1"))
-@RequiredArgsConstructor
+
 @Configuration
 public class SwaggerConfig {
 
