@@ -1,0 +1,46 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/testDb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+
+logging.level:
+  org.hibernate.SQL: debug
+
+---
+#spring:
+#  config:
+#    activate:
+#      on-profile: local
+#  datasource:
+#    driver-class-name: org.mariadb.jdbc.Driver
+#    url: jdbc:mariadb://<배포 서버 주소>/<데이터베이스 이름>
+#    username: <사용자 이름>
+#    password: <비밀번호>
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#  logging.level:
+#    org.hibernate.SQL: info
+
