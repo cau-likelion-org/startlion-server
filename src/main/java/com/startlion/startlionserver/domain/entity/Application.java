@@ -1,0 +1,79 @@
+package com.startlion.startlionserver.domain.entity;
+
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+public class Application {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long application_id;
+
+    @OneToOne(mappedBy = "application")
+    private Answer answer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "generation")
+    private CommonQuestion generation;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "part_id")
+    private Part part;
+
+    @Column(unique = true, length = 100, nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private boolean is_agreed;
+
+    @Column(nullable = false, length = 30)
+    private String name;
+
+    @Column(nullable = false, length = 1)
+    private String gender;
+
+    @Column(nullable = false)
+    private Integer student_num;
+
+    @Column(nullable = false, length = 30)
+    private String major;
+
+    @Column(length = 30)
+    private String multi_major;
+
+    @Column(nullable = false)
+    private Integer semester;
+
+    @Column(nullable = false)
+    private String phone;
+
+    @Column(nullable = false)
+    private String path_to_know;
+
+    @Column(nullable = false)
+    private String portfolio;
+
+    @Column(nullable = false)
+    private String interview;
+
+    @Column(nullable = false)
+    private String status;
+
+    @Column(nullable = false)
+    private LocalDateTime created_at;
+
+    @Column(nullable = false)
+    private  LocalDateTime updated_at;
+}
