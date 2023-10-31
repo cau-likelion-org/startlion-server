@@ -16,7 +16,7 @@ public class Application extends BaseTimeEntity {
     @Column(nullable = false)
     private Long applicationId;
 
-    @OneToOne(mappedBy = "application")
+    @OneToOne(mappedBy = "applicationEntity")
     private Answer answer;
 
     @ManyToOne(fetch = FetchType.LAZY)
