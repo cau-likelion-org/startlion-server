@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "common_question")
+@Table
 public class CommonQuestion {
 
     @Id
