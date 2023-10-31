@@ -14,13 +14,13 @@ public class Part {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long part_id;
+    private Long partId;
 
     @Column(length = 200)
-    private String part_content;
+    private String partContent;
 
     @Column(length = 200)
-    private String type_of_talent;
+    private String typeOfTalent;
 
 
 }

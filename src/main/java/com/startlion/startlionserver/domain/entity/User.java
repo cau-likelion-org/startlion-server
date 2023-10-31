@@ -1,5 +1,6 @@
 package com.startlion.startlionserver.domain.entity;
 
+import com.startlion.startlionserver.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,12 +13,12 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "user")
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
-    private Long user_id;
+    private Long userId;
 
     @Column(unique = true, length = 100)
     private String email;
@@ -29,19 +30,15 @@ public class User {
     private String username;
 
     @Column(length = 50)
-    private String google_id;
+    private String socialId;
 
-    private String image_url;
+    private String imageUrl;
 
-    private String access_token;
+    private String access_Token;
 
-    private String refresh_token;
+    private String refreshToken;
 
-    private LocalDateTime expired_in;
-
-    private LocalDateTime created_at;
-
-    private LocalDateTime updated_at;
+    private LocalDateTime expiredIn;
 
     private boolean status;
 }

@@ -14,11 +14,11 @@ public class Curriculum {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long curriculum_id;
+    private Long curriculumId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "part_id")
-    private Part part_id;
+    private Part partId;
 
     @Column(nullable = false)
     private Long generation;

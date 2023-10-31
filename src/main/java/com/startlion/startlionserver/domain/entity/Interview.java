@@ -14,7 +14,7 @@ public class Interview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long interview_id;
+    private Long interviewId;
 
     @Column(length = 100)
     private String title;
@@ -32,10 +32,10 @@ public class Interview {
     private String name;
 
     @Column(length = 200)
-    private String one_line_content;
+    private String oneLineContent;
 
     @Column(length = 200)
-    private String one_line_answer;
+    private String oneLineAnswer;
 
-    private String image_url;
+    private String imageUrl;
 }

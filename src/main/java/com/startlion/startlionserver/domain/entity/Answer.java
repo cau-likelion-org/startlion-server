@@ -14,33 +14,33 @@ public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long answer_id;
+    private Long answerId;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id")
     private Application applicationEntity;
 
     @Column(length = 500)
-    private String commonanswer1;
+    private String commonAnswer1;
 
     @Column(length = 500)
-    private String commonanswer2;
+    private String commonAnswer2;
 
     @Column(length = 500)
-    private String commonanswer3;
+    private String commonAnswer3;
 
     @Column(length = 500)
-    private String commonanswer4;
+    private String commonAnswer4;
 
     @Column(length = 500)
-    private String commonanswer5;
+    private String commonAnswer5;
 
     @Column(length = 500)
-    private String partanswer1;
+    private String partAnswer1;
 
     @Column(length = 500)
-    private String partanswer2;
+    private String partAnswer2;
 
     @Column(length = 500)
-    private String partanswer3;
+    private String partAnswer3;
 }

@@ -16,16 +16,16 @@ public class CommonQuestion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long commonquestion_id;
+    private Long commonquestionId;
 
     @Column(nullable = false, unique = true)
     private Long generation;
 
-    private String commonquestion1;
-    private String commonquestion2;
-    private String commonquestion3;
-    private String commonquestion4;
-    private String commonquestion5;
+    private String commonQuestion1;
+    private String commonQuestion2;
+    private String commonQuestion3;
+    private String commonQuestion4;
+    private String commonQuestion5;
 
     @OneToMany(mappedBy = "generation")
     private List<Application> applicationEntityList;

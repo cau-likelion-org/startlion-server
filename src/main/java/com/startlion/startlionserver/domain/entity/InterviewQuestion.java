@@ -14,11 +14,11 @@ public class InterviewQuestion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long interviequestion_id;
+    private Long interviewQuestionId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "interview_id")
-    private Interview interview_id;
+    private Interview interviewId;
 
     @Column(length = 200)
     private String question;

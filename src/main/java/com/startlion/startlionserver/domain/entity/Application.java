@@ -1,21 +1,20 @@
 package com.startlion.startlionserver.domain.entity;
 
+import com.startlion.startlionserver.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Application {
+public class Application extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long application_id;
+    private Long applicationId;
 
     @OneToOne(mappedBy = "application")
     private Answer answer;
@@ -36,7 +35,7 @@ public class Application {
     private String email;
 
     @Column(nullable = false)
-    private boolean is_agreed;
+    private boolean isAgreed;
 
     @Column(nullable = false, length = 30)
     private String name;
@@ -45,13 +44,13 @@ public class Application {
     private String gender;
 
     @Column(nullable = false)
-    private Integer student_num;
+    private Integer studentNum;
 
     @Column(nullable = false, length = 30)
     private String major;
 
     @Column(length = 30)
-    private String multi_major;
+    private String multiMajor;
 
     @Column(nullable = false)
     private Integer semester;
@@ -60,7 +59,7 @@ public class Application {
     private String phone;
 
     @Column(nullable = false)
-    private String path_to_know;
+    private String pathToKnow;
 
     @Column(nullable = false)
     private String portfolio;
@@ -70,10 +69,4 @@ public class Application {
 
     @Column(nullable = false)
     private String status;
-
-    @Column(nullable = false)
-    private LocalDateTime created_at;
-
-    @Column(nullable = false)
-    private  LocalDateTime updated_at;
 }
