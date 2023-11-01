@@ -1,13 +1,4 @@
 spring:
-  config:
-    activate:
-      on-profile: local
-
----
-spring:
-  config:
-    activate:
-      on-profile: local
   datasource:
     url: jdbc:h2:tcp://localhost/~/testDb
     username: sa
@@ -19,14 +10,41 @@ spring:
       ddl-auto: create
     properties:
       hibernate:
-        show_sql: true
+        #        show_sql: true
         format_sql: true
-  h2:
-    console:
-      enabled: true
 
 logging.level:
   org.hibernate.SQL: debug
+
+
+
+#  org.hibernate.type: trace
+
+#
+#spring:
+#  config:
+#    activate:
+#      on-profile: local
+#  datasource:
+#    url: jdbc:h2:tcp://localhost/~/testdb
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+#
+#  jpa:
+#    generate-ddl: true
+#    hibernate:
+#      ddl-auto: create
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
+#  h2:
+#    console:
+#      enabled: true
+#
+#logging.level:
+#  org.hibernate.SQL: debug
 
 ---
 #spring:
