@@ -18,7 +18,7 @@ public class PartQuestion {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "part_id")
-    private Part partId;
+    private Part part;
 
     @Column(nullable = false)
     private Long generation;

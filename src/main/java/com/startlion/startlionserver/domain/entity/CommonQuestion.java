@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,7 +17,7 @@ public class CommonQuestion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long commonquestionId;
+    private Long commonQuestionId;
 
     @Column(nullable = false, unique = true)
     private Long generation;
@@ -28,5 +29,5 @@ public class CommonQuestion {
     private String commonQuestion5;
 
     @OneToMany(mappedBy = "generation")
-    private List<Application> applicationEntityList;
+    private List<Application> applicationEntityList = new ArrayList<>();
 }

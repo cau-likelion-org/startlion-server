@@ -18,7 +18,7 @@ public class InterviewQuestion {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "interview_id")
-    private Interview interviewId;
+    private Interview interview;
 
     @Column(length = 200)
     private String question;

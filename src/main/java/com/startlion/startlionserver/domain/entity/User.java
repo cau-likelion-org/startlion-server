@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table
+@Table(name = "member")
 public class User extends BaseTimeEntity {
 
     @Id
@@ -23,18 +23,16 @@ public class User extends BaseTimeEntity {
     @Column(unique = true, length = 100)
     private String email;
 
-    @Column(length = 50)
     private String password; // 단방향 암호화 필요
 
     @Column(length = 30)
     private String username;
 
-    @Column(length = 50)
     private String socialId;
 
     private String imageUrl;
 
-    private String access_Token;
+    private String accessToken;
 
     private String refreshToken;
 

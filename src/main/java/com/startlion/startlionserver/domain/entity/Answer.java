@@ -18,7 +18,7 @@ public class Answer {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id")
-    private Application applicationEntity;
+    private Application application;
 
     @Column(length = 500)
     private String commonAnswer1;
