@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -28,13 +30,7 @@ public class Application extends BaseTimeEntity {
     @JoinColumn(name = "generation")
     private CommonQuestion generation;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "part_id")
-    private Part part;
-
-    @Column(unique = true, length = 100, nullable = false)
-    private String email;
-
+    // application page 1 start
     @Column(nullable = false)
     private boolean isAgreed;
 
@@ -59,8 +55,17 @@ public class Application extends BaseTimeEntity {
     @Column(nullable = false)
     private String phone;
 
-    @Column(nullable = false)
-    private String pathToKnow;
+    @Column(unique = true, length = 100, nullable = false)
+    private String email;
+
+    @OneToMany(mappedBy = "application")
+    private List<PathToKnow> pathToKnow;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "part_id")
+    private Part part;
+    // application page 1 end
+
 
     @Column(nullable = false)
     private String portfolio;
@@ -71,3 +76,4 @@ public class Application extends BaseTimeEntity {
     @Column(nullable = false)
     private String status;
 }
+
