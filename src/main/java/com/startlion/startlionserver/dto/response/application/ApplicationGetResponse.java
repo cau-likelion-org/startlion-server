@@ -4,19 +4,15 @@ import com.startlion.startlionserver.domain.entity.Application;
 import com.startlion.startlionserver.domain.entity.Part;
 import com.startlion.startlionserver.domain.entity.PathToKnow;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@AllArgsConstructor // check
-@Builder
+@AllArgsConstructor
 public class ApplicationGetResponse {
-
-    // application page 1 start
-    private boolean isAgreed;
+    private Boolean isAgreed;
 
     private String name;
 
@@ -28,7 +24,7 @@ public class ApplicationGetResponse {
 
     private String multiMajor;
 
-    private Integer semester;
+    private String semester;
 
     private String phone;
 
@@ -37,8 +33,6 @@ public class ApplicationGetResponse {
     private List<PathToKnow> pathToKnow;
 
     private Part part;
-    // application page 1 end
-
 
     private String portfolio;
 
@@ -46,11 +40,7 @@ public class ApplicationGetResponse {
 
     private String status;
 
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
-
-    public static ApplicationGetResponse of(Application application) {
-        return new ApplicationGetResponse(application.isAgreed(), application.getName(), application.getGender(), application.getStudentNum(), application.getMajor(), application.getMultiMajor(), application.getSemester(), application.getPhone(), application.getEmail(), application.getPathToKnow(), application.getPart(), application.getPortfolio(), application.getInterview(), application.getStatus(), application.getCreatedAt(), application.getUpdatedAt());}
+    public static ApplicationGetResponse of(Application application){
+        return new ApplicationGetResponse(application.getIsAgreed(), application.getName(), application.getGender(), application.getStudentNum(), application.getMajor(), application.getMultiMajor(), application.getSemester(), application.getPhone(), application.getEmail(), application.getPathToKnow(), application.getPart(), application.getPortfolio(), application.getInterview(), application.getStatus());
+    }
 }

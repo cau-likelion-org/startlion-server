@@ -1,5 +1,6 @@
 package com.startlion.startlionserver.dto.response.application;
 
+import com.startlion.startlionserver.domain.entity.Application;
 import com.startlion.startlionserver.domain.entity.Part;
 import com.startlion.startlionserver.domain.entity.PathToKnow;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class ApplicationPersonalInformationGetResponse {
-    private boolean isAgreed;
+    private Boolean isAgreed;
 
     private String name;
 
@@ -24,7 +25,7 @@ public class ApplicationPersonalInformationGetResponse {
 
     private String multiMajor;
 
-    private Integer semester;
+    private String semester;
 
     private String phone;
 
@@ -33,4 +34,8 @@ public class ApplicationPersonalInformationGetResponse {
     private List<PathToKnow> pathToKnow;
 
     private Part part;
+
+    public static ApplicationPersonalInformationGetResponse of(Application application) {
+        return new ApplicationPersonalInformationGetResponse(application.getIsAgreed(), application.getName(), application.getGender(), application.getStudentNum(), application.getMajor(), application.getMultiMajor(), application.getSemester(), application.getPhone(), application.getEmail(), application.getPathToKnow(), application.getPart());}
+
 }

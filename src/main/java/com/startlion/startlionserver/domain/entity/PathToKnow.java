@@ -18,6 +18,7 @@ public class PathToKnow {
     @Column(nullable = false)
     private PathType pathType;
 
+    // TODO: 바꿔야 할듯
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id")
     private Application application;

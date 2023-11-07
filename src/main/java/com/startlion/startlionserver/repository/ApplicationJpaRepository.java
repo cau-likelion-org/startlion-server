@@ -1,11 +1,9 @@
 package com.startlion.startlionserver.repository;
 
 import com.startlion.startlionserver.domain.entity.Application;
-import com.startlion.startlionserver.domain.entity.Part;
-import com.startlion.startlionserver.domain.entity.PathToKnow;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.Optional;
 
 
 public interface ApplicationJpaRepository extends JpaRepository<Application, Long> {
@@ -13,4 +11,10 @@ public interface ApplicationJpaRepository extends JpaRepository<Application, Lon
     default Application findByIdOrThrow(Long applicationId){
         return findById(applicationId).orElseThrow(() -> new IllegalArgumentException());
     };
+
+    default Application findByIdOrCreate(Long applicationId){
+        return findById(applicationId).orElse(save(Application.builder().build()));
+    }
+
+    Optional<Application> findByEmail(String email);
 }

@@ -1,11 +1,16 @@
 package com.startlion.startlionserver.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.startlion.startlionserver.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,49 +36,91 @@ public class Application extends BaseTimeEntity {
     private CommonQuestion generation;
 
     // application page 1 start
-    @Column(nullable = false)
-    private boolean isAgreed;
+    @ColumnDefault("''")
+    private Boolean isAgreed;
 
-    @Column(nullable = false, length = 30)
+    @Column(length = 30)
+    @ColumnDefault("''")
     private String name;
 
-    @Column(nullable = false, length = 1)
+    @Column(length = 1)
+    @ColumnDefault("''")
     private String gender;
 
-    @Column(nullable = false)
+    @ColumnDefault("''")
     private Integer studentNum;
 
-    @Column(nullable = false, length = 30)
+    @Column(length = 30)
+    @ColumnDefault("''")
     private String major;
 
     @Column(length = 30)
     private String multiMajor;
 
-    @Column(nullable = false)
-    private Integer semester;
+    @ColumnDefault("''")
+    private String semester;
 
-    @Column(nullable = false)
+    @ColumnDefault("''")
     private String phone;
 
-    @Column(unique = true, length = 100, nullable = false)
+    @Column(unique = true, length = 100)
+    @ColumnDefault("''")
     private String email;
 
+    //Todo: 여기도 수정 필요
     @OneToMany(mappedBy = "application")
-    private List<PathToKnow> pathToKnow;
+    private List<PathToKnow> pathToKnow = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    //Todo: 바꿔야할듯
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "part_id")
     private Part part;
     // application page 1 end
 
 
-    @Column(nullable = false)
+    @ColumnDefault("''")
     private String portfolio;
 
-    @Column(nullable = false)
+    @ColumnDefault("''")
     private String interview;
 
-    @Column(nullable = false)
+    @ColumnDefault("'N'")
     private String status;
+
+    //builder
+    @Builder
+    public Application(boolean isAgreed, String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnow, Part part){
+        this.isAgreed = isAgreed;
+        this.name = name;
+        this.gender = gender;
+        this.studentNum = studentNum;
+        this.major = major;
+        this.multiMajor = multiMajor;
+        this.semester = semester;
+        this.phone = phone;
+        this.email = email;
+        this.pathToKnow = pathToKnow;
+        this.part = part;
+    }
+
+    // update시 status는 S로 변경
+    public void updateApplication(boolean isAgreed, String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnow, Part part){
+        updateApplication(isAgreed, name, gender, studentNum, major, multiMajor, semester, phone, email, pathToKnow, part, "S");
+    }
+
+    public void updateApplication(boolean isAgreed, String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnow, Part part, String status){
+        this.isAgreed = isAgreed;
+        this.name = name;
+        this.gender = gender;
+        this.studentNum = studentNum;
+        this.major = major;
+        this.multiMajor = multiMajor;
+        this.semester = semester;
+        this.phone = phone;
+        this.email = email;
+        this.pathToKnow = pathToKnow;
+        this.part = part;
+        this.status = status;
+    }
 }
 
