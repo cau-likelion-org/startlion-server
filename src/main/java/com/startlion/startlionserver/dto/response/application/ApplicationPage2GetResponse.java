@@ -8,10 +8,10 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ApplicationGetWithCommonQuestionAndAnswerResponse {
+public class ApplicationPage2GetResponse {
     private Answer answer;
     private CommonQuestion generation;
-    public static ApplicationGetWithCommonQuestionAndAnswerResponse of(Answer answer, CommonQuestion generation) {
-        return new ApplicationGetWithCommonQuestionAndAnswerResponse(answer, generation);
+    public static ApplicationPage2GetResponse of(Answer answer, CommonQuestion generation) {
+        return new ApplicationPage2GetResponse(answer, generation);
     }
 }

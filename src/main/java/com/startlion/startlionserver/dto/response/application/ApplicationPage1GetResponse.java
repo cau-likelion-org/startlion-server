@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @Builder
-public class ApplicationPersonalInformationGetResponse {
+public class ApplicationPage1GetResponse {
     private Boolean isAgreed;
 
     private String name;
@@ -35,7 +35,7 @@ public class ApplicationPersonalInformationGetResponse {
 
     private Part part;
 
-    public static ApplicationPersonalInformationGetResponse of(Application application) {
-        return new ApplicationPersonalInformationGetResponse(application.getIsAgreed(), application.getName(), application.getGender(), application.getStudentNum(), application.getMajor(), application.getMultiMajor(), application.getSemester(), application.getPhone(), application.getEmail(), application.getPathToKnows(), application.getPart());}
+    public static ApplicationPage1GetResponse of(Application application) {
+        return new ApplicationPage1GetResponse(application.getIsAgreed(), application.getName(), application.getGender(), application.getStudentNum(), application.getMajor(), application.getMultiMajor(), application.getSemester(), application.getPhone(), application.getEmail(), application.getPathToKnows(), application.getPart());}
 
 }

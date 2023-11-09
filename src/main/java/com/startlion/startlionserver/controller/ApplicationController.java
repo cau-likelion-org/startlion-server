@@ -2,7 +2,7 @@ package com.startlion.startlionserver.controller;
 
 import com.startlion.startlionserver.dto.request.application.ApplicationTemporaryStorageRequest;
 import com.startlion.startlionserver.dto.response.application.ApplicationGetResponse;
-import com.startlion.startlionserver.dto.response.application.ApplicationPersonalInformationGetResponse;
+import com.startlion.startlionserver.dto.response.application.ApplicationPage1GetResponse;
 import com.startlion.startlionserver.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class ApplicationController {
 
     // 저장된 지원서 없을 시, 지원서 1페이지 정보 가져오기
     @GetMapping
-    public ResponseEntity<ApplicationPersonalInformationGetResponse> getApplicationPersonalInformation(){
+    public ResponseEntity<ApplicationPage1GetResponse> getApplicationPersonalInformation(){
         return ResponseEntity.ok(applicationService.getApplicationPersonalInformation());
     }
 

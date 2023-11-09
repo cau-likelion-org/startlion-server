@@ -2,10 +2,10 @@ package com.startlion.startlionserver.service;
 
 import com.startlion.startlionserver.domain.entity.Application;
 import com.startlion.startlionserver.dto.request.application.ApplicationTemporaryStorageRequest;
-import com.startlion.startlionserver.dto.response.application.ApplicationGetWithCommonQuestionAndAnswerResponse;
-import com.startlion.startlionserver.dto.response.application.ApplicationGetWithInterviewResponse;
-import com.startlion.startlionserver.dto.response.application.ApplicationGetWithPartQuestionAndAnswerAndPortfolioResponse;
-import com.startlion.startlionserver.dto.response.application.ApplicationPersonalInformationGetResponse;
+import com.startlion.startlionserver.dto.response.application.ApplicationPage2GetResponse;
+import com.startlion.startlionserver.dto.response.application.ApplicationPage4GetResponse;
+import com.startlion.startlionserver.dto.response.application.ApplicationPage3GetResponse;
+import com.startlion.startlionserver.dto.response.application.ApplicationPage1GetResponse;;
 import com.startlion.startlionserver.global.exception.EmailAlreadyInUseException;
 import com.startlion.startlionserver.repository.ApplicationJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +23,8 @@ public class ApplicationService {
     private final ApplicationJpaRepository applicationJpaRepository;
 
     // 저장된 지원서 없을 시, 지원서 1페이지 정보 가져오기 OK
-    public ApplicationPersonalInformationGetResponse getApplicationPersonalInformation() {
-        return ApplicationPersonalInformationGetResponse.builder().build();
+    public ApplicationPage1GetResponse getApplicationPersonalInformation() {
+        return ApplicationPage1GetResponse.builder().build();
     }
 
     // 저장된 지원서 있을 시, 지원서 정보 가져오기
@@ -33,13 +33,13 @@ public class ApplicationService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 applicationId를 가진 지원서가 존재하지 않습니다."));
         switch (page) {
             case 1:
-                return ResponseEntity.ok(ApplicationPersonalInformationGetResponse.of(application));
+                return ResponseEntity.ok(ApplicationPage1GetResponse.of(application));
             case 2:
-                return ResponseEntity.ok(ApplicationGetWithCommonQuestionAndAnswerResponse.of(application.getAnswer(), application.getGeneration()));
+                return ResponseEntity.ok(ApplicationPage2GetResponse.of(application.getAnswer(), application.getGeneration()));
             case 3:
-                return ResponseEntity.ok(ApplicationGetWithPartQuestionAndAnswerAndPortfolioResponse.of(application.getAnswer(), application.getPart(), application.getPortfolio()));
+                return ResponseEntity.ok(ApplicationPage3GetResponse.of(application.getAnswer(), application.getPart(), application.getPortfolio()));
             case 4:
-                return ResponseEntity.ok(ApplicationGetWithInterviewResponse.of(application.getInterview()));
+                return ResponseEntity.ok(ApplicationPage4GetResponse.of(application.getInterview()));
             default:
                 throw new IllegalArgumentException("페이지 번호가 잘못되었습니다.");
         }
