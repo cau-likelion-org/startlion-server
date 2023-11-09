@@ -31,7 +31,7 @@ public class ApplicationTemporaryStorageRequest {
 
     private String email;
 
-    private List<PathToKnow> pathToKnow;
+    private List<PathToKnow> pathToKnows;
 
     private Part part;
 

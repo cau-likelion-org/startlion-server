@@ -1,7 +1,5 @@
 package com.startlion.startlionserver.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.startlion.startlionserver.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -67,12 +65,13 @@ public class Application extends BaseTimeEntity {
     @ColumnDefault("''")
     private String email;
 
-    //Todo: 여기도 수정 필요
-    @OneToMany(mappedBy = "application")
-    private List<PathToKnow> pathToKnow = new ArrayList<>();
+    //Todo: 여기도 수정 필요 값이 안가져와짐
+    @OneToMany
+    @JoinColumn(name = "application_id")
+    private List<PathToKnow> pathToKnows = new ArrayList<>();
 
-    //Todo: 바꿔야할듯
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "part_id")
     private Part part;
     // application page 1 end
@@ -89,7 +88,10 @@ public class Application extends BaseTimeEntity {
 
     //builder
     @Builder
-    public Application(boolean isAgreed, String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnow, Part part){
+    public Application(Answer answer, User user, CommonQuestion generation, boolean isAgreed, String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnows, Part part, String portfolio, String interview, String status){
+        this.answer = answer;
+        this.user = user;
+        this.generation = generation;
         this.isAgreed = isAgreed;
         this.name = name;
         this.gender = gender;
@@ -99,16 +101,14 @@ public class Application extends BaseTimeEntity {
         this.semester = semester;
         this.phone = phone;
         this.email = email;
-        this.pathToKnow = pathToKnow;
+        this.pathToKnows = pathToKnows;
         this.part = part;
+        this.portfolio = portfolio;
+        this.interview = interview;
+        this.status = status;
     }
 
-    // update시 status는 S로 변경
-    public void updateApplication(boolean isAgreed, String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnow, Part part){
-        updateApplication(isAgreed, name, gender, studentNum, major, multiMajor, semester, phone, email, pathToKnow, part, "S");
-    }
-
-    public void updateApplication(boolean isAgreed, String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnow, Part part, String status){
+    public void updateApplication(boolean isAgreed, String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnows, Part part, String status){
         this.isAgreed = isAgreed;
         this.name = name;
         this.gender = gender;
@@ -118,7 +118,7 @@ public class Application extends BaseTimeEntity {
         this.semester = semester;
         this.phone = phone;
         this.email = email;
-        this.pathToKnow = pathToKnow;
+        this.pathToKnows = pathToKnows;
         this.part = part;
         this.status = status;
     }

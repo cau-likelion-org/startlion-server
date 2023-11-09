@@ -31,11 +31,11 @@ public class ApplicationPersonalInformationGetResponse {
 
     private String email;
 
-    private List<PathToKnow> pathToKnow;
+    private List<PathToKnow> pathToKnows;
 
     private Part part;
 
     public static ApplicationPersonalInformationGetResponse of(Application application) {
-        return new ApplicationPersonalInformationGetResponse(application.getIsAgreed(), application.getName(), application.getGender(), application.getStudentNum(), application.getMajor(), application.getMultiMajor(), application.getSemester(), application.getPhone(), application.getEmail(), application.getPathToKnow(), application.getPart());}
+        return new ApplicationPersonalInformationGetResponse(application.getIsAgreed(), application.getName(), application.getGender(), application.getStudentNum(), application.getMajor(), application.getMultiMajor(), application.getSemester(), application.getPhone(), application.getEmail(), application.getPathToKnows(), application.getPart());}
 
 }

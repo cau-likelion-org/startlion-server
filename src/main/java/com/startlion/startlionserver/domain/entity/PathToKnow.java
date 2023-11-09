@@ -3,25 +3,29 @@ package com.startlion.startlionserver.domain.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @Table
+@Setter
 public class PathToKnow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long PathToKnowId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "application_id")
+    private Application applicationId;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PathType pathType;
-
-    // TODO: 바꿔야 할듯
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "application_id")
-    private Application application;
 
     public enum PathType {
         RECOMMENDATION,

@@ -2,11 +2,14 @@ package com.startlion.startlionserver.service;
 
 import com.startlion.startlionserver.domain.entity.Application;
 import com.startlion.startlionserver.dto.request.application.ApplicationTemporaryStorageRequest;
-import com.startlion.startlionserver.dto.response.application.ApplicationGetResponse;
+import com.startlion.startlionserver.dto.response.application.ApplicationGetWithCommonQuestionAndAnswerResponse;
+import com.startlion.startlionserver.dto.response.application.ApplicationGetWithInterviewResponse;
+import com.startlion.startlionserver.dto.response.application.ApplicationGetWithPartQuestionAndAnswerAndPortfolioResponse;
 import com.startlion.startlionserver.dto.response.application.ApplicationPersonalInformationGetResponse;
 import com.startlion.startlionserver.global.exception.EmailAlreadyInUseException;
 import com.startlion.startlionserver.repository.ApplicationJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,19 +22,32 @@ public class ApplicationService {
 
     private final ApplicationJpaRepository applicationJpaRepository;
 
-    public ApplicationGetResponse getById(Long applicationId){
-        Application application = applicationJpaRepository.findByIdOrThrow(applicationId);
-        return ApplicationGetResponse.of(application);
-    }
-
-    // 저장된 지원서 없을 시, 지원서 1페이지 정보 가져오기
+    // 저장된 지원서 없을 시, 지원서 1페이지 정보 가져오기 OK
     public ApplicationPersonalInformationGetResponse getApplicationPersonalInformation() {
         return ApplicationPersonalInformationGetResponse.builder().build();
     }
 
+    // 저장된 지원서 있을 시, 지원서 정보 가져오기
+    public ResponseEntity<?> getById(Long applicationId, int page) {
+        Application application = applicationJpaRepository.findById(applicationId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 applicationId를 가진 지원서가 존재하지 않습니다."));
+        switch (page) {
+            case 1:
+                return ResponseEntity.ok(ApplicationPersonalInformationGetResponse.of(application));
+            case 2:
+                return ResponseEntity.ok(ApplicationGetWithCommonQuestionAndAnswerResponse.of(application.getAnswer(), application.getGeneration()));
+            case 3:
+                return ResponseEntity.ok(ApplicationGetWithPartQuestionAndAnswerAndPortfolioResponse.of(application.getAnswer(), application.getPart(), application.getPortfolio()));
+            case 4:
+                return ResponseEntity.ok(ApplicationGetWithInterviewResponse.of(application.getInterview()));
+            default:
+                throw new IllegalArgumentException("페이지 번호가 잘못되었습니다.");
+        }
+    }
+
     // 지원서 임시 저장 or 다음 버튼 누를 시 table 생성 또는 update
     @Transactional
-    public String updateApplication(Long applicationId, ApplicationTemporaryStorageRequest request) {
+    public String updateApplication(Long applicationId, ApplicationTemporaryStorageRequest request, String isFinal) {
         Application application;
         Optional<Application> optionalApplication = applicationJpaRepository.findById(applicationId);
 
@@ -49,8 +65,10 @@ public class ApplicationService {
             applicationJpaRepository.save(application);
         }
 
-        application.updateApplication(request.getIsAgreed(), request.getName(), request.getGender(), request.getStudentNum(), request.getMajor(), request.getMultiMajor(), request.getSemester(), request.getPhone(), request.getEmail(), request.getPathToKnow(), request.getPart());
+        application.updateApplication(request.getIsAgreed(), request.getName(), request.getGender(), request.getStudentNum(), request.getMajor(), request.getMultiMajor(), request.getSemester(), request.getPhone(), request.getEmail(), request.getPathToKnows(), request.getPart(), isFinal.equals("true") ? "Y" : "S");
+
 
         return application.getApplicationId().toString();
     }
 }
+

@@ -1,17 +1,20 @@
 package com.startlion.startlionserver.dto.response.application;
 
-import com.startlion.startlionserver.domain.entity.Application;
-import com.startlion.startlionserver.domain.entity.Part;
-import com.startlion.startlionserver.domain.entity.PathToKnow;
+import com.startlion.startlionserver.domain.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.Generated;
 
 import java.util.List;
+
 
 @Data
 @AllArgsConstructor
 public class ApplicationGetResponse {
+    private Answer answer;
+
+    private CommonQuestion generation;
+
     private Boolean isAgreed;
 
     private String name;
@@ -30,7 +33,7 @@ public class ApplicationGetResponse {
 
     private String email;
 
-    private List<PathToKnow> pathToKnow;
+    private List<PathToKnow> pathToKnows;
 
     private Part part;
 
@@ -41,6 +44,6 @@ public class ApplicationGetResponse {
     private String status;
 
     public static ApplicationGetResponse of(Application application){
-        return new ApplicationGetResponse(application.getIsAgreed(), application.getName(), application.getGender(), application.getStudentNum(), application.getMajor(), application.getMultiMajor(), application.getSemester(), application.getPhone(), application.getEmail(), application.getPathToKnow(), application.getPart(), application.getPortfolio(), application.getInterview(), application.getStatus());
+        return new ApplicationGetResponse(application.getAnswer(), application.getGeneration(), application.getIsAgreed(), application.getName(), application.getGender(), application.getStudentNum(), application.getMajor(), application.getMultiMajor(), application.getSemester(), application.getPhone(), application.getEmail(), application.getPathToKnows(), application.getPart(), application.getPortfolio(), application.getInterview(), application.getStatus());
     }
 }
