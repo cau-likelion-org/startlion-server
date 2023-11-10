@@ -40,4 +40,4 @@ application.yml
 
 .DS_Store
 
-application-oauth.properties
+application.properties
