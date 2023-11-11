@@ -31,7 +31,7 @@ public class Application extends BaseTimeEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "generation", referencedColumnName = "commonQuestionId")
+    @JoinColumn(nullable = false, name = "generation")
     @JsonIgnore
     private CommonQuestion generation;
 
@@ -67,8 +67,7 @@ public class Application extends BaseTimeEntity {
     @ColumnDefault("''")
     private String email;
 
-    //Todo: 여기도 수정 필요 값이 안가져와짐
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST) // application 저장 시, pathToKnows도 함께 저장
     @JoinColumn(name = "application_id")
     private List<PathToKnow> pathToKnows = new ArrayList<>();
 
@@ -111,7 +110,7 @@ public class Application extends BaseTimeEntity {
         this.status = status;
     }
 
-    public void updateApplication(boolean isAgreed, String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnows, Part part, String status){
+    public void updateApplication(boolean isAgreed, String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnows, Part part, String status, CommonQuestion generation){
         this.isAgreed = isAgreed;
         this.name = name;
         this.gender = gender;
@@ -124,18 +123,24 @@ public class Application extends BaseTimeEntity {
         this.pathToKnows = pathToKnows;
         this.part = part;
         this.status = status;
+        this.generation = generation;
     }
 
     public void setAnswer(Answer answer) {
         this.answer = answer;
     }
 
-    public void updateInterview(String interview) {
+    public void updateInterview(String interview, String status) {
         this.interview = interview;
+        this.status = status;
     }
 
     public void updatePortfolio(String portfolio) {
         this.portfolio = portfolio;
+    }
+
+    public void updateCommonQuestion(CommonQuestion generation) {
+        this.generation = generation;
     }
 }
 

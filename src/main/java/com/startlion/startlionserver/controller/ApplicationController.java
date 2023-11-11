@@ -37,8 +37,8 @@ public class ApplicationController {
 //    }
 
     @PutMapping("/{applicationId}/page1")
-    public ResponseEntity<Void> updateApplicationPage1(@PathVariable Long applicationId, @RequestBody ApplicationPage1PutRequest request){
-        URI uri = URI.create("/application/" + applicationService.updateApplicationPage1(applicationId, request));
+    public ResponseEntity<Void> updateApplicationPage1(@PathVariable Long applicationId, @RequestBody ApplicationPage1PutRequest request, @RequestParam Long generationId){
+        URI uri = URI.create("/application/" + applicationService.updateApplicationPage1(applicationId, request, generationId));
         return ResponseEntity.created(uri).build();
     }
 

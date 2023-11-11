@@ -2,6 +2,7 @@ package com.startlion.startlionserver.service;
 
 import com.startlion.startlionserver.domain.entity.Answer;
 import com.startlion.startlionserver.domain.entity.Application;
+import com.startlion.startlionserver.domain.entity.CommonQuestion;
 import com.startlion.startlionserver.dto.request.application.*;
 import com.startlion.startlionserver.dto.response.application.ApplicationPage2GetResponse;
 import com.startlion.startlionserver.dto.response.application.ApplicationPage4GetResponse;
@@ -53,7 +54,7 @@ public class ApplicationService {
     }
 
     @Transactional
-    public Long updateApplicationPage1(Long applicationId, ApplicationPage1PutRequest request) {
+    public Long updateApplicationPage1(Long applicationId, ApplicationPage1PutRequest request, Long generationId) {
         // isAgreed 필드 null 체크
         if (request.getIsAgreed() == null) {
             throw new IllegalArgumentException("isAgreed 필드가 null입니다.");
@@ -68,12 +69,19 @@ public class ApplicationService {
         Application application;
         Optional<Application> optionalApplication = applicationJpaRepository.findById(applicationId);
 
+        // common question id로 common question 찾기 -> 기존의 generation
+        CommonQuestion commonQuestion = commonQuestionRepository.findById(generationId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 CommonQuestion이 없습니다. id=" + generationId));
+
+
         // applicationId가 존재하면 update, 존재하지 않으면 create
         if (optionalApplication.isPresent()) {
             application = optionalApplication.get();
-            application.updateApplication(request.getIsAgreed(), request.getName(), request.getGender(), request.getStudentNum(), request.getMajor(), request.getMultiMajor(), request.getSemester(), request.getPhone(), request.getEmail(), request.getPathToKnows(), request.getPart(), "S");
+            application.updateApplication(request.getIsAgreed(), request.getName(), request.getGender(), request.getStudentNum(), request.getMajor(), request.getMultiMajor(), request.getSemester(), request.getPhone(), request.getEmail(), request.getPathToKnows(), request.getPart(), "S", commonQuestion);
         } else {
             application = Application.builder()
+                    .generation(commonQuestionRepository.findById(generationId)
+                            .orElseThrow(() -> new IllegalArgumentException("해당 commonQuestionId를 가진 commonQuestion이 존재하지 않습니다.")))
                     .isAgreed(request.getIsAgreed())
                     .name(request.getName())
                     .gender(request.getGender())
@@ -87,6 +95,7 @@ public class ApplicationService {
                     .part(request.getPart())
                     .status("S")
                     .build();
+            application.updateCommonQuestion(commonQuestion);
             applicationJpaRepository.save(application);
         }
 
@@ -132,7 +141,7 @@ public class ApplicationService {
         Application application = applicationJpaRepository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 applicationId를 가진 지원서가 존재하지 않습니다."));
 
-        application.updateInterview(request.getInterview());
+        application.updateInterview(request.getInterview(), "Y");
 
         return application.getApplicationId();
     }
