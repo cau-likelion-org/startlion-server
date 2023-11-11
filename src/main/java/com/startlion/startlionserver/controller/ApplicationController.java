@@ -29,31 +29,28 @@ public class ApplicationController {
         return ResponseEntity.ok(applicationService.getById(applicationId, page));
     }
 
-    // 지원서 임시 저장 or 다음 버튼 누를 시 table 생성 또는 update
-//    @PutMapping("/{applicationId}")
-//    public ResponseEntity<Void> updateApplication(@PathVariable Long applicationId, @RequestBody ApplicationPutRequest request, @RequestParam String isFinalPage){
-//        URI uri = URI.create("/application/" + applicationService.updateApplication(applicationId, request, isFinalPage));
-//        return ResponseEntity.created(uri).build();
-//    }
-
+    // 지원서 저장하기 1페이지
     @PutMapping("/{applicationId}/page1")
     public ResponseEntity<Void> updateApplicationPage1(@PathVariable Long applicationId, @RequestBody ApplicationPage1PutRequest request, @RequestParam Long generationId){
         URI uri = URI.create("/application/" + applicationService.updateApplicationPage1(applicationId, request, generationId));
         return ResponseEntity.created(uri).build();
     }
 
+    // 지원서 저장하기 2페이지
     @PutMapping("/{applicationId}/page2")
     public ResponseEntity<Void> updateApplicationPage2(@PathVariable Long applicationId, @RequestBody ApplicationPage2PutRequest request){
         URI uri = URI.create("/application/" + applicationService.updateApplicationPage2(applicationId, request));
         return ResponseEntity.created(uri).build();
     }
 
+    // 지원서 저장하기 3페이지
     @PutMapping("/{applicationId}/page3")
     public ResponseEntity<Void> updateApplicationPage3(@PathVariable Long applicationId, @RequestBody ApplicationPage3PutRequest request){
         URI uri = URI.create("/application/" + applicationService.updateApplicationPage3(applicationId, request));
         return ResponseEntity.created(uri).build();
     }
 
+    // 지원서 저장하기 4페이지 -> 제출
     @PutMapping("/{applicationId}/page4")
     public ResponseEntity<Void> updateApplicationPage4(@PathVariable Long applicationId, @RequestBody ApplicationPage4PutRequest request){
         URI uri = URI.create("/application/" + applicationService.updateApplicationPage4(applicationId, request));
