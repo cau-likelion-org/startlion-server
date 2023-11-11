@@ -2,7 +2,7 @@ package com.startlion.startlionserver.dto.response.application;
 
 import com.startlion.startlionserver.domain.entity.Answer;
 import com.startlion.startlionserver.domain.entity.CommonQuestion;
-import com.startlion.startlionserver.dto.response.answerGetResponse.CommonAnswerGetResponse;
+import com.startlion.startlionserver.dto.response.answer.CommonAnswerGetResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

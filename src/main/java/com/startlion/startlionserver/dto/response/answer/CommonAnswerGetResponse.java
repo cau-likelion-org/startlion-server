@@ -1,4 +1,4 @@
-package com.startlion.startlionserver.dto.response.answerGetResponse;
+package com.startlion.startlionserver.dto.response.answer;
 
 import com.startlion.startlionserver.domain.entity.Answer;
 import lombok.AllArgsConstructor;

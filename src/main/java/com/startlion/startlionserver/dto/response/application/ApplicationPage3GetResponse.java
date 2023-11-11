@@ -1,9 +1,8 @@
 package com.startlion.startlionserver.dto.response.application;
 
 import com.startlion.startlionserver.domain.entity.Answer;
-import com.startlion.startlionserver.domain.entity.Part;
 import com.startlion.startlionserver.domain.entity.PartQuestion;
-import com.startlion.startlionserver.dto.response.answerGetResponse.PartAnswerGetResponse;
+import com.startlion.startlionserver.dto.response.answer.PartAnswerGetResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
