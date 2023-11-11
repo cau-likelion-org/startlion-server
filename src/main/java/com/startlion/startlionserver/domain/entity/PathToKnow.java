@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ public class PathToKnow {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id")
+    @JsonIgnore
     private Application applicationId;
 
     @Enumerated(EnumType.STRING)

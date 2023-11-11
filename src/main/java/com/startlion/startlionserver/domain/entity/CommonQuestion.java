@@ -28,6 +28,6 @@ public class CommonQuestion {
     private String commonQuestion4;
     private String commonQuestion5;
 
-    @OneToMany(mappedBy = "generation")
-    private List<Application> applicationEntityList = new ArrayList<>();
+//    @OneToMany(mappedBy = "generation")
+//    private List<Application> applicationEntityList = new ArrayList<>();
 }

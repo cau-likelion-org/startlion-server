@@ -24,6 +24,7 @@ public class Application extends BaseTimeEntity {
     private Long applicationId;
 
     @OneToOne(mappedBy = "application")
+    @JsonIgnore
     private Answer answer;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -69,6 +70,7 @@ public class Application extends BaseTimeEntity {
 
     @OneToMany(cascade = CascadeType.PERSIST) // application 저장 시, pathToKnows도 함께 저장
     @JoinColumn(name = "application_id")
+    @JsonIgnore
     private List<PathToKnow> pathToKnows = new ArrayList<>();
 
 
