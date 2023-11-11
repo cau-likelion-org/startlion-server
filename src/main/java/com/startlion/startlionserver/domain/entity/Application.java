@@ -1,5 +1,6 @@
 package com.startlion.startlionserver.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.startlion.startlionserver.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -30,7 +31,8 @@ public class Application extends BaseTimeEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "generation")
+    @JoinColumn(name = "generation", referencedColumnName = "commonQuestionId")
+    @JsonIgnore
     private CommonQuestion generation;
 
     // application page 1 start
@@ -73,6 +75,7 @@ public class Application extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "part_id")
+    @JsonIgnore
     private Part part;
     // application page 1 end
 
@@ -121,6 +124,18 @@ public class Application extends BaseTimeEntity {
         this.pathToKnows = pathToKnows;
         this.part = part;
         this.status = status;
+    }
+
+    public void setAnswer(Answer answer) {
+        this.answer = answer;
+    }
+
+    public void updateInterview(String interview) {
+        this.interview = interview;
+    }
+
+    public void updatePortfolio(String portfolio) {
+        this.portfolio = portfolio;
     }
 }
 

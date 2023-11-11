@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @Builder
-public class ApplicationTemporaryStorageRequest {
+public class ApplicationPutRequest {
     private Boolean isAgreed;
 
     private String name;
@@ -34,6 +34,8 @@ public class ApplicationTemporaryStorageRequest {
     private List<PathToKnow> pathToKnows;
 
     private Part part;
+
+    private ApplicationPage4PutRequest answer;
 
 
 }
