@@ -14,14 +14,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.Map;
 
 @Slf4j
 @RestController
-public class ApiRestController {
+public class AuthApiController {
 
     private final AuthService authService;
     @Autowired
-    public ApiRestController(AuthService authService) {
+    public AuthApiController(AuthService authService) {
         this.authService = authService;
     }
 
@@ -56,9 +57,9 @@ public class ApiRestController {
     }
 
     @GetMapping("/login/oauth2/code/google")
-    public User oauthGoogleCheck(@RequestParam(value = "code") String authCode) throws Exception{
+    public Map<String, Object> oauthGoogleCheck(@RequestParam(value = "code") String authCode) throws Exception{
 
-        User returnvalue=authService.authenticateUser(authCode);
+        Map<String, Object> returnvalue=authService.authenticateUser(authCode);
         return returnvalue;
     }
 
