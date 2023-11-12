@@ -1,7 +1,11 @@
-package com.startlion.startlionserver.auth;
+package com.startlion.startlionserver.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.startlion.startlionserver.dto.response.GoogleLoginResponse;
+import com.startlion.startlionserver.dto.request.GoogleOAuthRequest;
+import com.startlion.startlionserver.repository.UserRepository;
+import com.startlion.startlionserver.domain.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +39,7 @@ public class AuthService {
     private UserRepository userRepository;
 
     @Autowired
-    private jwtTokenProvider jwtTokenProvider;
+    private com.startlion.startlionserver.auth.jwtTokenProvider jwtTokenProvider;
     public User authenticateUser(String authCode) throws Exception{
 
         GoogleOAuthRequest googleOAuthRequest = GoogleOAuthRequest

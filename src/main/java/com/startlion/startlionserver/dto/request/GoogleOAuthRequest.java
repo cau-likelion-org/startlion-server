@@ -1,4 +1,4 @@
-package com.startlion.startlionserver.auth;
+package com.startlion.startlionserver.dto.request;
 
 import lombok.Builder;
 import lombok.Data;

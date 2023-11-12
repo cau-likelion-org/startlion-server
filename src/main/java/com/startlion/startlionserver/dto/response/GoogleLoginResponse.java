@@ -1,4 +1,4 @@
-package com.startlion.startlionserver.auth;
+package com.startlion.startlionserver.dto.response;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
