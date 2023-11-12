@@ -1,5 +1,7 @@
-package com.startlion.startlionserver.auth;
+package com.startlion.startlionserver.controller;
 
+import com.startlion.startlionserver.service.AuthService;
+import com.startlion.startlionserver.domain.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
