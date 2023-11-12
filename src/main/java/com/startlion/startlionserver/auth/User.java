@@ -1,4 +1,4 @@
-package com.startlion.startlionserver.domain.entity;
+package com.startlion.startlionserver.auth;
 
 import com.startlion.startlionserver.domain.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "member")
 public class User extends BaseTimeEntity {

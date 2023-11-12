@@ -2,7 +2,6 @@ package com.startlion.startlionserver.auth;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.startlion.startlionserver.domain.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -71,27 +70,24 @@ public class AuthService {
         User user = userRepository.findByEmail(email);
         if (user == null) {
             User newUser = new User();
-
-
-            Authentication authentication = new UsernamePasswordAuthenticationToken(newUser, null, Collections.emptyList());
-            String accessToken = jwtTokenProvider.generateAccessToken(authentication);
-            String refreshToken = jwtTokenProvider.generateRefreshToken(authentication);
-
+            saveUserTokens(newUser);
             newUser.join(email,username,socialId,imageUrl);
-            newUser.saveToken(accessToken,refreshToken);
             userRepository.save(newUser);
 
             return newUser;
         }
         else {
             User findUser = userRepository.findByEmail(email);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(findUser, null, Collections.emptyList());
-            String accessToken = jwtTokenProvider.generateAccessToken(authentication);
-            String refreshToken = jwtTokenProvider.generateRefreshToken(authentication);
-            findUser.saveToken(accessToken,refreshToken);
-            userRepository.save(findUser);
+            saveUserTokens(findUser);
             return findUser;
         }
 
+    }
+    private void saveUserTokens(User user) {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+        String accessToken = jwtTokenProvider.generateToken(authentication, "access");
+        String refreshToken = jwtTokenProvider.generateToken(authentication, "refresh");
+        user.saveToken(accessToken, refreshToken);
+        userRepository.save(user);
     }
 }

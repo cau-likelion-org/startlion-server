@@ -1,6 +1,5 @@
 package com.startlion.startlionserver.auth;
 
-import com.startlion.startlionserver.domain.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,8 +17,11 @@ import java.net.URI;
 @RestController
 public class ApiRestController {
 
+    private final AuthService authService;
     @Autowired
-    private AuthService authService;
+    public ApiRestController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @Value("${google.auth.url}")
     private String googleAuthUrl;
@@ -36,16 +38,12 @@ public class ApiRestController {
     @Value("${google.secret}")
     private String googleClientSecret;
 
+    private String reqUrl;
     @GetMapping("/login")
     public ResponseEntity<?> getGoogleAuthUrl() throws Exception {
 
-        String reqUrl = googleLoginUrl + "/o/oauth2/v2/auth?client_id=" + googleClientId + "&redirect_uri=" + googleRedirectUrl
+        reqUrl = googleLoginUrl + "/o/oauth2/v2/auth?client_id=" + googleClientId + "&redirect_uri=" + googleRedirectUrl
                 + "&response_type=code&scope=email%20profile%20openid&access_type=offline";
-
-        log.info(reqUrl);
-        log.info("myLog-LoginUrl : {}",googleLoginUrl);
-        log.info("myLog-ClientId : {}",googleClientId);
-        log.info("myLog-RedirectUrl : {}",googleRedirectUrl);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(reqUrl));
@@ -56,7 +54,7 @@ public class ApiRestController {
     }
 
     @GetMapping("/login/oauth2/code/google")
-    public User oauth_google_check(@RequestParam(value = "code") String authCode) throws Exception{
+    public User oauthGoogleCheck(@RequestParam(value = "code") String authCode) throws Exception{
 
         User returnvalue=authService.authenticateUser(authCode);
         return returnvalue;

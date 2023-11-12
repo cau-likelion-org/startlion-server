@@ -1,5 +1,6 @@
 package com.startlion.startlionserver.domain.entity;
 
+import com.startlion.startlionserver.auth.User;
 import com.startlion.startlionserver.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
