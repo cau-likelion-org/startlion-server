@@ -17,7 +17,7 @@ public class ApplicationController {
 
     private final ApplicationService applicationService;
 
-    // 저장된 지원서 없을 시, 지원서 1페이지 정보 가져오기
+    // 저장된 지원서 없을 시, 지원서 1페이지 정보(질문) 가져오기
     @GetMapping
     public ResponseEntity<ApplicationPage1GetResponse> getApplicationPersonalInformation(){
         return ResponseEntity.ok(applicationService.getApplicationPersonalInformation());

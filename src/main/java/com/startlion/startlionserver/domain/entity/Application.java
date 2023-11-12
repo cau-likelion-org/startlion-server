@@ -24,7 +24,7 @@ public class Application extends BaseTimeEntity {
     private Long applicationId;
 
     @OneToOne(mappedBy = "application")
-    @JsonIgnore
+    @JsonIgnore // 무한 참조 에러 방지
     private Answer answer;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,8 +33,8 @@ public class Application extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "generation")
-    @JsonIgnore
-    private CommonQuestion generation;
+    @JsonIgnore // 무한 참조 에러 방지
+    private CommonQuestion generation; // generation이라고 매핑했지만 실제로는 CommonQuestion의 id를 가리킴
 
     // application page 1 start
     @ColumnDefault("''")
@@ -70,13 +70,13 @@ public class Application extends BaseTimeEntity {
 
     @OneToMany(cascade = CascadeType.PERSIST) // application 저장 시, pathToKnows도 함께 저장
     @JoinColumn(name = "application_id")
-    @JsonIgnore
+    @JsonIgnore // 무한 참조 에러 방지
     private List<PathToKnow> pathToKnows = new ArrayList<>();
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "part_id")
-    @JsonIgnore
+    @JsonIgnore // 무한 참조 에러 방지
     private Part part;
     // application page 1 end
 
@@ -134,7 +134,7 @@ public class Application extends BaseTimeEntity {
 
     public void updateInterview(String interview, String status) {
         this.interview = interview;
-        this.status = status;
+        this.status = status; // interview가 있다면 제출한 것이므로 status = 'Y'
     }
 
     public void updatePortfolio(String portfolio) {

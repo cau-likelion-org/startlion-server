@@ -2,7 +2,6 @@ package com.startlion.startlionserver.dto.response.application;
 
 import com.startlion.startlionserver.domain.entity.Application;
 import com.startlion.startlionserver.domain.entity.Part;
-import com.startlion.startlionserver.domain.entity.PathToKnow;
 import com.startlion.startlionserver.dto.response.pathToKnow.PathToKnowGetResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

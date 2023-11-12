@@ -7,5 +7,5 @@ import lombok.Getter;
 @Data
 @AllArgsConstructor
 public class ErrorResponse {
-    private String message;
+    private String message; // 에러 메시지 JSON 형식 지정
 }

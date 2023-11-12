@@ -53,6 +53,7 @@ public class ApplicationService {
         }
     }
 
+    // 지원서 1페이지 저장
     @Transactional
     public Long updateApplicationPage1(Long applicationId, ApplicationPage1PutRequest request, Long generationId) {
         // isAgreed 필드 null 체크
@@ -69,7 +70,7 @@ public class ApplicationService {
         Application application;
         Optional<Application> optionalApplication = applicationJpaRepository.findById(applicationId);
 
-        // common question id로 common question 찾기 -> 기존의 generation
+        // generationId로 common question 찾기
         CommonQuestion commonQuestion = commonQuestionRepository.findById(generationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 CommonQuestion이 없습니다. id=" + generationId));
 
@@ -102,6 +103,7 @@ public class ApplicationService {
         return application.getApplicationId();
     }
 
+    // 지원서 2페이지 저장
     @Transactional
     public Long updateApplicationPage2(Long applicationId, ApplicationPage2PutRequest request) {
         Application application = applicationJpaRepository.findById(applicationId)
@@ -117,6 +119,8 @@ public class ApplicationService {
         return application.getApplicationId();
     }
 
+
+    // 지원서 3페이지 저장
     @Transactional
     public Long updateApplicationPage3(Long applicationId, ApplicationPage3PutRequest request) {
         Application application = applicationJpaRepository.findById(applicationId)
@@ -135,7 +139,7 @@ public class ApplicationService {
         return application.getApplicationId();
     }
 
-
+    // 지원서 4페이지 저장(제출)
     @Transactional
     public Long updateApplicationPage4(Long applicationId, ApplicationPage4PutRequest request) {
         Application application = applicationJpaRepository.findById(applicationId)

@@ -5,9 +5,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -27,7 +24,4 @@ public class CommonQuestion {
     private String commonQuestion3;
     private String commonQuestion4;
     private String commonQuestion5;
-
-//    @OneToMany(mappedBy = "generation")
-//    private List<Application> applicationEntityList = new ArrayList<>();
 }
