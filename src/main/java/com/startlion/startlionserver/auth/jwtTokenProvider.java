@@ -1,5 +1,4 @@
 package com.startlion.startlionserver.auth;
-import com.startlion.startlionserver.domain.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -15,33 +14,30 @@ public class jwtTokenProvider {
     private String secretKey;
 
     @Value("${jwt.accessTokenExpiration}")
-    private long accessTokenValidityInMilliseconds;
+    private long accessTokenExpiredTime;
 
     @Value("${jwt.refreshTokenExpiration}")
-    private long refreshTokenValidityInMilliseconds;
+    private long refreshTokenExpiredTime;
+    private long expiredTime;
+    public String generateToken(Authentication authentication,String tokentype) {
 
-    public String generateAccessToken(Authentication authentication) {
+        switch (tokentype) {
+            case "access":
+                expiredTime = accessTokenExpiredTime;
+                break;
+            case "refresh":
+                expiredTime = refreshTokenExpiredTime;
+                break;
+        }
         User user = (User) authentication.getPrincipal();
         Date now = new Date();
-        Date accessTokenValidity = new Date(now.getTime() + accessTokenValidityInMilliseconds);
+
+        Date accessTokenValidity = new Date(now.getTime() + expiredTime);
 
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .setIssuedAt(now)
                 .setExpiration(accessTokenValidity)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
-    }
-
-    public String generateRefreshToken(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-        Date now = new Date();
-        Date refreshTokenValidity = new Date(now.getTime() + refreshTokenValidityInMilliseconds);
-
-        return Jwts.builder()
-                .setSubject(user.getUsername())
-                .setIssuedAt(now)
-                .setExpiration(refreshTokenValidity)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
