@@ -16,6 +16,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Service
@@ -38,9 +40,11 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
 
+    Map<String, Object> result = new HashMap<>();
+
     @Autowired
     private com.startlion.startlionserver.auth.jwtTokenProvider jwtTokenProvider;
-    public User authenticateUser(String authCode) throws Exception{
+    public Map<String, Object> authenticateUser(String authCode) throws Exception{
 
         GoogleOAuthRequest googleOAuthRequest = GoogleOAuthRequest
                 .builder()
@@ -78,20 +82,24 @@ public class AuthService {
             newUser.join(email,username,socialId,imageUrl);
             userRepository.save(newUser);
 
-            return newUser;
+            return result;
         }
         else {
             User findUser = userRepository.findByEmail(email);
             saveUserTokens(findUser);
-            return findUser;
+
+            return result;
         }
 
     }
     private void saveUserTokens(User user) {
+
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
         String accessToken = jwtTokenProvider.generateToken(authentication, "access");
         String refreshToken = jwtTokenProvider.generateToken(authentication, "refresh");
-        user.saveToken(accessToken, refreshToken);
+        user.saveToken(refreshToken);
         userRepository.save(user);
+        result.put("user", user);
+        result.put("accessToken", accessToken);
     }
 }

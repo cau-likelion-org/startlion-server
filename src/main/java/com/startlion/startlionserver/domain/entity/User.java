@@ -33,8 +33,6 @@ public class User extends BaseTimeEntity {
 
     private String imageUrl;
 
-    private String accessToken;
-
     private String refreshToken;
 
     private LocalDateTime expiredIn;
@@ -49,8 +47,7 @@ public class User extends BaseTimeEntity {
         this.imageUrl = imageUrl;
     }
 
-    public void saveToken(String accesstoken, String refreshToken){
-        this.accessToken=accesstoken;
+    public void saveToken(String refreshToken){
         this.refreshToken=refreshToken;
     }
 }
