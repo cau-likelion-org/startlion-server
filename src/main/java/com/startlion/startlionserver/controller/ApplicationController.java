@@ -29,6 +29,7 @@ public class ApplicationController {
         return ResponseEntity.ok(applicationService.getById(applicationId, page));
     }
 
+    // 지원서 저장하기의 경우 받아야 하는 Body 정보가 다르기 때문에, 4개의 API로 나누었습니다.
     // 지원서 저장하기 1페이지
     @PutMapping("/{applicationId}/page1")
     public ResponseEntity<String> updateApplicationPage1(@PathVariable Long applicationId, @RequestBody ApplicationPage1PutRequest request, @RequestParam Long generationId){
