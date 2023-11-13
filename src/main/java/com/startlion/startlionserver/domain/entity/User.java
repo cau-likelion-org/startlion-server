@@ -3,13 +3,14 @@ package com.startlion.startlionserver.domain.entity;
 import com.startlion.startlionserver.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Getter
 @Table(name = "member")
 public class User extends BaseTimeEntity {
@@ -31,11 +32,21 @@ public class User extends BaseTimeEntity {
 
     private String imageUrl;
 
-    private String accessToken;
-
     private String refreshToken;
 
     private LocalDateTime expiredIn;
 
     private boolean status;
+
+    @Builder
+    public void join(String email,String username,String socialId,String imageUrl) {
+        this.email = email;
+        this.username = username;
+        this.socialId = socialId;
+        this.imageUrl = imageUrl;
+    }
+
+    public void saveToken(String refreshToken){
+        this.refreshToken=refreshToken;
+    }
 }
