@@ -3,24 +3,31 @@ package com.startlion.startlionserver.domain.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @Table
+@Setter
 public class PathToKnow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long PathToKnowId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "application_id")
+    @JsonIgnore
+    private Application applicationId;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PathType pathType;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "application_id")
-    private Application application;
 
     public enum PathType {
         RECOMMENDATION,
