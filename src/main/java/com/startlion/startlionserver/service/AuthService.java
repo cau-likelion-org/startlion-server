@@ -6,12 +6,14 @@ import com.startlion.startlionserver.dto.response.GoogleLoginResponse;
 import com.startlion.startlionserver.dto.request.GoogleOAuthRequest;
 import com.startlion.startlionserver.repository.UserRepository;
 import com.startlion.startlionserver.domain.entity.User;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -44,6 +46,8 @@ public class AuthService {
 
     @Autowired
     private com.startlion.startlionserver.auth.jwtTokenProvider jwtTokenProvider;
+
+    @Transactional
     public Map<String, Object> authenticateUser(String authCode) throws Exception{
 
         GoogleOAuthRequest googleOAuthRequest = GoogleOAuthRequest
@@ -78,16 +82,14 @@ public class AuthService {
         User user = userRepository.findByEmail(email);
         if (user == null) {
             User newUser = new User();
-            saveUserTokens(newUser);
             newUser.join(email,username,socialId,imageUrl);
+            saveUserTokens(newUser);
             userRepository.save(newUser);
-
             return result;
         }
         else {
             User findUser = userRepository.findByEmail(email);
             saveUserTokens(findUser);
-
             return result;
         }
 

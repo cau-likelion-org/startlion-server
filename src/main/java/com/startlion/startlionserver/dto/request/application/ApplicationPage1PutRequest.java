@@ -2,6 +2,7 @@ package com.startlion.startlionserver.dto.request.application;
 
 import com.startlion.startlionserver.domain.entity.Part;
 import com.startlion.startlionserver.domain.entity.PathToKnow;
+import com.startlion.startlionserver.domain.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -21,4 +22,5 @@ public class ApplicationPage1PutRequest {
     private String email;
     private List<PathToKnow> pathToKnows;
     private Part part;
+    private User user;
 }

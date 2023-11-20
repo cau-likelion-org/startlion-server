@@ -112,7 +112,7 @@ public class Application extends BaseTimeEntity {
         this.status = status;
     }
 
-    public void updateApplication(boolean isAgreed, String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnows, Part part, String status, CommonQuestion generation){
+    public void updateApplication(boolean isAgreed, User user,String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnows, Part part, String status, CommonQuestion generation){
         this.isAgreed = isAgreed;
         this.name = name;
         this.gender = gender;
@@ -126,6 +126,7 @@ public class Application extends BaseTimeEntity {
         this.part = part;
         this.status = status;
         this.generation = generation;
+        this.user = user;
     }
 
     public void setAnswer(Answer answer) {
