@@ -78,11 +78,12 @@ public class ApplicationService {
         // applicationId가 존재하면 update, 존재하지 않으면 create
         if (optionalApplication.isPresent()) {
             application = optionalApplication.get();
-            application.updateApplication(request.getIsAgreed(), request.getName(), request.getGender(), request.getStudentNum(), request.getMajor(), request.getMultiMajor(), request.getSemester(), request.getPhone(), request.getEmail(), request.getPathToKnows(), request.getPart(), "S", commonQuestion);
+            application.updateApplication(request.getIsAgreed(), request.getUser(),request.getName(), request.getGender(), request.getStudentNum(), request.getMajor(), request.getMultiMajor(), request.getSemester(), request.getPhone(), request.getEmail(), request.getPathToKnows(), request.getPart(), "S", commonQuestion);
         } else {
             application = Application.builder()
                     .generation(commonQuestionRepository.findById(generationId)
                             .orElseThrow(() -> new IllegalArgumentException("해당 commonQuestionId를 가진 commonQuestion이 존재하지 않습니다.")))
+                    .user(request.getUser())
                     .isAgreed(request.getIsAgreed())
                     .name(request.getName())
                     .gender(request.getGender())
@@ -151,4 +152,3 @@ public class ApplicationService {
     }
 
 }
-
