@@ -2,6 +2,7 @@ package com.startlion.startlionserver.controller;
 
 import com.startlion.startlionserver.service.AuthService;
 import com.startlion.startlionserver.domain.entity.User;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,6 +43,7 @@ public class AuthApiController {
     private String googleClientSecret;
 
     private String reqUrl;
+    @Operation(summary = "소셜 로그인")
     @GetMapping("/login")
     public ResponseEntity<?> getGoogleAuthUrl() throws Exception {
 
@@ -56,6 +58,7 @@ public class AuthApiController {
 
     }
 
+    @Operation(summary = "소셜 로그인 성공")
     @GetMapping("/login/oauth2/code/google")
     public Map<String, Object> oauthGoogleCheck(@RequestParam(value = "code") String authCode) throws Exception{
 
@@ -63,6 +66,7 @@ public class AuthApiController {
         return returnvalue;
     }
 
+    @Operation(summary = "멤버")
     @GetMapping("/member")
     public Authentication getCurrentUser(Authentication authentication) {
         return authentication;
