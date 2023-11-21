@@ -17,7 +17,7 @@ public class SwaggerConfig {
 
     @Bean
     public GroupedOpenApi chatOpenApi() {
-        String[] paths = {"/**"}; // 기본 경로
+        String[] paths = {"/application/**", "/login/**", "/member/**"}; // 기본 경로
 
         return GroupedOpenApi.builder()
                 .group("START LION API v1")
