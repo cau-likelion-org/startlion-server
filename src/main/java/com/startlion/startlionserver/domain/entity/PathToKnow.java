@@ -23,7 +23,7 @@ public class PathToKnow {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id")
     @JsonIgnore
-    private Application application;
+    private Application applicationId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
