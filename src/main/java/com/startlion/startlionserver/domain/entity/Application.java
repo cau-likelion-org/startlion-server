@@ -48,7 +48,7 @@ public class Application extends BaseTimeEntity {
     @ColumnDefault("''")
     private String gender;
 
-    @ColumnDefault("''")
+    @ColumnDefault("0")
     private Integer studentNum;
 
     @Column(length = 30)
@@ -68,8 +68,7 @@ public class Application extends BaseTimeEntity {
     @ColumnDefault("''")
     private String email;
 
-    @OneToMany(cascade = CascadeType.PERSIST) // application 저장 시, pathToKnows도 함께 저장
-    @JoinColumn(name = "application_id")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "application") // application 저장 시, pathToKnows도 함께 저장
     @JsonIgnore // 무한 참조 에러 방지
     private List<PathToKnow> pathToKnows = new ArrayList<>();
 
