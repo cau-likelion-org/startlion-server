@@ -1,5 +1,8 @@
 package com.startlion.startlionserver.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.startlion.startlionserver.dto.response.GoogleLoginResponse;
@@ -17,9 +20,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 
 @Service
@@ -39,8 +47,14 @@ public class AuthService {
     @Value("${google.secret}")
     private String googleClientSecret;
 
+    @Value("${aws-bucket}")
+    private String bucket;
+
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AmazonS3 amazonS3;
 
     Map<String, Object> result = new HashMap<>();
 
@@ -81,19 +95,41 @@ public class AuthService {
 
         User user = userRepository.findByEmail(email);
         if (user == null) {
+            String s3Url = uploadImageToS3(imageUrl);
             User newUser = new User();
-            newUser.join(email,username,socialId,imageUrl);
+            newUser.join(email,username,socialId,s3Url);
             saveUserTokens(newUser);
             userRepository.save(newUser);
             return result;
         }
         else {
             User findUser = userRepository.findByEmail(email);
+            // 이미지가 변경되었을 경우에만 S3에 업로드
+            if(!imageUrl.equals(findUser.getPreviousImageUrl())) {
+                String s3Url = uploadImageToS3(imageUrl);
+                findUser.updateImageUrl(s3Url);
+            }
+
             saveUserTokens(findUser);
             return result;
         }
 
     }
+
+    // 이미지를 S3에 업로드하고 S3 URL을 반환
+    private String uploadImageToS3(String imageUrl) throws IOException {
+        URL url = new URL(imageUrl);
+        InputStream in = new BufferedInputStream(url.openStream());
+        String fileName = UUID.randomUUID().toString();
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType("image/jpeg");
+        amazonS3.putObject(new PutObjectRequest(bucket, fileName, in, metadata));
+
+        String s3Url = amazonS3.getUrl(bucket, fileName).toString();
+        return s3Url;
+    }
+
     private void saveUserTokens(User user) {
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());

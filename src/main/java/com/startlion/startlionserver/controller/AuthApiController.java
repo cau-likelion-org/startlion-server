@@ -54,8 +54,6 @@ public class AuthApiController {
         headers.setLocation(URI.create(reqUrl));
 
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
-
-
     }
 
     @Operation(summary = "소셜 로그인 성공")
