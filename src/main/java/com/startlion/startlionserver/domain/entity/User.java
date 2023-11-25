@@ -38,6 +38,9 @@ public class User extends BaseTimeEntity {
 
     private boolean status;
 
+    @Transient // DB에 저장하지 않는 필드 -> 이전 이미지 URL
+    private String previousImageUrl;
+
     @Builder
     public void join(String email,String username,String socialId,String imageUrl) {
         this.email = email;
@@ -48,5 +51,9 @@ public class User extends BaseTimeEntity {
 
     public void saveToken(String refreshToken){
         this.refreshToken=refreshToken;
+    }
+
+    public void updateImageUrl(String imageUrl){
+        this.imageUrl = imageUrl;
     }
 }
