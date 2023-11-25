@@ -24,19 +24,21 @@ public class FileUploadController {
     @Value("${aws-bucket}")
     private String bucket;
 
-//    @PostMapping
-//    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
-//        try{
-//            String fileName = file.getOriginalFilename();
-//            String fileUrl = "https://" + bucket + "/test/" + fileName;
-//            ObjectMetadata metadata = new ObjectMetadata();
-//            metadata.setContentType(file.getContentType());
-//            metadata.setContentLength(file.getSize());
-//            amazonS3.putObject(bucket, fileName, file.getInputStream(), metadata);
-//            return ResponseEntity.ok(fileUrl);
-//        } catch(IOException e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//        }
-//    }
+    // interview의 imageUrl에 저장될 url을 반환한다.
+    // S3에 파일을 업로드 해놓은 뒤, 수기로 interview의 imageUrl에 해당 url을 저장하는 식으로 사용하면 되지 않을까 싶습니다.
+    @PostMapping
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+        try{
+            String fileName = file.getOriginalFilename();
+            String fileUrl = "https://" + bucket + "/interview/" + fileName;
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(file.getContentType());
+            metadata.setContentLength(file.getSize());
+            amazonS3.putObject(bucket, fileName, file.getInputStream(), metadata);
+            return ResponseEntity.ok(fileUrl);
+        } catch(IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
