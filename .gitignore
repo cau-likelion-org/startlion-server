@@ -39,6 +39,7 @@ out/
 *.yml
 src/main/resources/application.yml
 application.yml
+src/main/resources/application-SECRET-KEY.properties
 
 .DS_Store
 application-oauth.properties
