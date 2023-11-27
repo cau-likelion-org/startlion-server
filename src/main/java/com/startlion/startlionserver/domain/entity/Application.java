@@ -144,5 +144,11 @@ public class Application extends BaseTimeEntity {
     public void updateCommonQuestion(CommonQuestion generation) {
         this.generation = generation;
     }
+
+    public void addPathToKnow(PathToKnow pathToKnow) {
+        pathToKnow.setApplicationId(this);
+    }
+
+
 }
 
