@@ -95,9 +95,9 @@ public class AuthService {
 
         User user = userRepository.findByEmail(email);
         if (user == null) {
-            String s3Url = uploadImageToS3(imageUrl);
+//            String s3Url = uploadImageToS3(imageUrl); -> google 사진은 S3에 업로드하지 않음
             User newUser = new User();
-            newUser.join(email,username,socialId,s3Url);
+            newUser.join(email,username,socialId,imageUrl);
             saveUserTokens(newUser);
             userRepository.save(newUser);
             return result;
@@ -106,28 +106,14 @@ public class AuthService {
             User findUser = userRepository.findByEmail(email);
             // 이미지가 변경되었을 경우에만 S3에 업로드
             if(!imageUrl.equals(findUser.getPreviousImageUrl())) {
-                String s3Url = uploadImageToS3(imageUrl);
-                findUser.updateImageUrl(s3Url);
+//                String s3Url = uploadImageToS3(imageUrl); -> google 사진은 S3에 업로드하지 않음
+                findUser.updateImageUrl(imageUrl);
             }
 
             saveUserTokens(findUser);
             return result;
         }
 
-    }
-
-    // 이미지를 S3에 업로드하고 S3 URL을 반환
-    private String uploadImageToS3(String imageUrl) throws IOException {
-        URL url = new URL(imageUrl);
-        InputStream in = new BufferedInputStream(url.openStream());
-        String fileName = UUID.randomUUID().toString();
-
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType("image/jpeg");
-        amazonS3.putObject(new PutObjectRequest(bucket, fileName, in, metadata));
-
-        String s3Url = amazonS3.getUrl(bucket, fileName).toString();
-        return s3Url;
     }
 
     private void saveUserTokens(User user) {
@@ -140,4 +126,18 @@ public class AuthService {
         result.put("user", user);
         result.put("accessToken", accessToken);
     }
+
+    // 이미지를 S3에 업로드하고 S3 URL을 반환 -> 삭제
+//    private String uploadImageToS3(String imageUrl) throws IOException {
+//        URL url = new URL(imageUrl);
+//        InputStream in = new BufferedInputStream(url.openStream());
+//        String fileName = UUID.randomUUID().toString();
+//
+//        ObjectMetadata metadata = new ObjectMetadata();
+//        metadata.setContentType("image/jpeg");
+//        amazonS3.putObject(new PutObjectRequest(bucket, fileName, in, metadata));
+//
+//        String s3Url = amazonS3.getUrl(bucket, fileName).toString();
+//        return s3Url;
+//    }
 }
