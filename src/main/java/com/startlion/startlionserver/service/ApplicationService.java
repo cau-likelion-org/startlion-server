@@ -83,8 +83,10 @@ public class ApplicationService {
         // applicationId가 존재하면 update, 존재하지 않으면 create
         if (optionalApplication.isPresent()) {
             application = optionalApplication.get();
-            pathToKnowJpaRepository.deleteByApplicationId(application);
             application.updateApplication(request.getIsAgreed(), request.getUser(),request.getName(), request.getGender(), request.getStudentNum(), request.getMajor(), request.getMultiMajor(), request.getSemester(), request.getPhone(), request.getEmail(), request.getPathToKnows(), request.getPart(), "S", commonQuestion);
+            applicationJpaRepository.save(application); //Application 저장
+
+            pathToKnowJpaRepository.deleteByApplicationId(application); // 기존의 path to know 삭제
             List<PathToKnow> pathToKnows = new ArrayList<>();
             for(PathToKnow pathToKnow : request.getPathToKnows()){
                 pathToKnow.setApplicationId(application);
@@ -108,12 +110,17 @@ public class ApplicationService {
                     .part(request.getPart())
                     .status("S")
                     .build();
+
+            applicationJpaRepository.save(application);
+
+            // path to know 저장
             pathToKnowJpaRepository.deleteByApplicationId(application);
             List<PathToKnow> pathToKnows = new ArrayList<>();
             for(PathToKnow pathToKnow : request.getPathToKnows()){
                 pathToKnow.setApplicationId(application);
                 pathToKnows.add(pathToKnow);
             }
+
             application.updateCommonQuestion(commonQuestion);
             applicationJpaRepository.save(application);
         }
