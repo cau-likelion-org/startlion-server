@@ -91,6 +91,7 @@ public class ApplicationService {
             for(PathToKnow pathToKnow : request.getPathToKnows()){
                 pathToKnow.setApplicationId(application);
                 pathToKnows.add(pathToKnow);
+                pathToKnowJpaRepository.save(pathToKnow);
             }
         } else {
             application = Application.builder()
@@ -119,6 +120,7 @@ public class ApplicationService {
             for(PathToKnow pathToKnow : request.getPathToKnows()){
                 pathToKnow.setApplicationId(application);
                 pathToKnows.add(pathToKnow);
+                pathToKnowJpaRepository.save(pathToKnow);
             }
 
             application.updateCommonQuestion(commonQuestion);
