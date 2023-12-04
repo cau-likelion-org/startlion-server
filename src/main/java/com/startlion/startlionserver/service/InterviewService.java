@@ -1,13 +1,11 @@
 package com.startlion.startlionserver.service;
 
 import com.startlion.startlionserver.domain.entity.Interview;
-import com.startlion.startlionserver.domain.entity.InterviewAnswer;
 import com.startlion.startlionserver.dto.response.interview.InterviewResponse;
 import com.startlion.startlionserver.dto.response.interviewanswer.InterviewAnswerResponse;
 import com.startlion.startlionserver.repository.InterviewAnswerJpaRepository;
 import com.startlion.startlionserver.repository.InterviewJpaRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
