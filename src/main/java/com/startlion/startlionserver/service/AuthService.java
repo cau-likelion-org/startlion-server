@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -59,7 +60,7 @@ public class AuthService {
     Map<String, Object> result = new HashMap<>();
 
     @Autowired
-    private com.startlion.startlionserver.auth.jwtTokenProvider jwtTokenProvider;
+    private com.startlion.startlionserver.auth.JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public Map<String, Object> authenticateUser(String authCode) throws Exception{
@@ -130,11 +131,17 @@ public class AuthService {
         return s3Url;
     }
 
+    @Value("${jwt.accessTokenExpiration}")
+    private Long accessTokenExpiration;
+
+    @Value("${jwt.refreshTokenExpiration}")
+    private Long refreshTokenExpiration;
+
     private void saveUserTokens(User user) {
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
-        String accessToken = jwtTokenProvider.generateToken(authentication, "access");
-        String refreshToken = jwtTokenProvider.generateToken(authentication, "refresh");
+        String accessToken = jwtTokenProvider.generateToken(authentication, accessTokenExpiration);
+        String refreshToken = jwtTokenProvider.generateToken(authentication, refreshTokenExpiration);
         user.saveToken(refreshToken);
         userRepository.save(user);
         result.put("user", user);
