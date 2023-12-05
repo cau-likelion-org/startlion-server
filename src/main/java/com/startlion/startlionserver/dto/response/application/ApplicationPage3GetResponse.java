@@ -3,19 +3,24 @@ package com.startlion.startlionserver.dto.response.application;
 import com.startlion.startlionserver.domain.entity.Answer;
 import com.startlion.startlionserver.domain.entity.PartQuestion;
 import com.startlion.startlionserver.dto.response.answer.PartAnswerGetResponse;
+import com.startlion.startlionserver.dto.response.partQuestion.PartQuestionResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
 public class ApplicationPage3GetResponse {
 
     private PartAnswerGetResponse answer;
-    private List<PartQuestion> partQuestions;
+    private List<PartQuestionResponse> partQuestions;
     private String portfolio;
     public static ApplicationPage3GetResponse of(Answer answer, List<PartQuestion> partQuestions, String portfolio) {
-        return new ApplicationPage3GetResponse(new PartAnswerGetResponse(answer), partQuestions, portfolio);
+        List<PartQuestionResponse> partQuestionResponses = partQuestions.stream()
+                .map(PartQuestionResponse::new)
+                .collect(Collectors.toList());
+        return new ApplicationPage3GetResponse(new PartAnswerGetResponse(answer), partQuestionResponses, portfolio);
     }
 }
