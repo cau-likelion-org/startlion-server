@@ -19,9 +19,6 @@ public record InterviewResponse(
         List<InterviewAnswerResponse> interviewAnswers
 ) {
 
-
-    //TODO: interviewAnswers, interviewQuestions가 interviewContent로 바뀌었으므로 수정 필요
-    // api 호출했을 때, interview의 question과 answer이 같이 나오도록 수정하시면 될 것 같습니다!
     public static InterviewResponse of(Interview interview, List<InterviewAnswerResponse> interviewAnswers) {
         return new InterviewResponse(
                 interview.getInterviewId(),
