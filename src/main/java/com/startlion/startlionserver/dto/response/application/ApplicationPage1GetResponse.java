@@ -2,6 +2,7 @@ package com.startlion.startlionserver.dto.response.application;
 
 import com.startlion.startlionserver.domain.entity.Application;
 import com.startlion.startlionserver.domain.entity.Part;
+import com.startlion.startlionserver.dto.response.part.PartIdResponse;
 import com.startlion.startlionserver.dto.response.pathToKnow.PathToKnowGetResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,12 +35,14 @@ public class ApplicationPage1GetResponse {
 
     private List<PathToKnowGetResponse> pathToKnows;
 
-    private Part part;
+    private PartIdResponse part;
 
     public static ApplicationPage1GetResponse of(Application application) {
+        // 리스트 형태로 PathToKnow 생성
         List<PathToKnowGetResponse> pathToKnowResponses = application.getPathToKnows().stream()
                 .map(PathToKnowGetResponse::new)
                 .collect(Collectors.toList());
-        return new ApplicationPage1GetResponse(application.getIsAgreed(), application.getName(), application.getGender(), application.getStudentNum(), application.getMajor(), application.getMultiMajor(), application.getSemester(), application.getPhone(), application.getEmail(), pathToKnowResponses, application.getPart());}
-
+        // PartId만 표시
+        PartIdResponse part = new PartIdResponse(application.getPart());
+        return new ApplicationPage1GetResponse(application.getIsAgreed(), application.getName(), application.getGender(), application.getStudentNum(), application.getMajor(), application.getMultiMajor(), application.getSemester(), application.getPhone(), application.getEmail(), pathToKnowResponses, part);}
 }

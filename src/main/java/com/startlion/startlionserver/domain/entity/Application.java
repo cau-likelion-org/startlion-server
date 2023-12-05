@@ -37,35 +37,35 @@ public class Application extends BaseTimeEntity {
     private CommonQuestion generation; // generation이라고 매핑했지만 실제로는 CommonQuestion의 id를 가리킴
 
     // application page 1 start
-    @ColumnDefault("''")
+    @ColumnDefault("")
     private Boolean isAgreed;
 
     @Column(length = 30)
-    @ColumnDefault("''")
+    @ColumnDefault("")
     private String name;
 
     @Column(length = 1)
-    @ColumnDefault("''")
+    @ColumnDefault("")
     private String gender;
 
     @ColumnDefault("0")
     private Integer studentNum;
 
     @Column(length = 30)
-    @ColumnDefault("''")
+    @ColumnDefault("")
     private String major;
 
     @Column(length = 30)
     private String multiMajor;
 
-    @ColumnDefault("''")
+    @ColumnDefault("")
     private String semester;
 
-    @ColumnDefault("''")
+    @ColumnDefault("")
     private String phone;
 
-    @Column(unique = true, length = 100)
-    @ColumnDefault("''")
+    @Column(length = 100)
+    @ColumnDefault("")
     private String email;
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "applicationId") // application 저장 시, pathToKnows도 함께 저장
@@ -80,10 +80,10 @@ public class Application extends BaseTimeEntity {
     // application page 1 end
 
 
-    @ColumnDefault("''")
+    @ColumnDefault("")
     private String portfolio;
 
-    @ColumnDefault("''")
+    @ColumnDefault("")
     private String interview;
 
     @ColumnDefault("'N'")
@@ -111,6 +111,7 @@ public class Application extends BaseTimeEntity {
         this.status = status;
     }
 
+
     public void updateApplication(boolean isAgreed, User user,String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnows, Part part, String status, CommonQuestion generation){
         this.isAgreed = isAgreed;
         this.name = name;
@@ -122,6 +123,9 @@ public class Application extends BaseTimeEntity {
         this.phone = phone;
         this.email = email;
         this.pathToKnows = pathToKnows;
+        for(PathToKnow pathToKnow : this.pathToKnows){
+            pathToKnow.setApplicationId(this);
+        }
         this.part = part;
         this.status = status;
         this.generation = generation;
@@ -144,11 +148,5 @@ public class Application extends BaseTimeEntity {
     public void updateCommonQuestion(CommonQuestion generation) {
         this.generation = generation;
     }
-
-    public void addPathToKnow(PathToKnow pathToKnow) {
-        pathToKnow.setApplicationId(this);
-    }
-
-
 }
 

@@ -5,15 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@NoArgsConstructor
 @Getter
 @Table
 @Setter
+@NoArgsConstructor
 public class PathToKnow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +27,8 @@ public class PathToKnow {
     private Application applicationId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column()
+    @ColumnDefault("")
     private PathType pathType;
 
     public enum PathType {
@@ -35,5 +37,9 @@ public class PathToKnow {
         EVERYTIME,
         HOMEPAGE,
         ETC
+    }
+
+    public void setApplicationId(Application applicationId) {
+        this.applicationId = applicationId;
     }
 }

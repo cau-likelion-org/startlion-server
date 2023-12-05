@@ -6,9 +6,10 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
 @Table
 public class Answer {
@@ -23,27 +24,35 @@ public class Answer {
     private Application application;
 
     @Column(length = 500)
+    @ColumnDefault("")
     private String commonAnswer1;
 
     @Column(length = 500)
+    @ColumnDefault("")
     private String commonAnswer2;
 
     @Column(length = 500)
+    @ColumnDefault("")
     private String commonAnswer3;
 
     @Column(length = 500)
+    @ColumnDefault("")
     private String commonAnswer4;
 
     @Column(length = 500)
+    @ColumnDefault("")
     private String commonAnswer5;
 
     @Column(length = 500)
+    @ColumnDefault("")
     private String partAnswer1;
 
     @Column(length = 500)
+    @ColumnDefault("")
     private String partAnswer2;
 
     @Column(length = 500)
+    @ColumnDefault("")
     private String partAnswer3;
 
     // 공동 답변 생성자
@@ -80,5 +89,9 @@ public class Answer {
         this.partAnswer1 = partAnswer1;
         this.partAnswer2 = partAnswer2;
         this.partAnswer3 = partAnswer3;
+    }
+
+    public void updateBlankAnswer(Application application) {
+        this.application = application;
     }
 }

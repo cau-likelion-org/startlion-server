@@ -1,13 +1,13 @@
 package com.startlion.startlionserver.dto.response.application;
 
-import com.startlion.startlionserver.domain.entity.CommonQuestion;
-import com.startlion.startlionserver.domain.entity.Part;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
 public class ApplicationListGetResponse {
+
+    private Long applicationId;
 
     private Long generationId;
 
@@ -17,7 +17,7 @@ public class ApplicationListGetResponse {
 
     private String status;
 
-    public static ApplicationListGetResponse of(Long generationId, String name, Long partId, String status) {
-        return new ApplicationListGetResponse(generationId, name, partId, status);
+    public static ApplicationListGetResponse of(Long applicationId, Long generationId, String name, Long partId, String status) {
+        return new ApplicationListGetResponse(applicationId ,generationId, name, partId, status);
     }
 }
