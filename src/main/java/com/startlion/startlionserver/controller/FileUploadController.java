@@ -2,6 +2,7 @@ package com.startlion.startlionserver.controller;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ public class FileUploadController {
 
     // interview의 imageUrl에 저장될 url을 반환한다.
     // S3에 파일을 업로드 해놓은 뒤, 수기로 interview의 imageUrl에 해당 url을 저장하는 식으로 사용하면 되지 않을까 싶습니다.
+    @Operation(summary = "파일 업로드")
     @PostMapping
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         try{

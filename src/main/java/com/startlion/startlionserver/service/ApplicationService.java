@@ -3,6 +3,7 @@ package com.startlion.startlionserver.service;
 import com.startlion.startlionserver.domain.entity.Answer;
 import com.startlion.startlionserver.domain.entity.Application;
 import com.startlion.startlionserver.domain.entity.CommonQuestion;
+import com.startlion.startlionserver.domain.entity.PathToKnow;
 import com.startlion.startlionserver.dto.request.application.*;
 import com.startlion.startlionserver.dto.response.application.ApplicationPage2GetResponse;
 import com.startlion.startlionserver.dto.response.application.ApplicationPage4GetResponse;
@@ -11,11 +12,14 @@ import com.startlion.startlionserver.dto.response.application.ApplicationPage1Ge
 import com.startlion.startlionserver.global.exception.EmailAlreadyInUseException;
 import com.startlion.startlionserver.repository.ApplicationJpaRepository;
 import com.startlion.startlionserver.repository.CommonQuestionRepository;
+import com.startlion.startlionserver.repository.PathToKnowJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +29,7 @@ public class ApplicationService {
 
     private final ApplicationJpaRepository applicationJpaRepository;
     private final CommonQuestionRepository commonQuestionRepository;
+    private final PathToKnowJpaRepository pathToKnowJpaRepository;
 
     private final AnswerService answerService;
 
@@ -79,6 +84,15 @@ public class ApplicationService {
         if (optionalApplication.isPresent()) {
             application = optionalApplication.get();
             application.updateApplication(request.getIsAgreed(), request.getUser(),request.getName(), request.getGender(), request.getStudentNum(), request.getMajor(), request.getMultiMajor(), request.getSemester(), request.getPhone(), request.getEmail(), request.getPathToKnows(), request.getPart(), "S", commonQuestion);
+            applicationJpaRepository.save(application); //Application 저장
+
+            pathToKnowJpaRepository.deleteByApplicationId(application); // 기존의 path to know 삭제
+            List<PathToKnow> pathToKnows = new ArrayList<>();
+            for(PathToKnow pathToKnow : request.getPathToKnows()){
+                pathToKnow.setApplicationId(application);
+                pathToKnows.add(pathToKnow);
+                pathToKnowJpaRepository.save(pathToKnow);
+            }
         } else {
             application = Application.builder()
                     .generation(commonQuestionRepository.findById(generationId)
@@ -97,6 +111,18 @@ public class ApplicationService {
                     .part(request.getPart())
                     .status("S")
                     .build();
+
+            applicationJpaRepository.save(application);
+
+            // path to know 저장
+            pathToKnowJpaRepository.deleteByApplicationId(application);
+            List<PathToKnow> pathToKnows = new ArrayList<>();
+            for(PathToKnow pathToKnow : request.getPathToKnows()){
+                pathToKnow.setApplicationId(application);
+                pathToKnows.add(pathToKnow);
+                pathToKnowJpaRepository.save(pathToKnow);
+            }
+
             application.updateCommonQuestion(commonQuestion);
             applicationJpaRepository.save(application);
         }

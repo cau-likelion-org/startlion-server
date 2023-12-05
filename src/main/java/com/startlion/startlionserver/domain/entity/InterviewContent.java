@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table
-public class InterviewAnswer {
+public class InterviewContent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +20,10 @@ public class InterviewAnswer {
     @JoinColumn(name = "interview_id")
     private Interview interview;
 
-    @Column(length = 200)
+    @Column(length = 400)
+    private String question;
+
+    @Column(length = 400)
     private String answer;
 
 }

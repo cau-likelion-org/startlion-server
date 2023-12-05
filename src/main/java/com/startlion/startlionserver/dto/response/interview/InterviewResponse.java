@@ -2,7 +2,6 @@ package com.startlion.startlionserver.dto.response.interview;
 
 
 import com.startlion.startlionserver.domain.entity.Interview;
-import com.startlion.startlionserver.domain.entity.InterviewAnswer;
 import com.startlion.startlionserver.dto.response.interviewanswer.InterviewAnswerResponse;
 
 import java.util.List;

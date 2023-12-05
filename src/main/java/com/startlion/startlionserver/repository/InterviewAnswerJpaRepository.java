@@ -1,12 +1,14 @@
 package com.startlion.startlionserver.repository;
 
 import com.startlion.startlionserver.domain.entity.Interview;
-import com.startlion.startlionserver.domain.entity.InterviewAnswer;
+import com.startlion.startlionserver.domain.entity.InterviewContent;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
-public interface InterviewAnswerJpaRepository extends JpaRepository<InterviewAnswer, Long> {
+@RepositoryRestResource(exported = false)
+public interface InterviewAnswerJpaRepository extends JpaRepository<InterviewContent, Long> {
 
-    List<InterviewAnswer> findByInterview(Interview interview);
+    List<InterviewContent> findByInterview(Interview interview);
 }
