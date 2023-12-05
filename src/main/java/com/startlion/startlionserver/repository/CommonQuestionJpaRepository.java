@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface CommonQuestionRepository extends JpaRepository<CommonQuestion, Long> {
+public interface CommonQuestionJpaRepository extends JpaRepository<CommonQuestion, Long> {
     Optional<CommonQuestion> findByGeneration(Long generationId);
 }

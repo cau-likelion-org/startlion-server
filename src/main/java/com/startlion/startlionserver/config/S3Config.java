@@ -10,25 +10,47 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import software.amazon.awssdk.auth.credentials.SystemPropertyCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 @Configuration
-@PropertySource("classpath:application-SECRET-KEY.properties")
 public class S3Config {
-    @Value("${iam-access-key}")
-    private String accessKey;
 
-    @Value("${iam-secret-key}")
-    private String secretKey;
+    private static final String AWS_ACCESS_KEY_ID = "aws.accessKeyId";
+    private static final String AWS_SECRET_ACCESS_KEY = "aws.secretAccessKey";
 
-    @Value("${aws-region}")
-    private String region;
+    private final String accessKey;
+    private final String secretKey;
+    private final String regionString;
+
+    public S3Config(@Value("${aws-property.iam-access-key}") final String accessKey,
+                     @Value("${aws-property.iam-secret-key}") final String secretKey,
+                     @Value("${aws-property.aws-region}") final String regionString) {
+        this.accessKey = accessKey;
+        this.secretKey = secretKey;
+        this.regionString = regionString;
+    }
+
 
     @Bean
-    public AmazonS3 amazonS3Client() {
-        AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
-        return AmazonS3Client.builder()
-                .withRegion(region)
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+    public SystemPropertyCredentialsProvider systemPropertyCredentialsProvider() {
+        System.setProperty(AWS_ACCESS_KEY_ID, accessKey);
+        System.setProperty(AWS_SECRET_ACCESS_KEY, secretKey);
+        return SystemPropertyCredentialsProvider.create();
+    }
+
+    @Bean
+    public Region getRegion() {
+        return Region.of(regionString);
+    }
+
+    @Bean
+    public S3Client getS3Client() {
+        return S3Client.builder()
+                .region(getRegion())
+                .credentialsProvider(systemPropertyCredentialsProvider())
                 .build();
     }
 }

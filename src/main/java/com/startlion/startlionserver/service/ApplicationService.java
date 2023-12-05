@@ -9,10 +9,9 @@ import com.startlion.startlionserver.dto.response.application.ApplicationPage2Ge
 import com.startlion.startlionserver.dto.response.application.ApplicationPage4GetResponse;
 import com.startlion.startlionserver.dto.response.application.ApplicationPage3GetResponse;
 import com.startlion.startlionserver.dto.response.application.ApplicationPage1GetResponse;;
-import com.startlion.startlionserver.global.exception.EmailAlreadyInUseException;
 import com.startlion.startlionserver.repository.AnswerJpaRepository;
 import com.startlion.startlionserver.repository.ApplicationJpaRepository;
-import com.startlion.startlionserver.repository.CommonQuestionRepository;
+import com.startlion.startlionserver.repository.CommonQuestionJpaRepository;
 import com.startlion.startlionserver.repository.PathToKnowJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,7 @@ import java.util.Optional;
 public class ApplicationService {
 
     private final ApplicationJpaRepository applicationJpaRepository;
-    private final CommonQuestionRepository commonQuestionRepository;
+    private final CommonQuestionJpaRepository commonQuestionRepository;
     private final PathToKnowJpaRepository pathToKnowJpaRepository;
     private final AnswerJpaRepository answerJpaRepository;
 
@@ -41,7 +40,7 @@ public class ApplicationService {
     }
 
     // 저장된 지원서 있을 시, 지원서 정보 가져오기
-    public ResponseEntity<?> getById(Long applicationId, int page) {
+    public ResponseEntity<?> getById(Long applicationId, int page, Long userId) {
         Application application = applicationJpaRepository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 applicationId를 가진 지원서가 존재하지 않습니다."));
         switch (page) {

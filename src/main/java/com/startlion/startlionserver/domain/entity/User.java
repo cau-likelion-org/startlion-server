@@ -42,15 +42,15 @@ public class User extends BaseTimeEntity {
     private String previousImageUrl;
 
     @Builder
-    public void join(String email,String username,String socialId,String imageUrl) {
+    public User(String email, String username, String socialId, String imageUrl) {
         this.email = email;
         this.username = username;
         this.socialId = socialId;
         this.imageUrl = imageUrl;
     }
 
-    public void saveToken(String refreshToken){
-        this.refreshToken=refreshToken;
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     public void updateImageUrl(String imageUrl){

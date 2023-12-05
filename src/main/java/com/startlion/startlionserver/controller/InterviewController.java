@@ -4,7 +4,6 @@ package com.startlion.startlionserver.controller;
 import com.startlion.startlionserver.dto.response.interview.InterviewResponse;
 import com.startlion.startlionserver.service.InterviewService;
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/interviews")
+@RequestMapping("api/interviews")
 public class InterviewController {
 
     private final InterviewService interviewService;
@@ -31,7 +30,7 @@ public class InterviewController {
     }
 
     @Operation(summary = "interviewId로 interview 정보 조회")
-    @GetMapping("{interviewId}")
+    @GetMapping("/{interviewId}")
     public ResponseEntity<InterviewResponse> getInterviewById(@PathVariable Long interviewId) {
         val response = interviewService.getInterviewById(interviewId);
         return ResponseEntity.ok(response);

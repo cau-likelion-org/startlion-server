@@ -38,4 +38,8 @@ public class Interview {
     private String oneLineAnswer;
 
     private String imageUrl;
+
+    public void updateImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }
