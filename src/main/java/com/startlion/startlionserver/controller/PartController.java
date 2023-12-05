@@ -16,7 +16,7 @@ public class PartController {
     private final PartService partService;
 
     @Operation(summary = "part 정보 조회")
-    @GetMapping("{partId}")
+    @GetMapping("/{partId}")
     public ResponseEntity<PartResponse> getPart(@PathVariable Long partId
     ) {
         val response = partService.getPartById(partId);
