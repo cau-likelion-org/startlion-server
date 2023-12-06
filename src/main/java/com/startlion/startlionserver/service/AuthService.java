@@ -1,23 +1,16 @@
 package com.startlion.startlionserver.service;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.startlion.startlionserver.config.auth.AuthValueConfig;
 import com.startlion.startlionserver.config.jwt.JwtTokenProvider;
-import com.startlion.startlionserver.dto.response.GoogleLoginResponse;
-import com.startlion.startlionserver.dto.request.GoogleOAuthRequest;
-import com.startlion.startlionserver.dto.response.auth.OAuthResponse;
-import com.startlion.startlionserver.external.S3Service;
-import com.startlion.startlionserver.repository.UserJpaRepository;
 import com.startlion.startlionserver.domain.entity.User;
-import jakarta.persistence.EntityNotFoundException;
+import com.startlion.startlionserver.dto.request.GoogleOAuthRequest;
+import com.startlion.startlionserver.dto.response.GoogleLoginResponse;
+import com.startlion.startlionserver.dto.response.auth.OAuthResponse;
+import com.startlion.startlionserver.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,14 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 
 @Service
