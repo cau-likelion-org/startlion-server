@@ -1,8 +1,6 @@
 package com.startlion.startlionserver.config.jwt;
 
 
-import com.startlion.startlionserver.auth.JwtTokenProvider;
-import com.startlion.startlionserver.global.exception.EmailAlreadyInUseException;
 import com.startlion.startlionserver.global.exception.TokenException;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.FilterChain;

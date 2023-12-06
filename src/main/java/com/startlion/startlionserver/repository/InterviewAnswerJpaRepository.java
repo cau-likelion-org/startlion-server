@@ -7,7 +7,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
-@RepositoryRestResource(exported = false)
 public interface InterviewAnswerJpaRepository extends JpaRepository<InterviewContent, Long> {
 
     List<InterviewContent> findByInterview(Interview interview);

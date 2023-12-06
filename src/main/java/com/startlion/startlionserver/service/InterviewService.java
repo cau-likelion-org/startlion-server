@@ -5,6 +5,7 @@ import com.startlion.startlionserver.dto.response.interview.InterviewResponse;
 import com.startlion.startlionserver.dto.response.interviewanswer.InterviewAnswerResponse;
 import com.startlion.startlionserver.repository.InterviewAnswerJpaRepository;
 import com.startlion.startlionserver.repository.InterviewJpaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,4 +41,17 @@ public class InterviewService {
                 .toList()))
                 .toList();
     }
+
+    @Transactional
+    public void updateInterviewImageUrl(Long interviewId, String imageUrl) {
+        Interview interview = findById(interviewId);
+        interview.updateImageUrl(imageUrl);
+    }
+
+    protected Interview findById(Long interviewId) {
+        return interviewJpaRepository.findById(interviewId)
+                .orElseThrow(() -> new EntityNotFoundException("해당하는 인터뷰가 없습니다."));
+    }
+
+
 }

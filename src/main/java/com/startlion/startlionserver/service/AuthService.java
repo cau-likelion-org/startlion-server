@@ -1,164 +1,91 @@
 package com.startlion.startlionserver.service;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.startlion.startlionserver.dto.response.GoogleLoginResponse;
-import com.startlion.startlionserver.dto.request.GoogleOAuthRequest;
-import com.startlion.startlionserver.repository.UserRepository;
+import com.startlion.startlionserver.config.auth.AuthValueConfig;
+import com.startlion.startlionserver.config.jwt.JwtTokenProvider;
 import com.startlion.startlionserver.domain.entity.User;
-import jakarta.persistence.EntityManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import com.startlion.startlionserver.dto.request.GoogleOAuthRequest;
+import com.startlion.startlionserver.dto.response.GoogleLoginResponse;
+import com.startlion.startlionserver.dto.response.auth.OAuthResponse;
+import com.startlion.startlionserver.repository.UserJpaRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
-    @Value("${google.auth.url}")
-    private String googleAuthUrl;
 
-    @Value("${google.login.url}")
-    private String googleLoginUrl;
+    private final AuthValueConfig valueConfig;
+    private final UserJpaRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    @Value("${google.client.id}")
-    private String googleClientId;
-
-    @Value("${google.redirect.url}")
-    private String googleRedirectUrl;
-
-    @Value("${google.secret}")
-    private String googleClientSecret;
-
-    @Value("${aws-bucket}")
-    private String bucket;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private AmazonS3 amazonS3;
-
-    Map<String, Object> result = new HashMap<>();
-
-    @Autowired
-    private com.startlion.startlionserver.auth.JwtTokenProvider jwtTokenProvider;
+    private static final String AUTHORIZATION_CODE = "authorization_code";
+    private static final Long ACCESS_TOKEN_EXPIRATION = 1000L * 60 * 60 * 2; // 2시간
+    private static final Long REFRESH_TOKEN_EXPIRATION = 1000L * 60 * 60 * 24 * 14; // 2주
 
     @Transactional
-    public Map<String, Object> authenticateUser(String authCode) throws Exception{
+    public OAuthResponse authenticateUser(String authCode) throws Exception {
 
         GoogleOAuthRequest googleOAuthRequest = GoogleOAuthRequest
                 .builder()
-                .clientId(googleClientId)
-                .clientSecret(googleClientSecret)
+                .clientId(valueConfig.getGoogleClientId())
+                .clientSecret(valueConfig.getGoogleClientSecret())
                 .code(authCode)
-                .redirectUri(googleRedirectUrl)
-                .grantType("authorization_code")
+                .redirectUri(valueConfig.getGoogleRedirectUrl())
+                .grantType(AUTHORIZATION_CODE)
                 .build();
 
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<GoogleLoginResponse> apiResponse = restTemplate.postForEntity(googleAuthUrl + "/token", googleOAuthRequest, GoogleLoginResponse.class);
+        ResponseEntity<GoogleLoginResponse> apiResponse = restTemplate.postForEntity(valueConfig.getGoogleAuthUrl() + "/token", googleOAuthRequest, GoogleLoginResponse.class);
 
         GoogleLoginResponse googleLoginResponse = apiResponse.getBody();
 
-
-        String googleToken = googleLoginResponse.getId_token();
-
-        String requestUrl = UriComponentsBuilder.fromHttpUrl(googleAuthUrl + "/tokeninfo").queryParam("id_token", googleToken).toUriString();
-
-        String resultJson = restTemplate.getForObject(requestUrl, String.class);
+        val googleToken = googleLoginResponse.getId_token();
+        val requestUrl = UriComponentsBuilder.fromHttpUrl(valueConfig.getGoogleAuthUrl() + "/tokeninfo")
+                .queryParam("id_token", googleToken)
+                .toUriString();
+        val resultJson = restTemplate.getForObject(requestUrl, String.class);
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(resultJson);
-        String email = jsonNode.get("email").asText();
-        String socialId = "google";
-        String username = jsonNode.get("name").asText();
-        String imageUrl = jsonNode.get("picture").asText();
+        val email = jsonNode.get("email").asText();
+        val socialId = "google";
+        val username = jsonNode.get("name").asText();
+        val imageUrl = jsonNode.get("picture").asText();
 
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-//            String s3Url = uploadImageToS3(imageUrl); -> google 사진은 S3에 업로드하지 않음
-            User newUser = new User();
-            newUser.join(email,username,socialId,imageUrl);
-            saveUserTokens(newUser);
-            userRepository.save(newUser);
-            return result;
+        val newUser = User.builder()
+                .email(email)
+                .username(username)
+                .socialId(socialId)
+                .imageUrl(imageUrl)
+                .build();
+
+        User user = userRepository.findByEmail(email)
+                .orElse(userRepository.save(newUser));
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, null);
+        val tokenVO = generateToken(authentication);
+
+        user.updateRefreshToken(tokenVO.getRefreshToken());
+        return OAuthResponse.of(tokenVO.getAccessToken(), tokenVO.getRefreshToken());
+    }
+
+private TokenVO generateToken(Authentication authentication){
+        String accessToken=jwtTokenProvider.generateToken(authentication,ACCESS_TOKEN_EXPIRATION);
+        String refreshToken=jwtTokenProvider.generateToken(authentication,REFRESH_TOKEN_EXPIRATION);
+        return new TokenVO(accessToken,refreshToken);
         }
-        else {
-            User findUser = userRepository.findByEmail(email);
-            // 이미지가 변경되었을 경우에만 S3에 업로드
-            if(!imageUrl.equals(findUser.getPreviousImageUrl())) {
-//                String s3Url = uploadImageToS3(imageUrl); -> google 사진은 S3에 업로드하지 않음
-                findUser.updateImageUrl(imageUrl);
-            }
-
-            saveUserTokens(findUser);
-            return result;
-        }
-
-    }
-
-    // 이미지를 S3에 업로드하고 S3 URL을 반환
-    private String uploadImageToS3(String imageUrl) throws IOException {
-        URL url = new URL(imageUrl);
-        InputStream in = new BufferedInputStream(url.openStream());
-        String fileName = UUID.randomUUID().toString();
-
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentType("image/jpeg");
-        amazonS3.putObject(new PutObjectRequest(bucket, fileName, in, metadata));
-
-        String s3Url = amazonS3.getUrl(bucket, fileName).toString();
-        return s3Url;
-    }
-
-    @Value("${jwt.accessTokenExpiration}")
-    private Long accessTokenExpiration;
-
-    @Value("${jwt.refreshTokenExpiration}")
-    private Long refreshTokenExpiration;
-
-    private void saveUserTokens(User user) {
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
-        String accessToken = jwtTokenProvider.generateToken(authentication, accessTokenExpiration);
-        String refreshToken = jwtTokenProvider.generateToken(authentication, refreshTokenExpiration);
-        user.saveToken(refreshToken);
-        userRepository.save(user);
-        result.put("user", user);
-        result.put("accessToken", accessToken);
-    }
-
-    // 이미지를 S3에 업로드하고 S3 URL을 반환 -> 삭제
-//    private String uploadImageToS3(String imageUrl) throws IOException {
-//        URL url = new URL(imageUrl);
-//        InputStream in = new BufferedInputStream(url.openStream());
-//        String fileName = UUID.randomUUID().toString();
-//
-//        ObjectMetadata metadata = new ObjectMetadata();
-//        metadata.setContentType("image/jpeg");
-//        amazonS3.putObject(new PutObjectRequest(bucket, fileName, in, metadata));
-//
-//        String s3Url = amazonS3.getUrl(bucket, fileName).toString();
-//        return s3Url;
-//    }
 }

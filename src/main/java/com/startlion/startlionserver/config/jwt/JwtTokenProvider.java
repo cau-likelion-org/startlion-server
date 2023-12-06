@@ -1,7 +1,5 @@
-package com.startlion.startlionserver.auth;
+package com.startlion.startlionserver.config.jwt;
 
-import com.startlion.startlionserver.config.jwt.JwtValidationType;
-import com.startlion.startlionserver.domain.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -30,19 +28,10 @@ public class JwtTokenProvider {
     public String generateToken(Authentication authentication, Long tokenExpirationTime) {
         final Date now = new Date();
 
-        final Claims claims = Jwts.claims()
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + tokenExpirationTime));
+        final Claims claims = Jwts.claims().setIssuedAt(now).setExpiration(new Date(now.getTime() + tokenExpirationTime));
+        claims.put("id", authentication.getPrincipal());
 
-        User user = (User) authentication.getPrincipal();
-        Long id = user.getUserId();
-        claims.put("id", id);
-
-        return Jwts.builder()
-                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-                .setClaims(claims)
-                .signWith(SignatureAlgorithm.HS256,getSigningKey())
-                .compact();
+        return Jwts.builder().setHeaderParam(Header.TYPE, Header.JWT_TYPE).setClaims(claims).signWith(getSigningKey()).compact();
     }
 
     private SecretKey getSigningKey() {
@@ -66,10 +55,7 @@ public class JwtTokenProvider {
     }
 
     private Claims getBody(final String token) {
-        return Jwts.parser()
-                .setSigningKey(getSigningKey())
-                .parseClaimsJws(token)
-                .getBody();
+        return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
     }
 
     public Long getUserFromJwt(String token) {

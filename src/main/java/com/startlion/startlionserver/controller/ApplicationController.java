@@ -3,18 +3,22 @@ package com.startlion.startlionserver.controller;
 import com.startlion.startlionserver.dto.request.application.*;
 import com.startlion.startlionserver.dto.response.application.ApplicationPage1GetResponse;
 import com.startlion.startlionserver.service.ApplicationService;
+import com.startlion.startlionserver.util.UserUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.security.Principal;
 
 @RestController
 @RequestMapping(value = "/application")
 @RequiredArgsConstructor
+@Tag(name = "[Application] 지원서 관련 API")
 public class ApplicationController {
 
     private final ApplicationService applicationService;
@@ -33,8 +37,11 @@ public class ApplicationController {
     //TODO: 인가 처리
     @Operation(summary = "저장된 지원서 있을 시, 지원서 정보 가져오기")
     @GetMapping("/{applicationId}")
-    public ResponseEntity<?> getApplication(@PathVariable Long applicationId, @RequestParam int page)  {
-        return ResponseEntity.ok(applicationService.getById(applicationId, page));
+    public ResponseEntity<?> getApplication(
+            @PathVariable Long applicationId,
+            @RequestParam int page,
+            Principal principal)  {
+        return ResponseEntity.ok(applicationService.getById(applicationId, page, UserUtil.getUserId(principal)));
     }
 
     // 지원서 저장하기의 경우 받아야 하는 Body 정보가 다르기 때문에, 4개의 API로 나누었습니다.

@@ -19,6 +19,9 @@ public class Part {
     @Column(nullable = false)
     private Long partId;
 
+    @Column(nullable = false)
+    private String name;
+
     @OneToMany(mappedBy = "part")
     @JsonIgnore
     private List<PartQuestion> partQuestions;

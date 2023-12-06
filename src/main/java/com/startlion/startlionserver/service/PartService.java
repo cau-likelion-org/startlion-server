@@ -15,8 +15,8 @@ public class PartService {
 
     private final PartJpaRepository partJpaRepository;
 
-    public PartResponse getPartById(Long partId) {
-        Part part = partJpaRepository.findById(partId)
+    public PartResponse getPartByName(String name) {
+        Part part = partJpaRepository.findByName(name)
                 .orElseThrow( () -> new IllegalArgumentException("해당하는 파트가 없습니다."));
         return PartResponse.of(part);
     }
