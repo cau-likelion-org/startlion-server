@@ -35,8 +35,6 @@ public class AuthService {
     private static final Long ACCESS_TOKEN_EXPIRATION = 1000L * 60 * 60 * 2; // 2시간
     private static final Long REFRESH_TOKEN_EXPIRATION = 1000L * 60 * 60 * 24 * 14; // 2주
 
-    Map<String, Object> result = new HashMap<>();
-
     @Transactional
     public OAuthResponse authenticateUser(String authCode) throws Exception {
 
