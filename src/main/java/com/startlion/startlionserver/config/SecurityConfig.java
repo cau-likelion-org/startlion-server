@@ -4,6 +4,7 @@ package com.startlion.startlionserver.config;
 import com.startlion.startlionserver.config.jwt.CustomJwtAuthenticationEntryPoint;
 import com.startlion.startlionserver.config.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +17,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
+import java.util.stream.Stream;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -25,14 +28,18 @@ public class SecurityConfig {
     private final CustomJwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     private static final String[] AUTH_WHITE_LIST = {
-            "/h2-console/*",
             "/health",
             "/login/oauth2/code/google",
-            "/login"
+            "/login",
+
+            "/swagger-resources/**",
+            "/favicon.ico",
+            "/api-docs/**",
+            "/swagger-ui/**",
     };
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
         return http.csrf().disable()
                 .httpBasic().disable()
                 .sessionManagement()
@@ -45,11 +52,17 @@ public class SecurityConfig {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers(new MvcRequestMatcher(introspector, "/health")).permitAll()
+                .requestMatchers(PathRequest.toH2Console()).permitAll()
+                .requestMatchers(createMvcRequestMatcherForWhitelist(mvc)).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    @Bean
+    public MvcRequestMatcher.Builder mvcRequestMatcherBuilder(HandlerMappingIntrospector introspector) {
+        return new MvcRequestMatcher.Builder(introspector);
     }
 
     @Bean
@@ -66,4 +79,7 @@ public class SecurityConfig {
             }
         };
     }
+        private MvcRequestMatcher[] createMvcRequestMatcherForWhitelist(MvcRequestMatcher.Builder mvc) {
+            return Stream.of(AUTH_WHITE_LIST).map(mvc::pattern).toArray(MvcRequestMatcher[]::new);
+        }
 }
