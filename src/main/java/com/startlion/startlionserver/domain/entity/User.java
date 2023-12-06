@@ -32,6 +32,7 @@ public class User extends BaseTimeEntity {
 
     private String imageUrl;
 
+    @Column(length = 1024)
     private String refreshToken;
 
     private LocalDateTime expiredIn;
