@@ -32,6 +32,8 @@ public class SecurityConfig {
             "/login/oauth2/code/google",
             "/login",
             "/application",
+            "/interviews/**",
+            "/parts/**",
 
             "/swagger-resources/**",
             "/favicon.ico",
