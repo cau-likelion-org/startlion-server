@@ -12,6 +12,7 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -60,6 +61,7 @@ public class JwtTokenProvider {
 
     public Long getUserFromJwt(String token) {
         Claims claims = getBody(token);
-        return Long.valueOf(claims.get("id").toString());
+        Map<String, Object> idClaim = (Map<String, Object>) claims.get("id");
+        return Long.valueOf(idClaim.get("userId").toString());
     }
 }
