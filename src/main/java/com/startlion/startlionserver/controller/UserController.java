@@ -4,6 +4,7 @@ import com.startlion.startlionserver.dto.response.application.ApplicationListWit
 import com.startlion.startlionserver.service.UserService;
 import com.startlion.startlionserver.util.UserUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.aspectj.weaver.MemberUtils;
@@ -18,6 +19,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("api/users")
 @RequiredArgsConstructor
+@Tag(name = "[User] 유저 관련 API")
 public class UserController {
 
     private final UserService userService;

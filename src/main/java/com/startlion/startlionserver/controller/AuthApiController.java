@@ -4,6 +4,7 @@ import com.startlion.startlionserver.config.auth.AuthValueConfig;
 import com.startlion.startlionserver.dto.response.auth.OAuthResponse;
 import com.startlion.startlionserver.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "[Auth] 인증 관련 API")
 public class AuthApiController {
 
     private final AuthService authService;

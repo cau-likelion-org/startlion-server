@@ -6,6 +6,7 @@ import com.startlion.startlionserver.service.ApplicationService;
 import com.startlion.startlionserver.util.UserUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping(value = "/application")
 @RequiredArgsConstructor
+@Tag(name = "[Application] 지원서 관련 API")
 public class ApplicationController {
 
     private final ApplicationService applicationService;
