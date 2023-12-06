@@ -31,6 +31,7 @@ public class SecurityConfig {
             "/health",
             "/login/oauth2/code/google",
             "/login",
+            "/application",
 
             "/swagger-resources/**",
             "/favicon.ico",
