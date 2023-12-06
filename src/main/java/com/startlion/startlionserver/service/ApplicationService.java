@@ -1,18 +1,12 @@
 package com.startlion.startlionserver.service;
 
-import com.startlion.startlionserver.domain.entity.Answer;
-import com.startlion.startlionserver.domain.entity.Application;
-import com.startlion.startlionserver.domain.entity.CommonQuestion;
-import com.startlion.startlionserver.domain.entity.PathToKnow;
+import com.startlion.startlionserver.domain.entity.*;
 import com.startlion.startlionserver.dto.request.application.*;
 import com.startlion.startlionserver.dto.response.application.ApplicationPage2GetResponse;
 import com.startlion.startlionserver.dto.response.application.ApplicationPage4GetResponse;
 import com.startlion.startlionserver.dto.response.application.ApplicationPage3GetResponse;
 import com.startlion.startlionserver.dto.response.application.ApplicationPage1GetResponse;;
-import com.startlion.startlionserver.repository.AnswerJpaRepository;
-import com.startlion.startlionserver.repository.ApplicationJpaRepository;
-import com.startlion.startlionserver.repository.CommonQuestionJpaRepository;
-import com.startlion.startlionserver.repository.PathToKnowJpaRepository;
+import com.startlion.startlionserver.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,6 +25,7 @@ public class ApplicationService {
     private final CommonQuestionJpaRepository commonQuestionRepository;
     private final PathToKnowJpaRepository pathToKnowJpaRepository;
     private final AnswerJpaRepository answerJpaRepository;
+    private final UserJpaRepository userJpaRepository;
 
     private final AnswerService answerService;
 
@@ -61,7 +56,7 @@ public class ApplicationService {
 
     // 지원서 1페이지 저장
     @Transactional
-    public Long updateApplicationPage1(Long applicationId, ApplicationPage1PutRequest request, Long generationId) {
+    public Long updateApplicationPage1(Long applicationId, ApplicationPage1PutRequest request, Long generationId, Long userId) {
         // isAgreed 필드 null 체크
         checkNullAgreedField(request.getIsAgreed());
 
@@ -71,6 +66,11 @@ public class ApplicationService {
         // generationId로 common question 찾기
         CommonQuestion commonQuestion = commonQuestionRepository.findById(generationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 CommonQuestion이 없습니다. id=" + generationId));
+
+        // userId로 User 객체 찾기
+        User user = userJpaRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. id=" + userId));
+
 
 
         // applicationId가 존재하면 기존 지원서 update, 존재하지 않으면 create
@@ -87,14 +87,14 @@ public class ApplicationService {
                 pathToKnowJpaRepository.save(pathToKnow);
             }
 
-            application.updateApplication(request.getIsAgreed(), request.getUser(),request.getName(), request.getGender(), request.getStudentNum(), request.getMajor(), request.getMultiMajor(), request.getSemester(), request.getPhone(), request.getEmail(), request.getPathToKnows(), request.getPart(), "S", commonQuestion);
+            application.updateApplication(request.getIsAgreed(), user,request.getName(), request.getGender(), request.getStudentNum(), request.getMajor(), request.getMultiMajor(), request.getSemester(), request.getPhone(), request.getEmail(), request.getPathToKnows(), request.getPart(), "S", commonQuestion);
 
             applicationJpaRepository.save(application); //Application 저장
         } else {
             application = Application.builder()
                     .generation(commonQuestionRepository.findById(generationId)
                             .orElseThrow(() -> new IllegalArgumentException("해당 commonQuestionId를 가진 commonQuestion이 존재하지 않습니다.")))
-                    .user(request.getUser())
+                    .user(user)
                     .isAgreed(request.getIsAgreed())
                     .name(request.getName())
                     .gender(request.getGender())

@@ -31,10 +31,6 @@ public class ApplicationController {
     }
 
     // 저장된 지원서 있을 시, 지원서 정보 가져오기
-    //TODO: 저장되어 있지 않은 페이지 조회 시 에러 해결 -> 값 없어도 조회 가능하게
-    //TODO: 리턴되는 값 수정
-    //TODO: 지원서 중복 작성시 로직 처리
-    //TODO: 인가 처리
     @Operation(summary = "저장된 지원서 있을 시, 지원서 정보 가져오기")
     @GetMapping("/{applicationId}")
     public ResponseEntity<?> getApplication(
@@ -48,8 +44,8 @@ public class ApplicationController {
     // 지원서 저장하기 1페이지
     @Operation(summary = "지원서 저장하기 1페이지")
     @PutMapping("/{applicationId}/page1")
-    public ResponseEntity<String> updateApplicationPage1(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage1PutRequest request, @RequestParam Long generationId){
-        URI uri = URI.create("/application/" + applicationService.updateApplicationPage1(applicationId, request, generationId));
+    public ResponseEntity<String> updateApplicationPage1(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage1PutRequest request, @RequestParam Long generationId, Principal principal){
+        URI uri = URI.create("/application/" + applicationService.updateApplicationPage1(applicationId, request, generationId, UserUtil.getUserId(principal)));
         return ResponseEntity.created(uri).body("지원서 1페이지 저장 완료");
     }
 
