@@ -1,0 +1,58 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  config:
+    activate:
+      on-profile: local
+    import: application.properties
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        #        show_sql: true
+        format_sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            redirect-uri: ${GOOGLE_REDIRECT_URL}
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+
+google:
+  auth-url: ${GOOGLE_AUTH_URL}
+  login-url: ${GOOGLE_LOGIN_URL}
+
+aws-property:
+  iam-access-key: ${AWS_ACCESS_KEY}
+  iam-secret-key: ${AWS_SECRET_KEY}
+  aws-region: ${AWS_REGION}
+  aws-bucket: ${AWS_BUCKET}
+
+jwt:
+  secret: ${JWT_SECRET}
+logging.level:
+  org.hibernate.SQL: debug
+springdoc:
+  packages-to-scan: com.startlion.startlionserver
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /api-docs/json
+    groups:
+      enabled: true
