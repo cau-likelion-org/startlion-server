@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/parts")
+@RequestMapping("/api/parts")
 @Tag(name = "[Part] 파트 관련 API")
 public class PartController {
 
@@ -27,9 +27,8 @@ public class PartController {
                     @ApiResponse(responseCode = "500", description = "서버 오류")
             }
     )
-    @GetMapping
-    public ResponseEntity<PartResponse> getPart(@RequestParam(required = true) String name
-    ) {
+    @GetMapping("/{name}")
+    public ResponseEntity<PartResponse> getPart(@PathVariable String name) {
         val response = partService.getPartByName(name);
         return ResponseEntity.ok(response);
     }

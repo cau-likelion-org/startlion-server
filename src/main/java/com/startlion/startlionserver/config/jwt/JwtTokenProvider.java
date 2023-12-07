@@ -29,8 +29,14 @@ public class JwtTokenProvider {
     public String generateToken(Authentication authentication, Long tokenExpirationTime) {
         final Date now = new Date();
 
+//        final Claims claims = Jwts.claims().setIssuedAt(now).setExpiration(new Date(now.getTime() + tokenExpirationTime));
+//
+//        claims.put("id", authentication.getPrincipal());
+//
+//        return Jwts.builder().setHeaderParam(Header.TYPE, Header.JWT_TYPE).setClaims(claims).signWith(getSigningKey()).compact();
+
         final Claims claims = Jwts.claims().setIssuedAt(now).setExpiration(new Date(now.getTime() + tokenExpirationTime));
-        claims.put("id", authentication.getPrincipal());
+        claims.put("id", authentication.getName());  // 사용자 이름을 사용자 ID로 사용
 
         return Jwts.builder().setHeaderParam(Header.TYPE, Header.JWT_TYPE).setClaims(claims).signWith(getSigningKey()).compact();
     }
