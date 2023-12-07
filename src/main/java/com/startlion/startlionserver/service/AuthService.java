@@ -74,7 +74,7 @@ public class AuthService {
                 .build();
 
         User user = userRepository.findByEmail(email)
-                .orElse(userRepository.save(newUser));
+                .orElseGet(() -> userRepository.save(newUser));
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, null);
         val tokenVO = generateToken(authentication);

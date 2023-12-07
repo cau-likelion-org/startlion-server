@@ -28,12 +28,13 @@ public class SecurityConfig {
     private final CustomJwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     private static final String[] AUTH_WHITE_LIST = {
+            "/",
             "/health",
             "/login/oauth2/code/google",
             "/login",
             "/application",
-            "/interviews/**",
-            "/parts/**",
+            "/api/interviews/**",
+            "/api/parts/**",
 
             "/swagger-resources/**",
             "/favicon.ico",
@@ -82,7 +83,8 @@ public class SecurityConfig {
             }
         };
     }
-        private MvcRequestMatcher[] createMvcRequestMatcherForWhitelist(MvcRequestMatcher.Builder mvc) {
-            return Stream.of(AUTH_WHITE_LIST).map(mvc::pattern).toArray(MvcRequestMatcher[]::new);
-        }
+
+    private MvcRequestMatcher[] createMvcRequestMatcherForWhitelist(MvcRequestMatcher.Builder mvc) {
+        return Stream.of(AUTH_WHITE_LIST).map(mvc::pattern).toArray(MvcRequestMatcher[]::new);
+    }
 }
