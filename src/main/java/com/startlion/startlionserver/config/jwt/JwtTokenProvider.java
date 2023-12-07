@@ -1,5 +1,6 @@
 package com.startlion.startlionserver.config.jwt;
 
+import com.startlion.startlionserver.domain.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -10,8 +11,10 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -28,11 +31,31 @@ public class JwtTokenProvider {
 
     public String generateToken(Authentication authentication, Long tokenExpirationTime) {
         final Date now = new Date();
+        User user = (User) authentication.getPrincipal();
 
-        final Claims claims = Jwts.claims().setIssuedAt(now).setExpiration(new Date(now.getTime() + tokenExpirationTime));
-        claims.put("id", authentication.getPrincipal());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        return Jwts.builder().setHeaderParam(Header.TYPE, Header.JWT_TYPE).setClaims(claims).signWith(getSigningKey()).compact();
+        // refreshToken을 제외한 필드만 가진 객체 생성
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", user.getUserId());
+        claims.put("createdAt", user.getCreatedAt().format(formatter));
+        claims.put("updatedAt", user.getUpdatedAt().format(formatter));
+        claims.put("userId", user.getUserId());
+        claims.put("email", user.getEmail());
+        claims.put("username", user.getUsername());
+        claims.put("socialId", user.getSocialId());
+        claims.put("imageUrl", user.getImageUrl());
+        claims.put("expiredIn", user.getExpiredIn());
+
+
+
+        return Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + tokenExpirationTime))
+                .signWith(getSigningKey())
+                .compact();
     }
 
     private SecretKey getSigningKey() {
@@ -61,7 +84,6 @@ public class JwtTokenProvider {
 
     public Long getUserFromJwt(String token) {
         Claims claims = getBody(token);
-        Map<String, Object> idClaim = (Map<String, Object>) claims.get("id");
-        return Long.valueOf(idClaim.get("userId").toString());
+        return Long.valueOf(claims.get("id").toString());
     }
 }
