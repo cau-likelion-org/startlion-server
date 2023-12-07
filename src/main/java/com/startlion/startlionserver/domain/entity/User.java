@@ -20,7 +20,7 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(unique = true, length = 100)
+    @Column(length = 100)
     private String email;
 
     private String password; // 단방향 암호화 필요
