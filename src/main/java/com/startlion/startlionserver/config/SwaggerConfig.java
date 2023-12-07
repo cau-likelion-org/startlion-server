@@ -1,26 +1,19 @@
 package com.startlion.startlionserver.config;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Info;
-import org.springdoc.core.models.GroupedOpenApi;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-@OpenAPIDefinition(
-        info = @Info(title = "START LION",
-                description = "start lion api명세",
-                version = "v1"))
 
 @Configuration
 public class SwaggerConfig {
 
     @Bean
-    public GroupedOpenApi chatOpenApi() {
-        String[] paths = {"/application/**", "/login/**", "/member/**", "/upload/**", "/interviews/**", "/parts/**"}; // 기본 경로
-
-        return GroupedOpenApi.builder()
-                .group("START LION API v1")
-                .pathsToMatch(paths)
-                .build();
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Startlion Server API V1")
+                        .version("1.0.0")
+                        .description("Startlion API 서버 명세서입니다."));
     }
 }
