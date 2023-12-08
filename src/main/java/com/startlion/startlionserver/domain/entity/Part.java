@@ -36,5 +36,5 @@ public class Part {
     private String imageUrl;
 
     @Column(nullable = false)
-    private Long curriculumGeneration;
+    private Long generation;
 }

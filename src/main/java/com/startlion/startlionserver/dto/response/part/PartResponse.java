@@ -48,7 +48,7 @@ public record PartResponse(
                         commonQuestion.getCommonQuestion4(),
                         commonQuestion.getCommonQuestion5()
                 ),
-                part.getCurriculumGeneration() // Curriculum의 Generation 정보
+                part.getGeneration() // part의 Generation 정보
         );
     }
 }

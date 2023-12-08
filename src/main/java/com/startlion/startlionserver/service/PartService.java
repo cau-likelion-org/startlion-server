@@ -31,13 +31,13 @@ public class PartService {
         Part part = partJpaRepository.findByName(name)
                 .orElseThrow( () -> new IllegalArgumentException("해당하는 파트가 없습니다."));
         List<PartQuestion> partQuestions = partQuestionJpaRepository.findByPart(part);
-        List<Curriculum> curriculums = curriculumJpaRepository.findByPart(part);
+        List<Curriculum> curriculums = curriculumJpaRepository.findByPartId(part);
 
         if (partQuestions.isEmpty() && curriculums.isEmpty()) {
             throw new NoSuchElementException("PartQuestion과 Curriculum이 모두 비어 있습니다.");
         }
 
-        Long generation = partQuestions.isEmpty() ? curriculums.get(0).getGeneration() : partQuestions.get(0).getGeneration();
+        Long generation = part.getGeneration();
         CommonQuestion commonQuestion = commonQuestionJpaRepository.findByGeneration(generation)
                 .orElseThrow(() -> new NoSuchElementException("해당 기수의 CommonQuestion이 없습니다."));
 
