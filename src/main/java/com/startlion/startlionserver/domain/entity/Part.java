@@ -34,4 +34,7 @@ public class Part {
 
     @Column(length = 500) // 이미지 URL 저장 필드 추가
     private String imageUrl;
+
+    @Column(nullable = false)
+    private Long curriculumGeneration;
 }

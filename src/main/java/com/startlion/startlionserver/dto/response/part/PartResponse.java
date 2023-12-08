@@ -19,7 +19,8 @@ public record PartResponse(
 
         List<String> partQuestions,
         List<String> curriculumContents,
-        List<String> commonQuestions
+        List<String> commonQuestions,
+        Long curriculumGeneration
 ) {
 
 //    public static PartResponse of(Part part) {
@@ -46,7 +47,8 @@ public record PartResponse(
                         commonQuestion.getCommonQuestion3(),
                         commonQuestion.getCommonQuestion4(),
                         commonQuestion.getCommonQuestion5()
-                )
+                ),
+                part.getCurriculumGeneration() // Curriculum의 Generation 정보
         );
     }
 }
