@@ -37,10 +37,18 @@ public class PartService {
             throw new NoSuchElementException("PartQuestion과 Curriculum이 모두 비어 있습니다.");
         }
 
-        // 임시로 이렇게 구현했습니다. 후에 파트에 generation을 추가하거나 해야할 듯 합니다.
-        Long generation = partQuestions.isEmpty() ? curriculums.get(0).getGeneration() : partQuestions.get(0).getGeneration();
+        Long generation;
+        if (partQuestions.isEmpty()) {
+            // partQuestions가 비어있을 경우 curriculums에서 generation 정보 가져오기
+            generation = curriculums.get(0).getGeneration();
+        } else {
+            // partQuestions에서 generation 정보 가져오기
+            generation = partQuestions.get(0).getGeneration();
+        }
+
+        // 해당 세대의 CommonQuestion 가져오기
         CommonQuestion commonQuestion = commonQuestionJpaRepository.findByGeneration(generation)
-                .orElseThrow(() -> new NoSuchElementException("해당 세대의 CommonQuestion이 없습니다."));
+                .orElseThrow(() -> new NoSuchElementException("해당 기수의 CommonQuestion이 없습니다."));
 
         return PartResponse.of(part, partQuestions, curriculums, commonQuestion);
     }

@@ -32,10 +32,6 @@ public class Part {
     @Column(length = 200)
     private String typeOfTalent;
 
-<<<<<<< HEAD
     @Column(length = 500) // 이미지 URL 저장 필드 추가
-=======
-    @Column
->>>>>>> 5069770cdda4c6fde9fb1f7b5722a5f249ad35d7
     private String imageUrl;
 }

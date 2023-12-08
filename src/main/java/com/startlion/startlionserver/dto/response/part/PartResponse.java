@@ -14,16 +14,12 @@ import java.util.stream.Collectors;
 public record PartResponse(
         String partContent,
         String typeOfTalent,
-<<<<<<< HEAD
-        String imageUrl
-=======
 
         String imageUrl,
 
         List<String> partQuestions,
         List<String> curriculumContents,
         List<String> commonQuestions
->>>>>>> 5069770cdda4c6fde9fb1f7b5722a5f249ad35d7
 ) {
 
 //    public static PartResponse of(Part part) {
@@ -37,9 +33,6 @@ public record PartResponse(
         return new PartResponse(
                 part.getPartContent(),
                 part.getTypeOfTalent(),
-<<<<<<< HEAD
-                part.getImageUrl() // 이미지 URL 추가
-=======
                 part.getImageUrl(),
                 partQuestions.stream()
                         .map(partQuestion -> partQuestion.getPartQuestion1() + ", " + partQuestion.getPartQuestion2() + ", " + partQuestion.getPartQuestion3())
@@ -54,7 +47,6 @@ public record PartResponse(
                         commonQuestion.getCommonQuestion4(),
                         commonQuestion.getCommonQuestion5()
                 )
->>>>>>> 5069770cdda4c6fde9fb1f7b5722a5f249ad35d7
         );
     }
 }
