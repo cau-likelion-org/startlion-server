@@ -25,4 +25,5 @@ public class Curriculum {
 
     @Column(length = 300)
     private String content;
+
 }
