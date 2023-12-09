@@ -9,3 +9,4 @@ import java.util.List;
 public interface CurriculumJpaRepository extends JpaRepository<Curriculum, Long> {
     List<Curriculum> findByPartId(Part part);
 }
+

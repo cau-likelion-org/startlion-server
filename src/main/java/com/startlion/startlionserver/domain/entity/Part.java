@@ -31,7 +31,4 @@ public class Part {
 
     @Column(length = 200)
     private String typeOfTalent;
-
-    @Column
-    private String imageUrl;
 }
