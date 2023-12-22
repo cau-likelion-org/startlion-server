@@ -21,9 +21,12 @@ jobs:
           cache: gradle
 
       - name: Set Up Environment Variables
-        run: cd src/resources
-             touch application-secret.properties
-             echo "${{ secrets.ENV }}" >> application-secret.properties
+        run: |
+          cd src/main/resources
+          
+          touch application-secret.properties
+          
+          echo "${{ secrets.ENV }}" >> application-secret.properties
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
