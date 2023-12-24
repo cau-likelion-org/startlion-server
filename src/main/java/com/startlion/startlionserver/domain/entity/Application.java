@@ -37,35 +37,35 @@ public class Application extends BaseTimeEntity {
     private CommonQuestion generation; // generation이라고 매핑했지만 실제로는 CommonQuestion의 id를 가리킴
 
     // application page 1 start
-    @ColumnDefault("")
+    @ColumnDefault("false")
     private Boolean isAgreed;
 
     @Column(length = 30)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String name;
 
     @Column(length = 1)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String gender;
 
     @ColumnDefault("0")
     private Integer studentNum;
 
     @Column(length = 30)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String major;
 
     @Column(length = 30)
     private String multiMajor;
 
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String semester;
 
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String phone;
 
     @Column(length = 100)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String email;
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "applicationId") // application 저장 시, pathToKnows도 함께 저장
@@ -80,10 +80,10 @@ public class Application extends BaseTimeEntity {
     // application page 1 end
 
 
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String portfolio;
 
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String interview;
 
     @ColumnDefault("'N'")
