@@ -56,7 +56,7 @@ public class SecurityConfig {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers(PathRequest.toH2Console()).permitAll()
+//                .requestMatchers(PathRequest.toH2Console()).permitAll()
                 .requestMatchers(createMvcRequestMatcherForWhitelist(mvc)).permitAll()
                 .anyRequest().authenticated()
                 .and()
