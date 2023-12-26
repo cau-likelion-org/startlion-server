@@ -28,6 +28,7 @@ public class SecurityConfig {
     private final CustomJwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     private static final String[] AUTH_WHITE_LIST = {
+            "",
             "/",
             "/health",
             "/login/oauth2/code/google",
