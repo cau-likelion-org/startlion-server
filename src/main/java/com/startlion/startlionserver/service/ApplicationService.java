@@ -38,6 +38,9 @@ public class ApplicationService {
     public ResponseEntity<?> getById(Long applicationId, int page, Long userId) {
         Application application = applicationJpaRepository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 applicationId를 가진 지원서가 존재하지 않습니다."));
+
+        checkApplicationOwner(application, userId);
+
         switch (page) {
             case 1:
                 return ResponseEntity.ok(ApplicationPage1GetResponse.of(application));
@@ -51,6 +54,13 @@ public class ApplicationService {
                 return ResponseEntity.ok(ApplicationPage4GetResponse.of(application.getInterview()));
             default:
                 throw new IllegalArgumentException("페이지 번호가 잘못되었습니다.");
+        }
+    }
+
+    // 본인의 지원서인지 체크
+    private void checkApplicationOwner(Application application, Long userId){
+        if(userId != application.getUser().getUserId()){
+            throw new IllegalArgumentException("본인의 application이 아닙니다.");
         }
     }
 
@@ -87,7 +97,7 @@ public class ApplicationService {
                 pathToKnowJpaRepository.save(pathToKnow);
             }
 
-            application.updateApplication(request.getIsAgreed(), user,request.getName(), request.getGender(), request.getStudentNum(), request.getMajor(), request.getMultiMajor(), request.getSemester(), request.getPhone(), request.getEmail(), request.getPathToKnows(), request.getPart(), "S", commonQuestion);
+            application.updateApplication(request.getIsAgreed(), user, request.getName(), request.getGender(), request.getStudentNum(), request.getMajor(), request.getMultiMajor(), request.getSemester(), request.getPhone(), request.getEmail(), request.getPathToKnows(), request.getPart(), "S", commonQuestion);
 
             applicationJpaRepository.save(application); //Application 저장
         } else {
@@ -153,7 +163,7 @@ public class ApplicationService {
         Application application = applicationJpaRepository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 applicationId를 가진 지원서가 존재하지 않습니다."));
 
-        // answer가 있으면 update 있으면 create
+        // answer가 있으면 update 없으면 create
         if (application.getAnswer() == null) {
             Answer newAnswer = answerService.createAnswer(application, request);
             application.setAnswer(newAnswer);

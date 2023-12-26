@@ -54,7 +54,7 @@ public class User extends BaseTimeEntity {
         this.refreshToken = refreshToken;
     }
 
-    public void updateImageUrl(String imageUrl){
-        this.imageUrl = imageUrl;
-    }
+//    public void updateImageUrl(String imageUrl){
+//        this.imageUrl = imageUrl;
+//    }
 }
