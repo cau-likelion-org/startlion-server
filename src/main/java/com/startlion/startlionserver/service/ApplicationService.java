@@ -87,6 +87,8 @@ public class ApplicationService {
         if (optionalApplication.isPresent()) {
             application = optionalApplication.get();
 
+            checkApplicationOwner(application, userId); // 본인 application인지 확인
+
             deletePathToKnows(application); // 기존의 path to know 삭제
 
             // path to know 저장
@@ -159,9 +161,11 @@ public class ApplicationService {
 
     // 지원서 2페이지 저장
     @Transactional
-    public Long updateApplicationPage2(Long applicationId, ApplicationPage2PutRequest request) {
+    public Long updateApplicationPage2(Long applicationId, ApplicationPage2PutRequest request, Long userId) {
         Application application = applicationJpaRepository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 applicationId를 가진 지원서가 존재하지 않습니다."));
+
+        checkApplicationOwner(application, userId);
 
         // answer가 있으면 update 없으면 create
         if (application.getAnswer() == null) {
@@ -177,9 +181,11 @@ public class ApplicationService {
 
     // 지원서 3페이지 저장
     @Transactional
-    public Long updateApplicationPage3(Long applicationId, ApplicationPage3PutRequest request) {
+    public Long updateApplicationPage3(Long applicationId, ApplicationPage3PutRequest request, Long userId) {
         Application application = applicationJpaRepository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 applicationId를 가진 지원서가 존재하지 않습니다."));
+
+        checkApplicationOwner(application, userId);
 
         // answer가 있으면 update 있으면 create
         if (application.getAnswer() == null) {
@@ -197,9 +203,11 @@ public class ApplicationService {
 
     // 지원서 4페이지 저장(제출)
     @Transactional
-    public Long updateApplicationPage4(Long applicationId, ApplicationPage4PutRequest request) {
+    public Long updateApplicationPage4(Long applicationId, ApplicationPage4PutRequest request, Long userId) {
         Application application = applicationJpaRepository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 applicationId를 가진 지원서가 존재하지 않습니다."));
+
+        checkApplicationOwner(application, userId);
 
         application.updateInterview(request.getInterview(), "Y");
 
