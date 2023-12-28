@@ -42,10 +42,19 @@ public class ApplicationController {
 
     // 지원서 저장하기의 경우 받아야 하는 Body 정보가 다르기 때문에, 4개의 API로 나누었습니다.
     // 지원서 저장하기 1페이지
-    @Operation(summary = "지원서 저장하기 1페이지")
+
+    @Operation(summary = "지원서 저장하기 1페이지 -> GET application/으로 접근했을 때 사용")
+    @PostMapping
+    public ResponseEntity<String> postApplicationPage1(@RequestBody ApplicationPage1PutRequest request, @RequestParam Long generation, Principal principal){
+        Long applicationId = applicationService.createApplicationPage1(request, generation, UserUtil.getUserId(principal));
+        URI uri = URI.create("/application/" + applicationId);
+        return ResponseEntity.created(uri).body("Application ID: " + applicationId);
+    }
+
+    @Operation(summary = "지원서 저장하기 1페이지 -> GET application/{applicationId}으로 접근했을 때 사용")
     @PutMapping("/{applicationId}/page1")
-    public ResponseEntity<String> updateApplicationPage1(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage1PutRequest request, @RequestParam Long generationId, Principal principal){
-        URI uri = URI.create("/application/" + applicationService.updateApplicationPage1(applicationId, request, generationId, UserUtil.getUserId(principal)));
+    public ResponseEntity<String> updateApplicationPage1(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage1PutRequest request, @RequestParam Long generation, Principal principal){
+        URI uri = URI.create("/application/" + applicationService.updateApplicationPage1(applicationId, request, generation, UserUtil.getUserId(principal)));
         return ResponseEntity.created(uri).body("지원서 1페이지 저장 완료");
     }
 
