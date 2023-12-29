@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,12 +33,18 @@ public class InterviewService {
           return InterviewDetailResponse.of(interview, interviewAnswerResponses);
     }
 
-    public List<InterviewResponse> getInterviews() {
-       return interviewJpaRepository.findAll()
-                .stream()
-                .map(interview ->
-                InterviewResponse.of(interview))
-                .toList();
+    public List<InterviewResponse> getInterviews(String part) {
+        List<Interview> interviews;
+
+        if (part == null || part.equalsIgnoreCase("ALL")) {
+            interviews = interviewJpaRepository.findAll();
+        } else {
+            interviews = interviewJpaRepository.findByPart(part);
+        }
+
+        return interviews.stream()
+                .map(InterviewResponse::of)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -50,6 +57,4 @@ public class InterviewService {
         return interviewJpaRepository.findById(interviewId)
                 .orElseThrow(() -> new EntityNotFoundException("해당하는 인터뷰가 없습니다."));
     }
-
-
 }
