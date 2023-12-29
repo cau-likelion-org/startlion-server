@@ -9,6 +9,7 @@ import lombok.Data;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public record PartResponse(
@@ -36,7 +37,7 @@ public record PartResponse(
                 part.getTypeOfTalent(),
                 part.getImageUrl(),
                 partQuestions.stream()
-                        .map(partQuestion -> partQuestion.getPartQuestion1() + ", " + partQuestion.getPartQuestion2() + ", " + partQuestion.getPartQuestion3())
+                        .flatMap(partQuestion -> Stream.of(partQuestion.getPartQuestion1(), partQuestion.getPartQuestion2(), partQuestion.getPartQuestion3()))
                         .collect(Collectors.toList()),
                 curriculums.stream()
                         .map(Curriculum::getContent)
