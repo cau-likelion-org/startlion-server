@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 
 
 public record PartResponse(
+        String partName,
         String partContent,
         String typeOfTalent,
 
@@ -33,6 +34,7 @@ public record PartResponse(
 
     public static PartResponse of(Part part, List<PartQuestion> partQuestions, Curriculum curriculum, CommonQuestion commonQuestion) {
         return new PartResponse(
+                part.getName(),
                 part.getPartContent(),
                 part.getTypeOfTalent(),
                 part.getImageUrl(),
