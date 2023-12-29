@@ -41,11 +41,23 @@ public class AuthApiController {
                 .build();
     }
 
+//        @Operation(summary = "소셜 로그인 성공")
+//    @GetMapping("/login/oauth2/code/google")
+//    public ResponseEntity<OAuthResponse> oauthGoogleCheck(@RequestParam(value = "code") String authCode) throws Exception{
+//        val response = authService.authenticateUser(authCode);
+//        return ResponseEntity.ok(response);
+//    }
+
     @Operation(summary = "소셜 로그인 성공")
     @GetMapping("/login/oauth2/code/google")
-    public ResponseEntity<OAuthResponse> oauthGoogleCheck(@RequestParam(value = "code") String authCode) throws Exception{
+    public ResponseEntity<OAuthResponse> oauthGoogleCheck(@RequestParam(value = "code") String authCode) throws Exception {
         val response = authService.authenticateUser(authCode);
-        return ResponseEntity.ok(response);
+
+        String redirectUrl = "http://localhost:3000/auth";
+
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header("Location", redirectUrl)
+                .body(response);
     }
 
     @Operation(summary = "멤버")
