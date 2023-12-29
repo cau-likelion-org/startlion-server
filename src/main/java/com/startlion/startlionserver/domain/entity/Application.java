@@ -11,6 +11,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -83,15 +84,15 @@ public class Application extends BaseTimeEntity {
     @ColumnDefault("''")
     private String portfolio;
 
-    @ColumnDefault("''")
-    private String interview;
+    @OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
+    private List<InterviewTime> interviewTimes = new ArrayList<>();
 
     @ColumnDefault("'N'")
     private String status;
 
     //builder
     @Builder
-    public Application(Answer answer, User user, CommonQuestion generation, boolean isAgreed, String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnows, Part part, String portfolio, String interview, String status){
+    public Application(Answer answer, User user, CommonQuestion generation, boolean isAgreed, String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnows, Part part, String portfolio, List<InterviewTime> interviewTimes, String status){
         this.answer = answer;
         this.user = user;
         this.generation = generation;
@@ -107,7 +108,7 @@ public class Application extends BaseTimeEntity {
         this.pathToKnows = pathToKnows;
         this.part = part;
         this.portfolio = portfolio;
-        this.interview = interview;
+        this.interviewTimes = interviewTimes;
         this.status = status;
     }
 
@@ -136,8 +137,9 @@ public class Application extends BaseTimeEntity {
         this.answer = answer;
     }
 
-    public void updateInterview(String interview, String status) {
-        this.interview = interview;
+    public void updateInterview(List<InterviewTime> interviewTimes, String status) {
+        this.interviewTimes.clear();
+        this.interviewTimes.addAll(interviewTimes);
         this.status = status; // interview가 있다면 제출한 것이므로 status = 'Y'
     }
 
@@ -147,6 +149,12 @@ public class Application extends BaseTimeEntity {
 
     public void updateCommonQuestion(CommonQuestion generation) {
         this.generation = generation;
+    }
+
+    public List<List<Integer>> getInterviewTimes() {
+        return this.interviewTimes.stream()
+                .map(InterviewTime::getTime)
+                .collect(Collectors.toList());
     }
 }
 

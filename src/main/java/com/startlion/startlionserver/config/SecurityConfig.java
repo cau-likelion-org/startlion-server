@@ -28,6 +28,7 @@ public class SecurityConfig {
     private final CustomJwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     private static final String[] AUTH_WHITE_LIST = {
+            "",
             "/",
             "/health",
             "/login/oauth2/code/google",
@@ -56,7 +57,7 @@ public class SecurityConfig {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers(PathRequest.toH2Console()).permitAll()
+//                .requestMatchers(PathRequest.toH2Console()).permitAll()
                 .requestMatchers(createMvcRequestMatcherForWhitelist(mvc)).permitAll()
                 .anyRequest().authenticated()
                 .and()

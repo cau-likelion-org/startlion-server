@@ -39,11 +39,11 @@ public class ApplicationGetResponse {
 
     private String portfolio;
 
-    private String interview;
+    private List<List<Integer>> interview;
 
     private String status;
 
     public static ApplicationGetResponse of(Application application){
-        return new ApplicationGetResponse(application.getAnswer(), application.getGeneration(), application.getIsAgreed(), application.getName(), application.getGender(), application.getStudentNum(), application.getMajor(), application.getMultiMajor(), application.getSemester(), application.getPhone(), application.getEmail(), application.getPathToKnows(), application.getPart(), application.getPortfolio(), application.getInterview(), application.getStatus());
+        return new ApplicationGetResponse(application.getAnswer(), application.getGeneration(), application.getIsAgreed(), application.getName(), application.getGender(), application.getStudentNum(), application.getMajor(), application.getMultiMajor(), application.getSemester(), application.getPhone(), application.getEmail(), application.getPathToKnows(), application.getPart(), application.getPortfolio(), application.getInterviewTimes(), application.getStatus());
     }
 }

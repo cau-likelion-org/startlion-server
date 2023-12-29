@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +28,7 @@ public class ApplicationService {
     private final UserJpaRepository userJpaRepository;
 
     private final AnswerService answerService;
+    private final InterviewTimeRepository interviewTimeRepository;
 
     // 저장된 지원서 없을 시, 지원서 1페이지 정보 가져오기
     public ApplicationPage1GetResponse getApplicationPersonalInformation() {
@@ -38,6 +39,9 @@ public class ApplicationService {
     public ResponseEntity<?> getById(Long applicationId, int page, Long userId) {
         Application application = applicationJpaRepository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 applicationId를 가진 지원서가 존재하지 않습니다."));
+
+        checkApplicationOwner(application, userId);
+
         switch (page) {
             case 1:
                 return ResponseEntity.ok(ApplicationPage1GetResponse.of(application));
@@ -48,7 +52,7 @@ public class ApplicationService {
             case 3:
                 return ResponseEntity.ok(ApplicationPage3GetResponse.of(application.getAnswer(), application.getPart().getPartQuestions(), application.getPortfolio()));
             case 4:
-                return ResponseEntity.ok(ApplicationPage4GetResponse.of(application.getInterview()));
+                return ResponseEntity.ok(ApplicationPage4GetResponse.of(application.getInterviewTimes()));
             default:
                 throw new IllegalArgumentException("페이지 번호가 잘못되었습니다.");
         }
@@ -56,12 +60,9 @@ public class ApplicationService {
 
     // 지원서 1페이지 저장
     @Transactional
-    public Long updateApplicationPage1(Long applicationId, ApplicationPage1PutRequest request, Long generationId, Long userId) {
+    public Long createApplicationPage1(ApplicationPage1PutRequest request, Long generationId, Long userId){
         // isAgreed 필드 null 체크
         checkNullAgreedField(request.getIsAgreed());
-
-        Application application;
-        Optional<Application> optionalApplication = applicationJpaRepository.findById(applicationId);
 
         // generationId로 common question 찾기
         CommonQuestion commonQuestion = commonQuestionRepository.findById(generationId)
@@ -71,89 +72,62 @@ public class ApplicationService {
         User user = userJpaRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. id=" + userId));
 
+        // 지원서 업데이트
+        Application application = updateApplicationInfo(request, generationId, user);
 
+        // application 생성될 때, answer도 함께 생성
+        createAnswer(application);
 
-        // applicationId가 존재하면 기존 지원서 update, 존재하지 않으면 create
-        if (optionalApplication.isPresent()) {
-            application = optionalApplication.get();
+        // path to know 저장
+        updatePathToKnow(application, request);
 
-            deletePathToKnows(application); // 기존의 path to know 삭제
+        application.updateCommonQuestion(commonQuestion);
+        applicationJpaRepository.save(application);
 
-            // path to know 저장
-            List<PathToKnow> pathToKnows = new ArrayList<>();
-            for(PathToKnow pathToKnow : request.getPathToKnows()){
-                pathToKnow.setApplicationId(application);
-                pathToKnows.add(pathToKnow);
-                pathToKnowJpaRepository.save(pathToKnow);
-            }
+        return application.getApplicationId();
 
-            application.updateApplication(request.getIsAgreed(), user,request.getName(), request.getGender(), request.getStudentNum(), request.getMajor(), request.getMultiMajor(), request.getSemester(), request.getPhone(), request.getEmail(), request.getPathToKnows(), request.getPart(), "S", commonQuestion);
+    }
+    @Transactional
+    public Long updateApplicationPage1(Long applicationId, ApplicationPage1PutRequest request, Long generationId, Long userId) {
+        // isAgreed 필드 null 체크
+        checkNullAgreedField(request.getIsAgreed());
 
-            applicationJpaRepository.save(application); //Application 저장
-        } else {
-            application = Application.builder()
-                    .generation(commonQuestionRepository.findById(generationId)
-                            .orElseThrow(() -> new IllegalArgumentException("해당 commonQuestionId를 가진 commonQuestion이 존재하지 않습니다.")))
-                    .user(user)
-                    .isAgreed(request.getIsAgreed())
-                    .name(request.getName())
-                    .gender(request.getGender())
-                    .studentNum(request.getStudentNum())
-                    .major(request.getMajor())
-                    .multiMajor(request.getMultiMajor())
-                    .semester(request.getSemester())
-                    .phone(request.getPhone())
-                    .email(request.getEmail())
-                    .pathToKnows(request.getPathToKnows())
-                    .part(request.getPart())
-                    .status("S")
-                    .build();
+        // application 가져오기
+        Application application = getApplicationById(applicationId);
 
-            applicationJpaRepository.save(application);
+        // generationId로 common question 찾기
+        CommonQuestion commonQuestion = commonQuestionRepository.findById(generationId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 CommonQuestion이 없습니다. id=" + generationId));
 
-            // application 생성될 때, answer도 함께 생성
-            Answer answer = new Answer();
-            answer.updateBlankAnswer(application);
-            answerJpaRepository.save(answer);
+        // userId로 User 객체 찾기
+        User user = userJpaRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. id=" + userId));
 
-            // path to know 저장
-            deletePathToKnows(application);
-            List<PathToKnow> pathToKnows = new ArrayList<>();
-            for(PathToKnow pathToKnow : request.getPathToKnows()){
-                pathToKnow.setApplicationId(application);
-                pathToKnows.add(pathToKnow);
-                pathToKnowJpaRepository.save(pathToKnow);
-            }
+        // 본인 application인지 확인
+        checkApplicationOwner(application, userId);
 
-            application.updateCommonQuestion(commonQuestion);
-            applicationJpaRepository.save(application);
-        }
+        // 기존의 path to know 삭제
+        deletePathToKnows(application);
+
+        // path to know 저장
+        updatePathToKnow(application, request);
+
+        application.updateApplication(request.getIsAgreed(), user, request.getName(), request.getGender(), request.getStudentNum(), request.getMajor(), request.getMultiMajor(), request.getSemester(), request.getPhone(), request.getEmail(), request.getPathToKnows(), request.getPart(), "S", commonQuestion);
+
+        applicationJpaRepository.save(application); //Application 저장
+
 
         return application.getApplicationId();
     }
 
-    // nullCheck
-    private void checkNullAgreedField(Boolean isAgreed) {
-        if (isAgreed == null) {
-            throw new IllegalArgumentException("isAgreed 필드가 null입니다.");
-        }
-    }
-    // pathToKnow 저장 method
-
-
-    // pathToKnow 삭제 method
-    @Transactional
-    public void deletePathToKnows(Application application) {
-        pathToKnowJpaRepository.deleteByApplicationId(application);
-    }
-
     // 지원서 2페이지 저장
     @Transactional
-    public Long updateApplicationPage2(Long applicationId, ApplicationPage2PutRequest request) {
-        Application application = applicationJpaRepository.findById(applicationId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 applicationId를 가진 지원서가 존재하지 않습니다."));
+    public Long updateApplicationPage2(Long applicationId, ApplicationPage2PutRequest request, Long userId) {
+        Application application = getApplicationById(applicationId);
 
-        // answer가 있으면 update 있으면 create
+        checkApplicationOwner(application, userId);
+
+        // answer가 있으면 update 없으면 create
         if (application.getAnswer() == null) {
             Answer newAnswer = answerService.createAnswer(application, request);
             application.setAnswer(newAnswer);
@@ -167,9 +141,10 @@ public class ApplicationService {
 
     // 지원서 3페이지 저장
     @Transactional
-    public Long updateApplicationPage3(Long applicationId, ApplicationPage3PutRequest request) {
-        Application application = applicationJpaRepository.findById(applicationId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 applicationId를 가진 지원서가 존재하지 않습니다."));
+    public Long updateApplicationPage3(Long applicationId, ApplicationPage3PutRequest request, Long userId) {
+        Application application = getApplicationById(applicationId);
+
+        checkApplicationOwner(application, userId);
 
         // answer가 있으면 update 있으면 create
         if (application.getAnswer() == null) {
@@ -187,13 +162,95 @@ public class ApplicationService {
 
     // 지원서 4페이지 저장(제출)
     @Transactional
-    public Long updateApplicationPage4(Long applicationId, ApplicationPage4PutRequest request) {
-        Application application = applicationJpaRepository.findById(applicationId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 applicationId를 가진 지원서가 존재하지 않습니다."));
+    public Long updateApplicationPage4(Long applicationId, ApplicationPage4PutRequest request, Long userId) {
+        Application application = getApplicationById(applicationId);
 
-        application.updateInterview(request.getInterview(), "Y");
+        checkApplicationOwner(application, userId);
+
+        deleteInterviewTimes(application);
+
+        List<InterviewTime> interviewTimes = request.getInterview().stream()
+                .map(time -> new InterviewTime(time, application))
+                .collect(Collectors.toList());
+
+        application.updateInterview(interviewTimes, "Y");
+
 
         return application.getApplicationId();
+    }
+
+    // 본인의 지원서인지 체크
+    private void checkApplicationOwner(Application application, Long userId){
+        if(userId != application.getUser().getUserId()){
+            throw new IllegalArgumentException("본인의 application이 아닙니다.");
+        }
+    }
+
+    // 지원서 빌더
+    private Application updateApplicationInfo(ApplicationPage1PutRequest request, Long generationId, User user){
+        Application application = Application.builder()
+                .generation(commonQuestionRepository.findById(generationId)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 commonQuestionId를 가진 commonQuestion이 존재하지 않습니다.")))
+                .user(user)
+                .isAgreed(request.getIsAgreed())
+                .name(request.getName())
+                .gender(request.getGender())
+                .studentNum(request.getStudentNum())
+                .major(request.getMajor())
+                .multiMajor(request.getMultiMajor())
+                .semester(request.getSemester())
+                .phone(request.getPhone())
+                .email(request.getEmail())
+                .pathToKnows(request.getPathToKnows())
+                .part(request.getPart())
+                .status("S")
+                .build();
+
+        applicationJpaRepository.save(application);
+
+        return application;
+    }
+
+    // answer 객체 생성
+    private void createAnswer(Application application) {
+        Answer answer = new Answer();
+        answer.updateBlankAnswer(application);
+        answerJpaRepository.save(answer);
+    }
+
+    // pathToKnow 저장
+    private void updatePathToKnow(Application application, ApplicationPage1PutRequest request){
+        deletePathToKnows(application);
+        List<PathToKnow> pathToKnows = new ArrayList<>();
+        for(PathToKnow pathToKnow : request.getPathToKnows()){
+            pathToKnow.setApplicationId(application);
+            pathToKnows.add(pathToKnow);
+            pathToKnowJpaRepository.save(pathToKnow);
+        }
+    }
+
+    // nullCheck
+    private void checkNullAgreedField(Boolean isAgreed) {
+        if (isAgreed == null) {
+            throw new IllegalArgumentException("isAgreed 필드가 null입니다.");
+        }
+    }
+
+    // pathToKnow 삭제 method
+    @Transactional
+    public void deletePathToKnows(Application application) {
+        pathToKnowJpaRepository.deleteByApplicationId(application);
+    }
+
+    @Transactional
+    public void deleteInterviewTimes(Application application){
+        interviewTimeRepository.deleteAllByApplication(application);
+    }
+
+    private Application getApplicationById(Long applicationId){
+        Application application = applicationJpaRepository.findById(applicationId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 applicationId를 가진 지원서가 존재하지 않습니다."));
+        return application;
     }
 
 }

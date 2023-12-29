@@ -42,34 +42,43 @@ public class ApplicationController {
 
     // 지원서 저장하기의 경우 받아야 하는 Body 정보가 다르기 때문에, 4개의 API로 나누었습니다.
     // 지원서 저장하기 1페이지
-    @Operation(summary = "지원서 저장하기 1페이지")
+
+    @Operation(summary = "지원서 저장하기 1페이지 -> GET application/으로 접근했을 때 사용")
+    @PostMapping
+    public ResponseEntity<String> postApplicationPage1(@RequestBody ApplicationPage1PutRequest request, @RequestParam Long generation, Principal principal){
+        Long applicationId = applicationService.createApplicationPage1(request, generation, UserUtil.getUserId(principal));
+        URI uri = URI.create("/application/" + applicationId);
+        return ResponseEntity.created(uri).body("Application ID: " + applicationId);
+    }
+
+    @Operation(summary = "지원서 저장하기 1페이지 -> GET application/{applicationId}으로 접근했을 때 사용")
     @PutMapping("/{applicationId}/page1")
-    public ResponseEntity<String> updateApplicationPage1(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage1PutRequest request, @RequestParam Long generationId, Principal principal){
-        URI uri = URI.create("/application/" + applicationService.updateApplicationPage1(applicationId, request, generationId, UserUtil.getUserId(principal)));
+    public ResponseEntity<String> updateApplicationPage1(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage1PutRequest request, @RequestParam Long generation, Principal principal){
+        URI uri = URI.create("/application/" + applicationService.updateApplicationPage1(applicationId, request, generation, UserUtil.getUserId(principal)));
         return ResponseEntity.created(uri).body("지원서 1페이지 저장 완료");
     }
 
     // 지원서 저장하기 2페이지
     @Operation(summary = "지원서 저장하기 2페이지")
     @PutMapping("/{applicationId}/page2")
-    public ResponseEntity<String> updateApplicationPage2(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage2PutRequest request){
-        URI uri = URI.create("/application/" + applicationService.updateApplicationPage2(applicationId, request));
+    public ResponseEntity<String> updateApplicationPage2(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage2PutRequest request, Principal principal){
+        URI uri = URI.create("/application/" + applicationService.updateApplicationPage2(applicationId, request, UserUtil.getUserId(principal)));
         return ResponseEntity.created(uri).body("지원서 2페이지 저장 완료");
     }
 
     // 지원서 저장하기 3페이지
     @Operation(summary = "지원서 저장하기 3페이지")
     @PutMapping("/{applicationId}/page3")
-    public ResponseEntity<String> updateApplicationPage3(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage3PutRequest request){
-        URI uri = URI.create("/application/" + applicationService.updateApplicationPage3(applicationId, request));
+    public ResponseEntity<String> updateApplicationPage3(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage3PutRequest request, Principal principal){
+        URI uri = URI.create("/application/" + applicationService.updateApplicationPage3(applicationId, request, UserUtil.getUserId(principal)));
         return ResponseEntity.created(uri).body("지원서 3페이지 저장 완료");
     }
 
     // 지원서 저장하기 4페이지 -> 제출
     @Operation(summary = "지원서 저장하기 4페이지 -> 제출")
     @PutMapping("/{applicationId}/page4")
-    public ResponseEntity<String> updateApplicationPage4(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage4PutRequest request){
-        URI uri = URI.create("/application/" + applicationService.updateApplicationPage4(applicationId, request));
+    public ResponseEntity<String> updateApplicationPage4(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage4PutRequest request, Principal principal){
+        URI uri = URI.create("/application/" + applicationService.updateApplicationPage4(applicationId, request, UserUtil.getUserId(principal)));
         return ResponseEntity.created(uri).body("지원서 제출 완료");
     }
 
