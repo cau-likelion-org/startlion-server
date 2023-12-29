@@ -1,6 +1,7 @@
 package com.startlion.startlionserver.service;
 
 import com.startlion.startlionserver.domain.entity.Interview;
+import com.startlion.startlionserver.dto.response.interview.InterviewDetailResponse;
 import com.startlion.startlionserver.dto.response.interview.InterviewResponse;
 import com.startlion.startlionserver.dto.response.interviewanswer.InterviewAnswerResponse;
 import com.startlion.startlionserver.repository.InterviewAnswerJpaRepository;
@@ -20,7 +21,7 @@ public class InterviewService {
     private final InterviewJpaRepository interviewJpaRepository;
     private final InterviewAnswerJpaRepository interviewAnswerJpaRepository;
 
-    public InterviewResponse getInterviewById(Long interviewId) {
+    public InterviewDetailResponse getInterviewById(Long interviewId) {
          Interview interview = interviewJpaRepository.findById(interviewId)
                  .orElseThrow( () -> new IllegalArgumentException("해당하는 인터뷰가 없습니다."));
 
@@ -28,17 +29,14 @@ public class InterviewService {
                   .stream()
                   .map(InterviewAnswerResponse::of)
                   .toList();
-          return InterviewResponse.of(interview, interviewAnswerResponses);
+          return InterviewDetailResponse.of(interview, interviewAnswerResponses);
     }
 
     public List<InterviewResponse> getInterviews() {
        return interviewJpaRepository.findAll()
                 .stream()
                 .map(interview ->
-                InterviewResponse.of(interview, interviewAnswerJpaRepository.findByInterview(interview)
-                .stream()
-                .map(InterviewAnswerResponse::of)
-                .toList()))
+                InterviewResponse.of(interview))
                 .toList();
     }
 

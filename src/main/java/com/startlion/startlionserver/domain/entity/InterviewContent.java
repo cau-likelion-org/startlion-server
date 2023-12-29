@@ -26,4 +26,6 @@ public class InterviewContent {
     @Column(length = 400)
     private String answer;
 
+    @Column
+    private String boldAnswer;
 }

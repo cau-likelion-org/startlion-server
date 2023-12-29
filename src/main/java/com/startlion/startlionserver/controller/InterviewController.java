@@ -1,6 +1,7 @@
 package com.startlion.startlionserver.controller;
 
 
+import com.startlion.startlionserver.dto.response.interview.InterviewDetailResponse;
 import com.startlion.startlionserver.dto.response.interview.InterviewResponse;
 import com.startlion.startlionserver.service.InterviewService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +34,7 @@ public class InterviewController {
 
     @Operation(summary = "interviewId로 interview 정보 조회")
     @GetMapping("/{interviewId}")
-    public ResponseEntity<InterviewResponse> getInterviewById(@PathVariable Long interviewId) {
+    public ResponseEntity<InterviewDetailResponse> getInterviewById(@PathVariable Long interviewId) {
         val response = interviewService.getInterviewById(interviewId);
         return ResponseEntity.ok(response);
     }
