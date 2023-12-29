@@ -30,17 +30,19 @@ public class PartService {
     public PartResponse getPartByName(String name) {
         Part part = partJpaRepository.findByName(name)
                 .orElseThrow( () -> new IllegalArgumentException("해당하는 파트가 없습니다."));
+        Curriculum curriculum = curriculumJpaRepository.findByPartId(part)
+                .orElseThrow(() -> new NoSuchElementException("해당 파트의 커리큘럼이 없습니다."));
         List<PartQuestion> partQuestions = partQuestionJpaRepository.findByPart(part);
-        List<Curriculum> curriculums = curriculumJpaRepository.findByPartId(part);
+        //List<Curriculum> curriculums = curriculumJpaRepository.findByPartId(part);
 
-        if (partQuestions.isEmpty() && curriculums.isEmpty()) {
-            throw new NoSuchElementException("PartQuestion과 Curriculum이 모두 비어 있습니다.");
+        if (partQuestions.isEmpty()) {
+            throw new NoSuchElementException("PartQuestion이 비어 있습니다.");
         }
 
         Long generation = part.getGeneration();
         CommonQuestion commonQuestion = commonQuestionJpaRepository.findByGeneration(generation)
                 .orElseThrow(() -> new NoSuchElementException("해당 기수의 CommonQuestion이 없습니다."));
 
-        return PartResponse.of(part, partQuestions, curriculums, commonQuestion);
+        return PartResponse.of(part, partQuestions, curriculum, commonQuestion);
     }
 }
