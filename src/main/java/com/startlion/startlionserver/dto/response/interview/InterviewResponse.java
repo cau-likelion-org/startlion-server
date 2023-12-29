@@ -11,7 +11,8 @@ public record InterviewResponse(
         Long generation,
         String name,
         String part,
-        String OneLineContent
+        String OneLineContent,
+        String imageUrl
 ) {
 
     public static InterviewResponse of(Interview interview) {
@@ -20,7 +21,8 @@ public record InterviewResponse(
                 interview.getGeneration(),
                 interview.getName(),
                 interview.getPart(),
-                interview.getOneLineContent()
+                interview.getOneLineContent(),
+                interview.getImageUrl()
         );
     }
 }
