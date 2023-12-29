@@ -9,16 +9,18 @@ import lombok.Data;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public record PartResponse(
+        String partName,
         String partContent,
         String typeOfTalent,
 
         String imageUrl,
 
         List<String> partQuestions,
-        List<String> curriculumContents,
+        String curriculumContents,
         List<String> commonQuestions,
         Long curriculumGeneration
 ) {
@@ -30,17 +32,16 @@ public record PartResponse(
 //                part.getImageUrl()
 //        );
 
-    public static PartResponse of(Part part, List<PartQuestion> partQuestions, List<Curriculum> curriculums, CommonQuestion commonQuestion) {
+    public static PartResponse of(Part part, List<PartQuestion> partQuestions, Curriculum curriculum, CommonQuestion commonQuestion) {
         return new PartResponse(
+                part.getName(),
                 part.getPartContent(),
                 part.getTypeOfTalent(),
                 part.getImageUrl(),
                 partQuestions.stream()
-                        .map(partQuestion -> partQuestion.getPartQuestion1() + ", " + partQuestion.getPartQuestion2() + ", " + partQuestion.getPartQuestion3())
+                        .flatMap(partQuestion -> Stream.of(partQuestion.getPartQuestion1(), partQuestion.getPartQuestion2(), partQuestion.getPartQuestion3()))
                         .collect(Collectors.toList()),
-                curriculums.stream()
-                        .map(Curriculum::getContent)
-                        .collect(Collectors.toList()),
+                curriculum.getContent(),
                 Arrays.asList(
                         commonQuestion.getCommonQuestion1(),
                         commonQuestion.getCommonQuestion2(),
