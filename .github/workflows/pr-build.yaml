@@ -1,6 +1,8 @@
 name: pr-check
 
 on:
+  push:
+    branches: [ develop ]
   pull_request:
     branches: [ develop ]
 
@@ -17,6 +19,14 @@ jobs:
           java-version: 17
           distribution: 'temurin'
           cache: gradle
+
+      - name: Set Up Environment Variables
+        run: |
+          cd src/main/resources
+          
+          touch application-secret.properties
+          
+          echo "${{ secrets.ENV }}" >> application-secret.properties
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew

@@ -43,7 +43,7 @@ src/main/resources/application-SECRET-KEY.properties
 src/main/resources/application-secret.properties
 
 .DS_Store
-application-oauth.properties
+application-secret.properties
 application.properties
 
 screen

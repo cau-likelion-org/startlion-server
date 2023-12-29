@@ -10,3 +10,4 @@ import java.util.Optional;
 public interface CurriculumJpaRepository extends JpaRepository<Curriculum, Long> {
     Optional<Curriculum> findByPartId(Part part); // Part를 기반으로 Curriculum을 조회
 }
+

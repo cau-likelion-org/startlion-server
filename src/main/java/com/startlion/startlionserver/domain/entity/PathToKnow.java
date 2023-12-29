@@ -27,8 +27,7 @@ public class PathToKnow {
     private Application applicationId;
 
     @Enumerated(EnumType.STRING)
-    @Column()
-    @ColumnDefault("")
+    @Column
     private PathType pathType;
 
     public enum PathType {

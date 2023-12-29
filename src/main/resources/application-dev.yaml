@@ -2,17 +2,20 @@ spring:
   config:
     activate:
       on-profile: dev
-    import: application.properties
+    import: application-secret.properties
 
   datasource:
-    url: ${DEV_DB_URL}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DEV_DB_ENDPOINT}:3306/${DATABASE_NAME}?serverTimezone=UTC&characterEncoding=UTF-8
     username: ${DEV_DB_USERNAME}
     password: ${DEV_DB_PASSWORD}
-    driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
 
   security:
     oauth2:

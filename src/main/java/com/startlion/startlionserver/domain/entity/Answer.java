@@ -24,35 +24,35 @@ public class Answer {
     private Application application;
 
     @Column(length = 500)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String commonAnswer1;
 
     @Column(length = 500)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String commonAnswer2;
 
     @Column(length = 500)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String commonAnswer3;
 
     @Column(length = 500)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String commonAnswer4;
 
     @Column(length = 500)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String commonAnswer5;
 
     @Column(length = 500)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String partAnswer1;
 
     @Column(length = 500)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String partAnswer2;
 
     @Column(length = 500)
-    @ColumnDefault("")
+    @ColumnDefault("''")
     private String partAnswer3;
 
     // 공동 답변 생성자
