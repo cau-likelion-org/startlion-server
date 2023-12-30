@@ -80,7 +80,6 @@ public class Application extends BaseTimeEntity {
     private Part part;
     // application page 1 end
 
-
     @ColumnDefault("''")
     private String portfolio;
 

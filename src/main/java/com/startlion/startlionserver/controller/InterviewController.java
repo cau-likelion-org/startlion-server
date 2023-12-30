@@ -1,6 +1,7 @@
 package com.startlion.startlionserver.controller;
 
 
+import com.startlion.startlionserver.dto.response.interview.InterviewDetailResponse;
 import com.startlion.startlionserver.dto.response.interview.InterviewResponse;
 import com.startlion.startlionserver.service.InterviewService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,10 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,14 +24,14 @@ public class InterviewController {
 
     @Operation(summary = "interview 정보 조회")
     @GetMapping
-    public ResponseEntity<List<InterviewResponse>> getInterviews() {
-        val response = interviewService.getInterviews();
+    public ResponseEntity<List<InterviewResponse>> getInterviews(@RequestParam(required = false) String part) {
+        val response = interviewService.getInterviews(part);
         return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "interviewId로 interview 정보 조회")
     @GetMapping("/{interviewId}")
-    public ResponseEntity<InterviewResponse> getInterviewById(@PathVariable Long interviewId) {
+    public ResponseEntity<InterviewDetailResponse> getInterviewById(@PathVariable Long interviewId) {
         val response = interviewService.getInterviewById(interviewId);
         return ResponseEntity.ok(response);
     }

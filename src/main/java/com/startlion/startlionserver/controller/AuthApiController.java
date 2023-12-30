@@ -45,6 +45,7 @@ public class AuthApiController {
     }
 
 
+
 @Operation(summary = "소셜 로그인 성공")
 @GetMapping("/login/oauth2/code/google")
 public ResponseEntity<Void> oauthGoogleCheck(@RequestParam(value = "code") String authCode) throws Exception {
@@ -56,6 +57,7 @@ public ResponseEntity<Void> oauthGoogleCheck(@RequestParam(value = "code") Strin
             .header("Location", redirectUrl)
             .build();
 }
+
 
     @Operation(summary = "멤버")
     @GetMapping("/member")
