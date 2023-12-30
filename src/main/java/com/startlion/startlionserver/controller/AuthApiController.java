@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -41,24 +44,20 @@ public class AuthApiController {
                 .build();
     }
 
-//        @Operation(summary = "소셜 로그인 성공")
-//    @GetMapping("/login/oauth2/code/google")
-//    public ResponseEntity<OAuthResponse> oauthGoogleCheck(@RequestParam(value = "code") String authCode) throws Exception{
-//        val response = authService.authenticateUser(authCode);
-//        return ResponseEntity.ok(response);
-//    }
 
-    @Operation(summary = "소셜 로그인 성공")
-    @GetMapping("/login/oauth2/code/google")
-    public ResponseEntity<OAuthResponse> oauthGoogleCheck(@RequestParam(value = "code") String authCode) throws Exception {
-        val response = authService.authenticateUser(authCode);
 
-        String redirectUrl = "http://localhost:3000/auth";
+@Operation(summary = "소셜 로그인 성공")
+@GetMapping("/login/oauth2/code/google")
+public ResponseEntity<Void> oauthGoogleCheck(@RequestParam(value = "code") String authCode) throws Exception {
+    OAuthResponse response = authService.authenticateUser(authCode);
 
-        return ResponseEntity.status(HttpStatus.FOUND)
-                .header("Location", redirectUrl)
-                .body(response);
-    }
+    String redirectUrl = "http://localhost:3000/auth?" + response.toString();
+
+    return ResponseEntity.status(HttpStatus.FOUND)
+            .header("Location", redirectUrl)
+            .build();
+}
+
 
     @Operation(summary = "멤버")
     @GetMapping("/member")

@@ -8,4 +8,9 @@ public record OAuthResponse(
     public static OAuthResponse of(String accessToken, String refreshToken) {
         return new OAuthResponse(accessToken, refreshToken);
     }
+
+    @Override
+    public String toString() {
+        return "accessToken=" + accessToken + "&refreshToken=" + refreshToken;
+    }
 }
