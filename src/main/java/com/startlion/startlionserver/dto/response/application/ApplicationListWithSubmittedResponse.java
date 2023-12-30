@@ -13,4 +13,7 @@ public class ApplicationListWithSubmittedResponse {
 
     // member의 작성 application의 List
     private List<ApplicationListGetResponse> applicationList;
+
+    // null값으로 채워진 ApplicationList
+    private ApplicationListGetResponse defaultApplicationList;
 }
