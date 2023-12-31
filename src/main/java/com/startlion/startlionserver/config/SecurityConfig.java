@@ -76,7 +76,7 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000", "https://startlion.kro.kr")
+                        .allowedOrigins("https://recruit-caulikelion.org", "http://localhost:3000", "https://startlion.kro.kr")
                         .allowedOriginPatterns("*")
                         .allowedMethods("*")
                         .allowedHeaders("*")
