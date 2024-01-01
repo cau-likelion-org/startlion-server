@@ -1,5 +1,7 @@
 package com.startlion.startlionserver.dto.response.application;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.startlion.startlionserver.domain.entity.Application;
 import com.startlion.startlionserver.dto.response.part.PartIdResponse;
 import com.startlion.startlionserver.dto.response.pathToKnow.PathToKnowGetResponse;
@@ -12,9 +14,11 @@ import java.util.stream.Collectors;
 
 @Data
 @Schema(description = "지원서 1페이지 조회 응답")
+@JsonPropertyOrder({ "isAgreed", "name", "gender", "studentNum", "major", "multiMajor", "semester", "phone", "email", "pathToKnows", "part" })
 public class ApplicationPage1GetResponse {
     @Schema(description = "개인정보 수집 및 이용 동의 여부")
-    private boolean isAgreed;
+    @JsonProperty("isAgreed") // JSON 필드 이름을 'isAgreed'로 설정
+    private Boolean isAgreed;
     @Schema(description = "이름")
     private String name;
     @Schema(description = "성별")
