@@ -48,4 +48,8 @@ public class ApplicationPage1PutRequest {
 
     @Schema(description = "유저", required = true)
     private User user;
+
+    public boolean getIsAgreed() {
+        return isAgreed == null ? false : isAgreed;
+    }
 }

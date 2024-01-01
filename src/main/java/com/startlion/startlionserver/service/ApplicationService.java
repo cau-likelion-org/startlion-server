@@ -61,8 +61,8 @@ public class ApplicationService {
     // 지원서 1페이지 저장
     @Transactional
     public Long createApplicationPage1(ApplicationPage1PutRequest request, Long generationId, Long userId){
-        // isAgreed 필드 null 체크
-        checkNullAgreedField(request.getIsAgreed());
+        // isAgreed 필드 null 체크 -> 삭제
+//        checkNullAgreedField(request.getIsAgreed());
 
         // generationId로 common question 찾기
         CommonQuestion commonQuestion = commonQuestionRepository.findById(generationId)
@@ -89,8 +89,8 @@ public class ApplicationService {
     }
     @Transactional
     public Long updateApplicationPage1(Long applicationId, ApplicationPage1PutRequest request, Long generationId, Long userId) {
-        // isAgreed 필드 null 체크
-        checkNullAgreedField(request.getIsAgreed());
+        // isAgreed 필드 null 체크 -> 삭제
+//        checkNullAgreedField(request.getIsAgreed());
 
         // application 가져오기
         Application application = getApplicationById(applicationId);
