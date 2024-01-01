@@ -20,4 +20,8 @@ public class CommonAnswerGetResponse {
         this.commonAnswer4 = answer.getCommonAnswer4();
         this.commonAnswer5 = answer.getCommonAnswer5();
     }
+
+    public static CommonAnswerGetResponse of(Answer answer) {
+        return new CommonAnswerGetResponse(answer);
+    }
 }
