@@ -30,9 +30,22 @@ public class ApplicationService {
     private final AnswerService answerService;
     private final InterviewTimeRepository interviewTimeRepository;
 
+
     // 저장된 지원서 없을 시, 지원서 1페이지 정보 가져오기
     public ApplicationPage1GetResponse getApplicationPersonalInformation() {
-        return ApplicationPage1GetResponse.builder().build();
+        return ApplicationPage1GetResponse.builder()
+                .isAgreed(false)
+                .name(null)
+                .gender(null)
+                .studentNum(0)
+                .major(null)
+                .multiMajor(null)
+                .semester(null)
+                .phone(null)
+                .email(null)
+                .pathToKnows(null)
+                .part(null)
+                .build();
     }
 
     // 저장된 지원서 있을 시, 지원서 정보 가져오기

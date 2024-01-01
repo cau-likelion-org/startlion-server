@@ -23,21 +23,17 @@ public class ApplicationController {
 
     private final ApplicationService applicationService;
 
-    // 저장된 지원서 없을 시, 지원서 1페이지 정보(질문) 가져오기
-    @Operation(summary = "저장된 지원서 없을 시, 지원서 1페이지 정보(질문) 가져오기")
-    @GetMapping
-    public ResponseEntity<ApplicationPage1GetResponse> getApplicationPersonalInformation(){
-        return ResponseEntity.ok(applicationService.getApplicationPersonalInformation());
-    }
-
-    // 저장된 지원서 있을 시, 지원서 정보 가져오기
-    @Operation(summary = "저장된 지원서 있을 시, 지원서 정보 가져오기")
+    @Operation(summary = "지원서 정보 가져오기 (저장된 지원서가 없을 시(applicationId = 0), 지원서 1페이지 질문 가져오기)")
     @GetMapping("/{applicationId}")
     public ResponseEntity<?> getApplication(
-            @PathVariable Long applicationId,
-            @RequestParam int page,
-            Principal principal)  {
-        return ResponseEntity.ok(applicationService.getById(applicationId, page, UserUtil.getUserId(principal)));
+            @PathVariable(required = false) Long applicationId,
+            @RequestParam(required = false) Integer page,
+            Principal principal) {
+        if (applicationId == null || applicationId == 0) {
+            return ResponseEntity.ok(applicationService.getApplicationPersonalInformation());
+        } else {
+            return ResponseEntity.ok(applicationService.getById(applicationId, page, UserUtil.getUserId(principal)));
+        }
     }
 
     // 지원서 저장하기의 경우 받아야 하는 Body 정보가 다르기 때문에, 4개의 API로 나누었습니다.
