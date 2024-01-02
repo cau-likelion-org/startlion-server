@@ -252,11 +252,11 @@ public class ApplicationService {
     }
 
     // nullCheck
-    private void checkNullAgreedField(Boolean isAgreed) {
-        if (isAgreed == null) {
-            throw new IllegalArgumentException("isAgreed 필드가 null입니다.");
-        }
-    }
+//    private void checkNullAgreedField(Boolean isAgreed) {
+//        if (isAgreed == null) {
+//            throw new IllegalArgumentException("isAgreed 필드가 null입니다.");
+//        }
+//    }
 
     // pathToKnow 삭제 method
     @Transactional
