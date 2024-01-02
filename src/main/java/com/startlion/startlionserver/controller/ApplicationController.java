@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,9 @@ import java.security.Principal;
 public class ApplicationController {
 
     private final ApplicationService applicationService;
+
+    @Value("${global.generation}")
+    Long generation;
 
     @Operation(summary = "지원서 정보 가져오기 (저장된 지원서가 없을 시(applicationId = 0), 지원서 1페이지 질문 가져오기)")
     @GetMapping("/{applicationId}")
@@ -41,7 +45,7 @@ public class ApplicationController {
 
     @Operation(summary = "지원서 저장하기 1페이지 -> GET application/으로 접근했을 때 사용")
     @PostMapping
-    public ResponseEntity<String> postApplicationPage1(@RequestBody ApplicationPage1PutRequest request, @RequestParam Long generation, Principal principal){
+    public ResponseEntity<String> postApplicationPage1(@RequestBody ApplicationPage1PutRequest request, Principal principal){
         Long applicationId = applicationService.createApplicationPage1(request, generation, UserUtil.getUserId(principal));
         URI uri = URI.create("/application/" + applicationId);
         return ResponseEntity.created(uri).body("Application ID: " + applicationId);
@@ -49,7 +53,7 @@ public class ApplicationController {
 
     @Operation(summary = "지원서 저장하기 1페이지 -> GET application/{applicationId}으로 접근했을 때 사용")
     @PutMapping("/{applicationId}/page1")
-    public ResponseEntity<String> updateApplicationPage1(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage1PutRequest request, @RequestParam Long generation, Principal principal){
+    public ResponseEntity<String> updateApplicationPage1(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage1PutRequest request, Principal principal){
         URI uri = URI.create("/application/" + applicationService.updateApplicationPage1(applicationId, request, generation, UserUtil.getUserId(principal)));
         return ResponseEntity.created(uri).body("지원서 1페이지 저장 완료");
     }
