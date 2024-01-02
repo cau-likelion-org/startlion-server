@@ -29,14 +29,14 @@ public class ApplicationController {
 
     @Operation(summary = "지원서 정보 가져오기 (저장된 지원서가 없을 시(applicationId = 0), 지원서 1페이지 질문 가져오기)")
     @GetMapping("/{applicationId}")
-    public ResponseEntity<?> getApplication(
+    public Object getApplication(
             @PathVariable(required = false) Long applicationId,
             @RequestParam(required = false) Integer page,
             Principal principal) {
         if (applicationId == null || applicationId == 0) {
-            return ResponseEntity.ok(applicationService.getApplicationPersonalInformation());
+            return applicationService.getApplicationPersonalInformation();
         } else {
-            return ResponseEntity.ok(applicationService.getById(applicationId, page, UserUtil.getUserId(principal)));
+            return applicationService.getById(applicationId, page, UserUtil.getUserId(principal));
         }
     }
 

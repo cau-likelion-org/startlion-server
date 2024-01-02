@@ -50,7 +50,8 @@ public class ApplicationService {
     }
 
     // 저장된 지원서 있을 시, 지원서 정보 가져오기
-    public ResponseEntity<?> getById(Long applicationId, int page, Long userId) {
+// 저장된 지원서 있을 시, 지원서 정보 가져오기
+    public Object getById(Long applicationId, int page, Long userId) {
         Application application = applicationJpaRepository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 applicationId를 가진 지원서가 존재하지 않습니다."));
 
@@ -58,15 +59,15 @@ public class ApplicationService {
 
         switch (page) {
             case 1:
-                return ResponseEntity.ok(ApplicationPage1GetResponse.of(application));
+                return ApplicationPage1GetResponse.of(application);
             case 2:
-                return ResponseEntity.ok(ApplicationPage2GetResponse.of(application.getAnswer()
+                return ApplicationPage2GetResponse.of(application.getAnswer()
                         , commonQuestionRepository.findByGeneration(application.getGeneration().getGeneration())
-                                .orElseThrow(() -> new IllegalArgumentException("해당 generation을 가진 commonQuestion이 존재하지 않습니다."))));
+                                .orElseThrow(() -> new IllegalArgumentException("해당 generation을 가진 commonQuestion이 존재하지 않습니다.")));
             case 3:
-                return ResponseEntity.ok(ApplicationPage3GetResponse.of(application.getAnswer(), application.getPart().getPartQuestions(), application.getPortfolio()));
+                return ApplicationPage3GetResponse.of(application.getAnswer(), application.getPart().getPartQuestions(), application.getPortfolio());
             case 4:
-                return ResponseEntity.ok(ApplicationPage4GetResponse.of(application.getInterviewTimes()));
+                return ApplicationPage4GetResponse.of(application.getInterviewTimes());
             default:
                 throw new IllegalArgumentException("페이지 번호가 잘못되었습니다.");
         }
