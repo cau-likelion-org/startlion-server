@@ -55,6 +55,10 @@ public class Answer {
     @ColumnDefault("''")
     private String partAnswer3;
 
+    @Column(length = 500)
+    @ColumnDefault("''")
+    private String partAnswer4;
+
     // 공동 답변 생성자
     public Answer(Application application, ApplicationPage2PutRequest request) {
         // 필드 초기화
@@ -73,6 +77,7 @@ public class Answer {
         this.partAnswer1 = request.getPartAnswer1();
         this.partAnswer2 = request.getPartAnswer2();
         this.partAnswer3 = request.getPartAnswer3();
+        this.partAnswer4 = request.getPartAnswer4();
     }
 
     // 공통 답변 업데이트
@@ -85,10 +90,11 @@ public class Answer {
     }
 
     // 파트 답변 업데이트
-    public void updatePartAnswers(String partAnswer1, String partAnswer2, String partAnswer3) {
+    public void updatePartAnswers(String partAnswer1, String partAnswer2, String partAnswer3, String partAnswer4) {
         this.partAnswer1 = partAnswer1;
         this.partAnswer2 = partAnswer2;
         this.partAnswer3 = partAnswer3;
+        this.partAnswer4 = partAnswer4;
     }
 
     public void updateBlankAnswer(Application application) {
