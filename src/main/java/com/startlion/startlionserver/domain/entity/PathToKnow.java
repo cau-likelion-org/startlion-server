@@ -30,6 +30,9 @@ public class PathToKnow {
     @Column
     private PathType pathType;
 
+    @Column
+    private String etcDetail;
+
     public enum PathType {
         RECOMMENDATION,
         INSTAGRAM,
