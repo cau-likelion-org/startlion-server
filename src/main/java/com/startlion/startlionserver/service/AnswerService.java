@@ -28,7 +28,7 @@ public class AnswerService {
     @Transactional
     public Answer createAnswer(Application application, ApplicationPage3PutRequest request){
         Answer answer = answerJpaRepository.findByApplication(application).orElse(new Answer(application, request));
-        answer.updatePartAnswers(request.getPartAnswer1(), request.getPartAnswer2(), request.getPartAnswer3());
+        answer.updatePartAnswers(request.getPartAnswer1(), request.getPartAnswer2(), request.getPartAnswer3(), request.getPartAnswer4());
         return answerJpaRepository.save(answer);
     }
 }

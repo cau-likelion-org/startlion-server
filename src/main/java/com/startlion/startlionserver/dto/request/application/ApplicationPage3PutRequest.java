@@ -16,6 +16,9 @@ public class ApplicationPage3PutRequest {
     @Schema(description = "파트 질문 답변3", example = "true", required = true)
     private String partAnswer3;
 
+    @Schema(description = "파트 질문 답변4", example = "true", required = true)
+    private String partAnswer4;
+
     @Schema(description = "포트폴리오", example = "true", required = true)
     private String portfolio;
 }

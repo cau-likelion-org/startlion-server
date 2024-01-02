@@ -29,6 +29,7 @@ public class ApplicationService {
 
     private final AnswerService answerService;
     private final InterviewTimeRepository interviewTimeRepository;
+    private final PartJpaRepository partJpaRepository;
 
 
     // 저장된 지원서 없을 시, 지원서 1페이지 정보 가져오기
@@ -164,7 +165,7 @@ public class ApplicationService {
             Answer newAnswer = answerService.createAnswer(application, request);
             application.setAnswer(newAnswer);
         } else {
-            application.getAnswer().updatePartAnswers(request.getPartAnswer1(), request.getPartAnswer2(), request.getPartAnswer3());
+            application.getAnswer().updatePartAnswers(request.getPartAnswer1(), request.getPartAnswer2(), request.getPartAnswer3(), request.getPartAnswer4());
         }
 
         // portfolio 업데이트

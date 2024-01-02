@@ -31,4 +31,7 @@ public class PartQuestion {
 
     @Column(length = 100)
     private String partQuestion3;
+
+    @Column(length = 100)
+    private String partQuestion4;
 }
