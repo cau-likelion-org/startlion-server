@@ -8,10 +8,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class PathToKnowGetResponse {
     private String pathType;
+    private String etcDetail;
     private Long pathToKnowId;
 
     public PathToKnowGetResponse(PathToKnow pathToKnow) {
         this.pathType = pathToKnow.getPathType().name();
         this.pathToKnowId = pathToKnow.getPathToKnowId();
+        this.etcDetail = pathToKnow.getEtcDetail();
     }
 }
