@@ -86,8 +86,12 @@ public class ApplicationService {
         User user = userJpaRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. id=" + userId));
 
+        // part 문자열로 part 가져옴
+        String partName = request.getPart(); // part 문자열 추출
+        Part part = getPartByKoreanName(partName); // part 문자열로 part 객체 가져옴
+
         // 지원서 업데이트
-        Application application = updateApplicationInfo(request, generationId, user);
+        Application application = updateApplicationInfo(request, generationId, user, part);
 
         // application 생성될 때, answer도 함께 생성
         createAnswer(application);
@@ -120,13 +124,17 @@ public class ApplicationService {
         // 본인 application인지 확인
         checkApplicationOwner(application, userId);
 
+        // part 문자열로 part 가져옴
+        String partName = request.getPart(); // part 문자열 추출
+        Part part = getPartByKoreanName(partName); // part 문자열로 part 객체 가져옴
+
         // 기존의 path to know 삭제
         deletePathToKnows(application);
 
         // path to know 저장
         updatePathToKnow(application, request);
 
-        application.updateApplication(request.getIsAgreed(), user, request.getName(), request.getGender(), request.getStudentNum(), request.getMajor(), request.getMultiMajor(), request.getSemester(), request.getPhone(), request.getEmail(), request.getPathToKnows(), request.getPart(), "S", commonQuestion);
+        application.updateApplication(request.getIsAgreed(), user, request.getName(), request.getGender(), request.getStudentNum(), request.getMajor(), request.getMultiMajor(), request.getSemester(), request.getPhone(), request.getEmail(), request.getPathToKnows(), part, "S", commonQuestion);
 
         applicationJpaRepository.save(application); //Application 저장
 
@@ -201,7 +209,7 @@ public class ApplicationService {
     }
 
     // 지원서 빌더
-    private Application updateApplicationInfo(ApplicationPage1PutRequest request, Long generationId, User user){
+    private Application updateApplicationInfo(ApplicationPage1PutRequest request, Long generationId, User user, Part part){
         Application application = Application.builder()
                 .generation(commonQuestionRepository.findById(generationId)
                         .orElseThrow(() -> new IllegalArgumentException("해당 commonQuestionId를 가진 commonQuestion이 존재하지 않습니다.")))
@@ -216,7 +224,7 @@ public class ApplicationService {
                 .phone(request.getPhone())
                 .email(request.getEmail())
                 .pathToKnows(request.getPathToKnows())
-                .part(request.getPart())
+                .part(part)
                 .status("S")
                 .build();
 
@@ -265,6 +273,11 @@ public class ApplicationService {
         Application application = applicationJpaRepository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 applicationId를 가진 지원서가 존재하지 않습니다."));
         return application;
+    }
+
+    private Part getPartByKoreanName(String koreanName) {
+        return partJpaRepository.findByKoreanName(koreanName)
+                .orElseThrow(() -> new IllegalArgumentException("해당 한글 파트 이름을 가진 파트가 존재하지 않습니다."));
     }
 
 }

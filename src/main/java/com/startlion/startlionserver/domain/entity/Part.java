@@ -22,6 +22,9 @@ public class Part {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String koreanName;
+
     @OneToMany(mappedBy = "part")
     @JsonIgnore
     private List<PartQuestion> partQuestions;

@@ -38,10 +38,10 @@ public class ApplicationPage1GetResponse {
     @Schema(description = "지원경로")
     private List<PathToKnowGetResponse> pathToKnows;
     @Schema(description = "지원파트")
-    private PartIdResponse part;
+    private String part;
 
     @Builder
-    public ApplicationPage1GetResponse(Boolean isAgreed, String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnowGetResponse> pathToKnows, PartIdResponse part) {
+    public ApplicationPage1GetResponse(Boolean isAgreed, String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnowGetResponse> pathToKnows, String part) {
         this.isAgreed = isAgreed;
         this.name = name;
         this.gender = gender;
@@ -60,7 +60,8 @@ public class ApplicationPage1GetResponse {
         List<PathToKnowGetResponse> pathToKnowResponses = application.getPathToKnows().stream()
                 .map(PathToKnowGetResponse::new)
                 .collect(Collectors.toList());
-        // PartId만 표시
-        PartIdResponse part = new PartIdResponse(application.getPart());
-        return new ApplicationPage1GetResponse(application.getIsAgreed(), application.getName(), application.getGender(), application.getStudentNum(), application.getMajor(), application.getMultiMajor(), application.getSemester(), application.getPhone(), application.getEmail(), pathToKnowResponses, part);}
+        // Part의 한글 이름 직접 사용
+        String part = application.getPart().getKoreanName();
+        return new ApplicationPage1GetResponse(application.getIsAgreed(), application.getName(), application.getGender(), application.getStudentNum(), application.getMajor(), application.getMultiMajor(), application.getSemester(), application.getPhone(), application.getEmail(), pathToKnowResponses, part);
+    }
 }

@@ -7,9 +7,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class PartIdResponse {
-    private Long partId;
+    private String partName;
 
     public PartIdResponse(Part part){
-        this.partId = part.getPartId();
+        this.partName = part.getKoreanName();
     }
 }
