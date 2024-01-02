@@ -12,7 +12,7 @@ import lombok.Data;
 public class PartQuestionResponse {
     private Long questionId;
 
-    private PartIdResponse partId;
+    private String part;
 
     private Long generation;
 
@@ -24,7 +24,7 @@ public class PartQuestionResponse {
 
     public PartQuestionResponse(PartQuestion partQuestion) {
         this.questionId = partQuestion.getQuestionId();
-        this.partId = new PartIdResponse(partQuestion.getPart());
+        this.part = partQuestion.getPart().getKoreanName();
         this.generation = partQuestion.getGeneration();
         this.partQuestion1 = partQuestion.getPartQuestion1();
         this.partQuestion2 = partQuestion.getPartQuestion2();

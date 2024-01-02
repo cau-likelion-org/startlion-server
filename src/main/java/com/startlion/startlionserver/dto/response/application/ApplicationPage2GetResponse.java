@@ -13,11 +13,11 @@ public class ApplicationPage2GetResponse {
     @Schema(description = "답변")
     private CommonAnswerGetResponse answer;
     @Schema(description = "질문")
-    private CommonQuestionResponse generation;
+    private CommonQuestionResponse commonquestion;
 
     public ApplicationPage2GetResponse(CommonAnswerGetResponse answer, CommonQuestionResponse generation) {
         this.answer = answer;
-        this.generation = generation;
+        this.commonquestion = generation;
     }
 
     public static ApplicationPage2GetResponse of(Answer answer, CommonQuestion generation) {

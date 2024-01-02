@@ -31,7 +31,7 @@ public class ApplicationPage1PutRequest {
     @Schema(description = "복수전공", example = "cs", required = true)
     private String multiMajor;
 
-    @Schema(description = "학기", example = "3-2", required = true)
+    @Schema(description = "학기", example = "3학년 2학기", required = true)
     private String semester;
 
     @Schema(description = "전화번호", example = "010-1234-5678", required = true)
@@ -43,8 +43,8 @@ public class ApplicationPage1PutRequest {
     @Schema(description = "알게 된 경로", required = true)
     private List<PathToKnow> pathToKnows;
 
-    @Schema(description = "파트", required = true)
-    private Part part;
+    @Schema(description = "파트", example = "기획", required = true)
+    private String part;
 
     @Schema(description = "유저", required = true)
     private User user;

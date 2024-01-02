@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface PartJpaRepository extends JpaRepository<Part, Long> {
     Optional<Part> findByName(String name);
+    Optional<Part> findByKoreanName(String koreanName);
 }
