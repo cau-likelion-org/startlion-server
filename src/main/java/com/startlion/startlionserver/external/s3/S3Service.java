@@ -1,7 +1,6 @@
-package com.startlion.startlionserver.external;
+package com.startlion.startlionserver.external.s3;
 
 
-import com.startlion.startlionserver.config.S3Config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

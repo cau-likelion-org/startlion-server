@@ -8,7 +8,7 @@ import com.startlion.startlionserver.service.ApplicationService;
 import com.startlion.startlionserver.util.UserUtil;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +21,7 @@ import java.security.Principal;
 public class ApplicationController implements ApplicationApi {
 
     private final ApplicationService applicationService;
-
-    @Value("${global.generation}")
-    Long generation;
+    private static final Long CURRENT_GENERATION = 12L;
 
     @Override
     @GetMapping("/{applicationId}")
@@ -43,7 +41,7 @@ public class ApplicationController implements ApplicationApi {
     @Override
     @PostMapping
     public ResponseEntity<String> postApplicationPage1(@RequestBody ApplicationPage1PutRequest request, Principal principal){
-        Long applicationId = applicationService.createApplicationPage1(request, generation, UserUtil.getUserId(principal));
+        Long applicationId = applicationService.createApplicationPage1(request, CURRENT_GENERATION, UserUtil.getUserId(principal));
         URI uri = URI.create("/application/" + applicationId);
         return ResponseEntity.created(uri).body("Application ID: " + applicationId);
     }
@@ -51,7 +49,7 @@ public class ApplicationController implements ApplicationApi {
     @Override
     @PutMapping("/{applicationId}/page1")
     public ResponseEntity<String> updateApplicationPage1(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage1PutRequest request, Principal principal){
-        URI uri = URI.create("/application/" + applicationService.updateApplicationPage1(applicationId, request, generation, UserUtil.getUserId(principal)));
+        URI uri = URI.create("/application/" + applicationService.updateApplicationPage1(applicationId, request, CURRENT_GENERATION, UserUtil.getUserId(principal)));
         return ResponseEntity.created(uri).body("지원서 1페이지 저장 완료");
     }
 
@@ -66,7 +64,9 @@ public class ApplicationController implements ApplicationApi {
     // 지원서 저장하기 3페이지
     @Override
     @PutMapping("/{applicationId}/page3")
-    public ResponseEntity<String> updateApplicationPage3(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage3PutRequest request, Principal principal){
+    public ResponseEntity<String> updateApplicationPage3(
+            @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
+            @RequestBody ApplicationPage3PutRequest request, Principal principal){
         URI uri = URI.create("/application/" + applicationService.updateApplicationPage3(applicationId, request, UserUtil.getUserId(principal)));
         return ResponseEntity.created(uri).body("지원서 3페이지 저장 완료");
     }
@@ -74,8 +74,11 @@ public class ApplicationController implements ApplicationApi {
     // 지원서 저장하기 4페이지 -> 제출
     @Override
     @PutMapping("/{applicationId}/page4")
-    public ResponseEntity<String> updateApplicationPage4(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage4PutRequest request, Principal principal){
-        URI uri = URI.create("/application/" + applicationService.updateApplicationPage4(applicationId, request, UserUtil.getUserId(principal)));
+    public ResponseEntity<String> updateApplicationPage4(@PathVariable @Parameter(description = "지원서 ID") Long applicationId,
+                                                         @RequestBody ApplicationPage4PutRequest request,
+                                                         Principal principal){
+        val userId = UserUtil.getUserId(principal);
+        URI uri = URI.create("/application/" + applicationService.updateApplicationPage4(applicationId, request, userId));
         return ResponseEntity.created(uri).body("지원서 제출 완료");
     }
 

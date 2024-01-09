@@ -47,6 +47,15 @@ public class User extends BaseTimeEntity {
         this.imageUrl = imageUrl;
     }
 
+    public static User create(String email, String username, String socialId, String imageUrl) {
+        return User.builder()
+                .email(email)
+                .username(username)
+                .socialId(socialId)
+                .imageUrl(imageUrl)
+                .build();
+    }
+
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }

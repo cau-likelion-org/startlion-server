@@ -11,6 +11,7 @@ import com.startlion.startlionserver.dto.response.application.ApplicationPage3Ge
 import com.startlion.startlionserver.dto.response.application.ApplicationPage4GetResponse;
 import com.startlion.startlionserver.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,14 +92,14 @@ public class ApplicationService {
 //        checkNullAgreedField(request.getIsAgreed());
 
         // application 가져오기
-        Application application = getApplicationById(applicationId);
+        val application = getApplicationById(applicationId);
 
         // generationId로 common question 찾기
-        CommonQuestion commonQuestion = commonQuestionRepository.findById(generationId)
+        val commonQuestion = commonQuestionRepository.findById(generationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 CommonQuestion이 없습니다. id=" + generationId));
 
         // userId로 User 객체 찾기
-        User user = userJpaRepository.findById(userId)
+        val user = userJpaRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. id=" + userId));
 
         // 본인 application인지 확인
@@ -113,9 +114,21 @@ public class ApplicationService {
 
         // path to know 저장
         updatePathToKnow(application, request);
-
-        application.updateApplication(request.getIsAgreed(), user, request.getName(), request.getGender(), request.getStudentNum(), request.getMajor(), request.getMultiMajor(), request.getSemester(), request.getPhone(), request.getEmail(), request.getPathToKnows(), part, "S", commonQuestion);
-
+        application.updateApplication(
+                request.getIsAgreed(),
+                user,
+                request.getName(),
+                request.getGender(),
+                request.getStudentNum(),
+                request.getMajor(),
+                request.getMultiMajor(),
+                request.getSemester(),
+                request.getPhone(),
+                request.getEmail(),
+                request.getPathToKnows(),
+                part,
+                "S",
+                commonQuestion);
         applicationJpaRepository.save(application); //Application 저장
 
         return application.getApplicationId();
@@ -124,8 +137,7 @@ public class ApplicationService {
     // 지원서 2페이지 저장
     @Transactional
     public Long updateApplicationPage2(Long applicationId, ApplicationPage2PutRequest request, Long userId) {
-        Application application = getApplicationById(applicationId);
-
+        val application = getApplicationById(applicationId);
         checkApplicationOwner(application, userId);
 
         // answer가 있으면 update 없으면 create
@@ -149,7 +161,6 @@ public class ApplicationService {
     @Transactional
     public Long updateApplicationPage3(Long applicationId, ApplicationPage3PutRequest request, Long userId) {
         Application application = getApplicationById(applicationId);
-
         checkApplicationOwner(application, userId);
 
         // answer가 있으면 update 있으면 create
@@ -172,7 +183,6 @@ public class ApplicationService {
         Application application = getApplicationById(applicationId);
 
         checkApplicationOwner(application, userId);
-
         deleteInterviewTimes(application);
 
         List<InterviewTime> interviewTimes = request.getInterview().stream()
@@ -189,7 +199,7 @@ public class ApplicationService {
 
     // 본인의 지원서인지 체크
     private void checkApplicationOwner(Application application, Long userId){
-        if(userId != application.getUser().getUserId()){
+        if (userId != application.getUser().getUserId()){
             throw new IllegalArgumentException("본인의 application이 아닙니다.");
         }
     }
@@ -215,15 +225,12 @@ public class ApplicationService {
                 .build();
 
         applicationJpaRepository.save(application);
-
         return application;
     }
 
     // answer 객체 생성
     private void createAnswer(Application application) {
-        Answer answer = new Answer();
-        answer.updateBlankAnswer(application);
-        answerJpaRepository.save(answer);
+        answerJpaRepository.save(Answer.createBasicAnswer(application));
     }
 
     // pathToKnow 저장
@@ -247,7 +254,7 @@ public class ApplicationService {
     // pathToKnow 삭제 method
     @Transactional
     public void deletePathToKnows(Application application) {
-        pathToKnowJpaRepository.deleteByApplicationId(application);
+        pathToKnowJpaRepository.deleteByApplication(application);
     }
 
     @Transactional
@@ -264,5 +271,4 @@ public class ApplicationService {
         return partJpaRepository.findByKoreanName(koreanName)
                 .orElseThrow(() -> new IllegalArgumentException("해당 한글 파트 이름을 가진 파트가 존재하지 않습니다."));
     }
-
 }

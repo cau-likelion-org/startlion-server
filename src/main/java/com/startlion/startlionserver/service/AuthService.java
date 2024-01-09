@@ -62,20 +62,11 @@ public class AuthService {
         val socialId = "google";
         val username = jsonNode.get("name").asText();
         val imageUrl = jsonNode.get("picture").asText();
+        val newUser = User.create(email, username, socialId, imageUrl);
 
-        val newUser = User.builder()
-                .email(email)
-                .username(username)
-                .socialId(socialId)
-                .imageUrl(imageUrl)
-                .build();
-
-        User user = userRepository.findByEmail(email)
-                .orElseGet(() -> userRepository.save(newUser));
-
+        User user = userRepository.findByEmail(email).orElseGet(() -> userRepository.save(newUser));
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, null);
         val tokenVO = generateToken(authentication);
-
         user.updateRefreshToken(tokenVO.refreshToken());
         return OAuthResponse.of(tokenVO.accessToken(), tokenVO.refreshToken());
     }

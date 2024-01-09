@@ -1,7 +1,7 @@
 package com.startlion.startlionserver.service;
 
 
-import com.startlion.startlionserver.external.S3Service;
+import com.startlion.startlionserver.external.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Service;

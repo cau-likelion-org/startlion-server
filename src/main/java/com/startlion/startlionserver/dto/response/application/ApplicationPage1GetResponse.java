@@ -3,6 +3,7 @@ package com.startlion.startlionserver.dto.response.application;
 import com.startlion.startlionserver.domain.entity.Application;
 import com.startlion.startlionserver.dto.response.pathToKnow.PathToKnowGetResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.val;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,7 +55,7 @@ public record ApplicationPage1GetResponse(
                 .map(PathToKnowGetResponse::new)
                 .collect(Collectors.toList());
         // Part의 한글 이름 직접 사용
-        String part = application.getPart().getKoreanName();
+        val part = application.getPart().getKoreanName();
         return new ApplicationPage1GetResponse(
                 application.getIsAgreed(),
                 application.getName(),

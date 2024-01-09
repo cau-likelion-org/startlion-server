@@ -7,12 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("api/interviews")
+@RequestMapping("/api/interviews")
 @RequiredArgsConstructor
-public class InterviewFileUploadController {
+public class InterviewFileUploadController implements InterviewFileUploadApi {
 
     private final InterviewFileUploadService interviewFileUploadService;
 
+    @Override
     @PostMapping("{interviewId}/file")
     public ResponseEntity<String> uploadFile(@RequestPart MultipartFile file, @PathVariable Long interviewId) {
         interviewFileUploadService.uploadFile(file, interviewId);

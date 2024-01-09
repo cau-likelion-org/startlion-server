@@ -4,6 +4,7 @@ import com.startlion.startlionserver.dto.request.application.ApplicationPage2Put
 import com.startlion.startlionserver.dto.request.application.ApplicationPage3PutRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -87,7 +88,14 @@ public class Answer {
         this.partAnswer4 = partAnswer4;
     }
 
-    public void updateBlankAnswer(Application application) {
+    @Builder
+    public Answer(Application application) {
         this.application = application;
+    }
+
+    public static Answer createBasicAnswer(Application application) {
+        return Answer.builder()
+                .application(application)
+                .build();
     }
 }
