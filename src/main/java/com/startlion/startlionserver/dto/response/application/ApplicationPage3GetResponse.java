@@ -19,8 +19,8 @@ public class ApplicationPage3GetResponse {
     private String portfolio;
     public static ApplicationPage3GetResponse of(Answer answer, List<PartQuestion> partQuestions, String portfolio) {
         List<PartQuestionResponse> partQuestionResponses = partQuestions.stream()
-                .map(PartQuestionResponse::new)
+                .map(PartQuestionResponse::of)
                 .collect(Collectors.toList());
-        return new ApplicationPage3GetResponse(new PartAnswerGetResponse(answer), partQuestionResponses, portfolio);
+        return new ApplicationPage3GetResponse(PartAnswerGetResponse.of(answer), partQuestionResponses, portfolio);
     }
 }

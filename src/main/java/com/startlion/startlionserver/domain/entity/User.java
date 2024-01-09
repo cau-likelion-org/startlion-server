@@ -40,7 +40,7 @@ public class User extends BaseTimeEntity {
     private String previousImageUrl;
 
     @Builder
-    public User(String email, String username, String socialId, String imageUrl) {
+    private User(String email, String username, String socialId, String imageUrl) {
         this.email = email;
         this.username = username;
         this.socialId = socialId;

@@ -1,5 +1,6 @@
 package com.startlion.startlionserver.domain.entity;
 
+import com.startlion.startlionserver.domain.PathType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,24 +19,14 @@ public class PathToKnow {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id")
     @JsonIgnore
-    private Application applicationId;
+    private Application application;
 
     @Enumerated(EnumType.STRING)
-    @Column
     private PathType pathType;
 
-    @Column
     private String etcDetail;
 
-    public enum PathType {
-        RECOMMENDATION,
-        INSTAGRAM,
-        EVERYTIME,
-        HOMEPAGE,
-        ETC
-    }
-
-    public void setApplicationId(Application applicationId) {
-        this.applicationId = applicationId;
+    public void updateApplication(Application application) {
+        this.application = application;
     }
 }

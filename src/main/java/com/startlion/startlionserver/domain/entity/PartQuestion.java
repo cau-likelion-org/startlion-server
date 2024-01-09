@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class PartQuestion {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -20,16 +19,8 @@ public class PartQuestion {
 
     @Column(nullable = false)
     private Long generation;
-
-    @Column(length = 100)
     private String partQuestion1;
-
-    @Column(length = 100)
     private String partQuestion2;
-
-    @Column(length = 100)
     private String partQuestion3;
-
-    @Column(length = 100)
     private String partQuestion4;
 }

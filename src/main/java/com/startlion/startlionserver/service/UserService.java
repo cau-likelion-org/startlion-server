@@ -40,9 +40,8 @@ public class UserService {
 
     // 제출된 지원서 있는지 체크
     private boolean checkIsSubmitted(List<Application> applications){
-        boolean isSubmitted = applications.stream()
+        return applications.stream()
                 .anyMatch(application -> "Y".equals(application.getStatus()));
-        return isSubmitted;
     }
 
     // boolean을 String으로 변환
@@ -52,7 +51,7 @@ public class UserService {
 
     // 지원서 리스트 불러오기
     private List<ApplicationListGetResponse> loadApplicationList(List<Application> applications){
-        List<ApplicationListGetResponse> applicationList = applications.stream()
+        return applications.stream()
                 .map(application -> ApplicationListGetResponse.of(
                         application.getApplicationId(),
                         application.getGeneration().getCommonQuestionId(),
@@ -60,7 +59,5 @@ public class UserService {
                         application.getPart().getPartId(),
                         application.getStatus()))
                 .collect(Collectors.toList());
-
-        return applicationList;
     }
 }

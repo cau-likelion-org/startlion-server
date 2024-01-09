@@ -11,7 +11,6 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
-@Table
 public class Answer {
 
     @Id
@@ -54,11 +53,11 @@ public class Answer {
     public Answer(Application application, ApplicationPage2PutRequest request) {
         // 필드 초기화
         this.application = application;
-        this.commonAnswer1 = request.getCommonAnswer1();
-        this.commonAnswer2 = request.getCommonAnswer2();
-        this.commonAnswer3 = request.getCommonAnswer3();
-        this.commonAnswer4 = request.getCommonAnswer4();
-        this.commonAnswer5 = request.getCommonAnswer5();
+        this.commonAnswer1 = request.commonAnswer1();
+        this.commonAnswer2 = request.commonAnswer2();
+        this.commonAnswer3 = request.commonAnswer3();
+        this.commonAnswer4 = request.commonAnswer4();
+        this.commonAnswer5 = request.commonAnswer5();
     }
 
     // 파트 답변 생성자

@@ -4,7 +4,6 @@ import com.startlion.startlionserver.config.auth.AuthValueConfig;
 import com.startlion.startlionserver.dto.response.auth.OAuthResponse;
 import com.startlion.startlionserver.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,18 +15,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "[Auth] 인증 관련 API")
-public class AuthApiController {
+public class AuthApiController implements AuthApi {
 
     private final AuthService authService;
     private final AuthValueConfig valueConfig;
-    @Operation(summary = "소셜 로그인")
+
+    @Override
     @GetMapping("/login")
     public ResponseEntity<Void> getGoogleAuthUrl(HttpServletResponse response) throws Exception {
 
@@ -46,7 +42,7 @@ public class AuthApiController {
 
 
 
-@Operation(summary = "소셜 로그인 성공")
+@Override
 @GetMapping("/login/oauth2/code/google")
 public ResponseEntity<Void> oauthGoogleCheck(@RequestParam(value = "code") String authCode) throws Exception {
     OAuthResponse response = authService.authenticateUser(authCode);
@@ -57,7 +53,6 @@ public ResponseEntity<Void> oauthGoogleCheck(@RequestParam(value = "code") Strin
             .header("Location", redirectUrl)
             .build();
 }
-
 
     @Operation(summary = "멤버")
     @GetMapping("/member")

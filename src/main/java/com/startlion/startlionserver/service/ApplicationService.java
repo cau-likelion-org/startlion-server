@@ -1,20 +1,21 @@
 package com.startlion.startlionserver.service;
 
 import com.startlion.startlionserver.domain.entity.*;
-import com.startlion.startlionserver.dto.request.application.*;
+import com.startlion.startlionserver.dto.request.application.ApplicationPage1PutRequest;
+import com.startlion.startlionserver.dto.request.application.ApplicationPage2PutRequest;
+import com.startlion.startlionserver.dto.request.application.ApplicationPage3PutRequest;
+import com.startlion.startlionserver.dto.request.application.ApplicationPage4PutRequest;
+import com.startlion.startlionserver.dto.response.application.ApplicationPage1GetResponse;
 import com.startlion.startlionserver.dto.response.application.ApplicationPage2GetResponse;
-import com.startlion.startlionserver.dto.response.application.ApplicationPage4GetResponse;
 import com.startlion.startlionserver.dto.response.application.ApplicationPage3GetResponse;
-import com.startlion.startlionserver.dto.response.application.ApplicationPage1GetResponse;;
+import com.startlion.startlionserver.dto.response.application.ApplicationPage4GetResponse;
 import com.startlion.startlionserver.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,19 +35,7 @@ public class ApplicationService {
 
     // 저장된 지원서 없을 시, 지원서 1페이지 정보 가져오기
     public ApplicationPage1GetResponse getApplicationPersonalInformation() {
-        return ApplicationPage1GetResponse.builder()
-                .isAgreed(false)
-                .name(null)
-                .gender(null)
-                .studentNum(0)
-                .major(null)
-                .multiMajor(null)
-                .semester(null)
-                .phone(null)
-                .email(null)
-                .pathToKnows(null)
-                .part(null)
-                .build();
+        return ApplicationPage1GetResponse.createNoArgs();
     }
 
     // 저장된 지원서 있을 시, 지원서 정보 가져오기
@@ -76,9 +65,6 @@ public class ApplicationService {
     // 지원서 1페이지 저장
     @Transactional
     public Long createApplicationPage1(ApplicationPage1PutRequest request, Long generationId, Long userId){
-        // isAgreed 필드 null 체크 -> 삭제
-//        checkNullAgreedField(request.getIsAgreed());
-
         // generationId로 common question 찾기
         CommonQuestion commonQuestion = commonQuestionRepository.findById(generationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 CommonQuestion이 없습니다. id=" + generationId));
@@ -88,23 +74,16 @@ public class ApplicationService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. id=" + userId));
 
         // part 문자열로 part 가져옴
-        String partName = request.getPart(); // part 문자열 추출
-        Part part = getPartByKoreanName(partName); // part 문자열로 part 객체 가져옴
-
+        Part part = getPartByKoreanName(request.getPart()); // part 문자열로 part 객체 가져옴
         // 지원서 업데이트
         Application application = updateApplicationInfo(request, generationId, user, part);
-
         // application 생성될 때, answer도 함께 생성
         createAnswer(application);
-
         // path to know 저장
         updatePathToKnow(application, request);
-
         application.updateCommonQuestion(commonQuestion);
         applicationJpaRepository.save(application);
-
         return application.getApplicationId();
-
     }
     @Transactional
     public Long updateApplicationPage1(Long applicationId, ApplicationPage1PutRequest request, Long generationId, Long userId) {
@@ -139,7 +118,6 @@ public class ApplicationService {
 
         applicationJpaRepository.save(application); //Application 저장
 
-
         return application.getApplicationId();
     }
 
@@ -155,7 +133,12 @@ public class ApplicationService {
             Answer newAnswer = answerService.createAnswer(application, request);
             application.setAnswer(newAnswer);
         } else {
-            application.getAnswer().updateCommonAnswers(request.getCommonAnswer1(), request.getCommonAnswer2(), request.getCommonAnswer3(), request.getCommonAnswer4(), request.getCommonAnswer5());
+            application.getAnswer().updateCommonAnswers(
+                    request.commonAnswer1(),
+                    request.commonAnswer2(),
+                    request.commonAnswer3(),
+                    request.commonAnswer4(),
+                    request.commonAnswer5());
         }
 
         return application.getApplicationId();
@@ -193,11 +176,13 @@ public class ApplicationService {
         deleteInterviewTimes(application);
 
         List<InterviewTime> interviewTimes = request.getInterview().stream()
-                .map(time -> new InterviewTime(time, application))
-                .collect(Collectors.toList());
+                .map(time ->
+                        InterviewTime.builder()
+                                .time(time)
+                                .application(application).build())
+                                .toList();
 
         application.updateInterview(interviewTimes, "Y");
-
 
         return application.getApplicationId();
     }
@@ -246,7 +231,7 @@ public class ApplicationService {
         deletePathToKnows(application);
         List<PathToKnow> pathToKnows = new ArrayList<>();
         for(PathToKnow pathToKnow : request.getPathToKnows()){
-            pathToKnow.setApplicationId(application);
+            pathToKnow.updateApplication(application);
             pathToKnows.add(pathToKnow);
             pathToKnowJpaRepository.save(pathToKnow);
         }
@@ -271,9 +256,8 @@ public class ApplicationService {
     }
 
     private Application getApplicationById(Long applicationId){
-        Application application = applicationJpaRepository.findById(applicationId)
+        return applicationJpaRepository.findById(applicationId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 applicationId를 가진 지원서가 존재하지 않습니다."));
-        return application;
     }
 
     private Part getPartByKoreanName(String koreanName) {

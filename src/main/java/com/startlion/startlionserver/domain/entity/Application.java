@@ -120,7 +120,7 @@ public class Application extends BaseTimeEntity {
         this.email = email;
         this.pathToKnows = pathToKnows;
         for(PathToKnow pathToKnow : this.pathToKnows){
-            pathToKnow.setApplicationId(this);
+            pathToKnow.updateApplication(this);
         }
         this.part = part;
         this.status = status;

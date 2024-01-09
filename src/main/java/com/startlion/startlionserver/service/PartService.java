@@ -2,8 +2,6 @@ package com.startlion.startlionserver.service;
 
 
 import com.startlion.startlionserver.domain.entity.CommonQuestion;
-import com.startlion.startlionserver.domain.entity.Curriculum;
-import com.startlion.startlionserver.domain.entity.Part;
 import com.startlion.startlionserver.domain.entity.PartQuestion;
 import com.startlion.startlionserver.dto.response.part.PartResponse;
 import com.startlion.startlionserver.repository.CommonQuestionJpaRepository;
@@ -11,6 +9,7 @@ import com.startlion.startlionserver.repository.CurriculumJpaRepository;
 import com.startlion.startlionserver.repository.PartJpaRepository;
 import com.startlion.startlionserver.repository.PartQuestionJpaRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,9 +27,9 @@ public class PartService {
     private final CommonQuestionJpaRepository commonQuestionJpaRepository;
 
     public PartResponse getPartByName(String name) {
-        Part part = partJpaRepository.findByName(name)
+        val part = partJpaRepository.findByName(name)
                 .orElseThrow( () -> new IllegalArgumentException("해당하는 파트가 없습니다."));
-        Curriculum curriculum = curriculumJpaRepository.findByPartId(part)
+        val curriculum = curriculumJpaRepository.findByPartId(part)
                 .orElseThrow(() -> new NoSuchElementException("해당 파트의 커리큘럼이 없습니다."));
         List<PartQuestion> partQuestions = partQuestionJpaRepository.findByPart(part);
         //List<Curriculum> curriculums = curriculumJpaRepository.findByPartId(part);

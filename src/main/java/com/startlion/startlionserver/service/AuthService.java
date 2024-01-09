@@ -19,9 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 @Service
 @RequiredArgsConstructor
@@ -79,13 +76,13 @@ public class AuthService {
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, null);
         val tokenVO = generateToken(authentication);
 
-        user.updateRefreshToken(tokenVO.getRefreshToken());
-        return OAuthResponse.of(tokenVO.getAccessToken(), tokenVO.getRefreshToken());
+        user.updateRefreshToken(tokenVO.refreshToken());
+        return OAuthResponse.of(tokenVO.accessToken(), tokenVO.refreshToken());
     }
 
 private TokenVO generateToken(Authentication authentication){
-        String accessToken=jwtTokenProvider.generateToken(authentication,ACCESS_TOKEN_EXPIRATION);
-        String refreshToken=jwtTokenProvider.generateToken(authentication,REFRESH_TOKEN_EXPIRATION);
+        val accessToken = jwtTokenProvider.generateToken(authentication,ACCESS_TOKEN_EXPIRATION);
+        val refreshToken = jwtTokenProvider.generateToken(authentication,REFRESH_TOKEN_EXPIRATION);
         return new TokenVO(accessToken,refreshToken);
         }
 }

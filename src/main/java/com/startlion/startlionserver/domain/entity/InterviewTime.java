@@ -2,6 +2,7 @@ package com.startlion.startlionserver.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,7 +25,8 @@ public class InterviewTime {
     @JoinColumn(name = "application_id")
     private Application application;
 
-    public InterviewTime(List<Integer> time, Application application) {
+    @Builder
+    private InterviewTime(List<Integer> time, Application application) {
         this.time = time;
         this.application = application;
     }

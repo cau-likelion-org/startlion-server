@@ -20,7 +20,12 @@ public class AnswerService {
     @Transactional
     public Answer createAnswer(Application application, ApplicationPage2PutRequest request){
         Answer answer = answerJpaRepository.findByApplication(application).orElse(new Answer(application, request));
-        answer.updateCommonAnswers(request.getCommonAnswer1(), request.getCommonAnswer2(), request.getCommonAnswer3(), request.getCommonAnswer4(), request.getCommonAnswer5());
+        answer.updateCommonAnswers(
+                request.commonAnswer1(),
+                request.commonAnswer2(),
+                request.commonAnswer3(),
+                request.commonAnswer4(),
+                request.commonAnswer5());
         return answerJpaRepository.save(answer);
     }
 

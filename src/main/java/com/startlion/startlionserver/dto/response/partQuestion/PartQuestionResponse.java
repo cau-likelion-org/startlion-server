@@ -1,33 +1,22 @@
 package com.startlion.startlionserver.dto.response.partQuestion;
 
-import com.startlion.startlionserver.domain.entity.Part;
 import com.startlion.startlionserver.domain.entity.PartQuestion;
-import com.startlion.startlionserver.dto.response.part.PartIdResponse;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+public record PartQuestionResponse(
+        Long questionId,
+        String part,
+        Long generation,
+        String partQuestion1,
+        String partQuestion2,
+        String partQuestion3
+) {
 
-@Data
-@AllArgsConstructor
-public class PartQuestionResponse {
-    private Long questionId;
-
-    private String part;
-
-    private Long generation;
-
-    private String partQuestion1;
-
-    private String partQuestion2;
-
-    private String partQuestion3;
-
-    public PartQuestionResponse(PartQuestion partQuestion) {
-        this.questionId = partQuestion.getQuestionId();
-        this.part = partQuestion.getPart().getKoreanName();
-        this.generation = partQuestion.getGeneration();
-        this.partQuestion1 = partQuestion.getPartQuestion1();
-        this.partQuestion2 = partQuestion.getPartQuestion2();
-        this.partQuestion3 = partQuestion.getPartQuestion3();
+    public static PartQuestionResponse of(PartQuestion partQuestion) {
+        return new PartQuestionResponse(
+                partQuestion.getQuestionId(),
+                partQuestion.getPart().getKoreanName(),
+                partQuestion.getGeneration(),
+                partQuestion.getPartQuestion1(),
+                partQuestion.getPartQuestion2(),
+                partQuestion.getPartQuestion3());
     }
 }
