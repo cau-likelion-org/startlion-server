@@ -2,7 +2,6 @@ package com.startlion.startlionserver.domain.entity;
 
 import com.startlion.startlionserver.domain.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +16,6 @@ public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", nullable = false)
     private Long userId;
 
     @Column(unique = true, length = 100)
@@ -32,7 +30,6 @@ public class User extends BaseTimeEntity {
 
     private String imageUrl;
 
-    @Column(length = 1024)
     private String refreshToken;
 
     private LocalDateTime expiredIn;

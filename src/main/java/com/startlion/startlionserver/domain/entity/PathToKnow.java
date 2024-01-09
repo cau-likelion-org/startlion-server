@@ -1,20 +1,14 @@
 package com.startlion.startlionserver.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import net.minidev.json.annotate.JsonIgnore;
-import org.hibernate.annotations.ColumnDefault;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
-@Table
-@Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PathToKnow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

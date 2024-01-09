@@ -8,12 +8,10 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table
 public class InterviewContent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     private Long interviewAnswerId;
 
     @ManyToOne(fetch = FetchType.LAZY)

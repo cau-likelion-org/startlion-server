@@ -1,2 +1,4 @@
-package com.startlion.startlionserver.domain;public enum PathType {
+package com.startlion.startlionserver.domain;
+
+public enum PathType {
 }

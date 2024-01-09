@@ -3,28 +3,22 @@ package com.startlion.startlionserver.controller;
 import com.startlion.startlionserver.dto.response.application.ApplicationListWithSubmittedResponse;
 import com.startlion.startlionserver.service.UserService;
 import com.startlion.startlionserver.util.UserUtil;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.aspectj.weaver.MemberUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 
 @RestController
-@RequestMapping("api/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
-@Tag(name = "[User] 유저 관련 API")
-public class UserController {
+public class UserController implements UserApi {
 
     private final UserService userService;
 
-    @Operation(summary = "내 정보 조회")
     @GetMapping("/me")
     public ResponseEntity<ApplicationListWithSubmittedResponse> getApplicationList(
             Principal principal) {

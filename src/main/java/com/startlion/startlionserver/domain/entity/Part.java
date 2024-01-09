@@ -35,7 +35,7 @@ public class Part {
     @Column(length = 200)
     private String typeOfTalent;
 
-    @Column(length = 500) // 이미지 URL 저장 필드 추가
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
     @Column(nullable = false)

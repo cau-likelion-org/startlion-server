@@ -1,15 +1,15 @@
 package com.startlion.startlionserver.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table
 public class InterviewTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
