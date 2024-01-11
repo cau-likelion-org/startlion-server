@@ -5,6 +5,7 @@ import com.startlion.startlionserver.dto.request.application.ApplicationPage2Req
 import com.startlion.startlionserver.dto.request.application.ApplicationPage3Request;
 import com.startlion.startlionserver.dto.request.application.ApplicationPage4Request;
 import com.startlion.startlionserver.dto.response.application.ApplicationGetResponse;
+import com.startlion.startlionserver.dto.response.application.ApplicationIdResponse;
 import com.startlion.startlionserver.dto.response.application.ApplicationsGetResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -43,12 +44,15 @@ public interface ApplicationApi {
     @Operation(summary = "지원서 저장하기 1페이지")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "201", description = "지원서 저장하기 성공"),
+                    @ApiResponse(responseCode = "200", description = "지원서 저장하기 성공"),
                     @ApiResponse(responseCode = "403", description = "권한 없음"),
                     @ApiResponse(responseCode = "404", description = "지원서 정보 없음")
             }
     )
-    ResponseEntity<Void> createApplication(@RequestBody ApplicationPage1Request request, Principal principal);
+    ResponseEntity<ApplicationIdResponse> createApplication(
+            @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
+            @RequestBody ApplicationPage1Request request,
+            Principal principal);
 
     @ApiResponses(
             value = {

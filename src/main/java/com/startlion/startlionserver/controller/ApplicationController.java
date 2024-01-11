@@ -5,6 +5,7 @@ import com.startlion.startlionserver.dto.request.application.ApplicationPage2Req
 import com.startlion.startlionserver.dto.request.application.ApplicationPage3Request;
 import com.startlion.startlionserver.dto.request.application.ApplicationPage4Request;
 import com.startlion.startlionserver.dto.response.application.ApplicationGetResponse;
+import com.startlion.startlionserver.dto.response.application.ApplicationIdResponse;
 import com.startlion.startlionserver.dto.response.application.ApplicationsGetResponse;
 import com.startlion.startlionserver.service.ApplicationCommandService;
 import com.startlion.startlionserver.service.ApplicationQueryService;
@@ -43,12 +44,13 @@ public class ApplicationController implements ApplicationApi {
 
     @Override
     @PutMapping("{applicationId}")
-    public ResponseEntity<Void> createApplication(
+    public ResponseEntity<ApplicationIdResponse> createApplication(
             @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
             @RequestBody ApplicationPage1Request request,
             Principal principal){
         val id = applicationCommandService.createApplication(request, UserUtil.getUserId(principal), applicationId);
-        return ResponseEntity.created(URI.create(id.toString())).build();
+        ApplicationIdResponse response = new ApplicationIdResponse(id);
+        return ResponseEntity.ok(response);
 
     }
 
