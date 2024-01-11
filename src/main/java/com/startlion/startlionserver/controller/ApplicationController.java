@@ -16,7 +16,6 @@ import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.security.Principal;
 
 @RestController
@@ -36,7 +35,7 @@ public class ApplicationController implements ApplicationApi {
     }
 
     @Override
-    @GetMapping
+    @GetMapping("{applicationId}")
     public ResponseEntity<ApplicationGetResponse> getApplication(Long applicationId, Principal principal) {
         val response = applicationQueryService.getApplication(applicationId, UserUtil.getUserId(principal));
         return ResponseEntity.ok(response);
