@@ -101,7 +101,6 @@ public class Application extends BaseTimeEntity {
 
     public static Application create(ApplicationPage1Request request, User user, int generation) {
         return Application.builder()
-                .isPersonalInformationAgreed(request.isPersonalInformationAgreed())
                 .email(request.email())
                 .gender(request.gender())
                 .major(request.major())
@@ -114,6 +113,19 @@ public class Application extends BaseTimeEntity {
                 .user(user)
                 .generation(generation)
                 .build();
+    }
+
+    public void updateApplicationPage1(ApplicationPage1Request request) {
+        this.email = request.email();
+        this.gender = request.gender();
+        this.major = request.major();
+        this.multiMajor = request.multiMajor();
+        this.part = ApplyPart.valueOf(request.part());
+        this.name = request.name();
+        this.phone = request.phone();
+        this.semester = Semester.valueOf(request.semester());
+        this.studentNumber = request.studentNumber();
+        this.isPersonalInformationAgreed = request.isPersonalInformationAgreed();
     }
 
     public void updateApplicationPage2(ApplicationPage2Request request) {

@@ -30,7 +30,7 @@ public class ApplicationCommandService {
     private final PathToKnowJpaRepository pathToKnowJpaRepository;
     // method 변수가 되는 것이 아니라 전역 변수가 되어버림.
 
-    public Long createApplication(ApplicationPage1Request request, Long userId) {
+    public Long createApplication(ApplicationPage1Request request, Long userId, Long applicationId) {
 
         val currentGeneration = currentGenerationRepository.findAll()
                 .stream()
@@ -41,10 +41,18 @@ public class ApplicationCommandService {
         if (!request.isPersonalInformationAgreed()) {
             throw new IllegalArgumentException("개인정보 수집 및 이용에 동의해주세요.");
         }
-        val user = userJpaRepository.findByIdOrThrow(userId);
-        val application = Application.create(request, user, currentGeneration);
-        applicationJpaRepository.save(application);
-        savePathToKnows(request.pathToKnows(), application.getApplicationId(), request.etcDetail());
+
+        if (applicationId == 0) {
+            val user = userJpaRepository.findByIdOrThrow(userId);
+            val application = Application.create(request, user, currentGeneration);
+            applicationJpaRepository.save(application);
+            savePathToKnows(request.pathToKnows(), application.getApplicationId(), request.etcDetail());
+            return application.getApplicationId();
+        }
+
+        val application = applicationJpaRepository.findByIdOrThrow(applicationId);
+        application.updateApplicationPage1(request);
+        pathToKnowJpaRepository.deleteAllByApplicationId(applicationId);
         return application.getApplicationId();
     }
 

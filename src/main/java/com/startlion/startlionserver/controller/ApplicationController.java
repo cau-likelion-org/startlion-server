@@ -35,21 +35,20 @@ public class ApplicationController implements ApplicationApi {
     }
 
     @Override
-    @GetMapping("/{applicationId}")
-    public ResponseEntity<ApplicationGetResponse> getApplication(
-            @PathVariable Long applicationId,
-            Principal principal) {
+    @GetMapping
+    public ResponseEntity<ApplicationGetResponse> getApplication(Long applicationId, Principal principal) {
         val response = applicationQueryService.getApplication(applicationId, UserUtil.getUserId(principal));
         return ResponseEntity.ok(response);
     }
 
     @Override
-    @PostMapping
+    @PutMapping("{applicationId}")
     public ResponseEntity<Void> createApplication(
+            @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
             @RequestBody ApplicationPage1Request request,
             Principal principal){
-        val applicationId = applicationCommandService.createApplication(request, UserUtil.getUserId(principal));
-        return ResponseEntity.created(URI.create(applicationId.toString())).build();
+        val id = applicationCommandService.createApplication(request, UserUtil.getUserId(principal), applicationId);
+        return ResponseEntity.created(URI.create(id.toString())).build();
 
     }
 
