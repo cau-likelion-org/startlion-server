@@ -1,7 +1,7 @@
 package com.startlion.startlionserver.dto.response.interview;
 
 
-import com.startlion.startlionserver.domain.entity.Interview;
+import com.startlion.startlionserver.domain.entity.GraduateInterview;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record InterviewResponse(
@@ -24,14 +24,14 @@ public record InterviewResponse(
         String imageUrl
 ) {
 
-    public static InterviewResponse of(Interview interview) {
+    public static InterviewResponse of(GraduateInterview graduateInterview) {
         return new InterviewResponse(
-                interview.getInterviewId(),
-                interview.getGeneration(),
-                interview.getPart().toString(),
-                interview.getName(),
-                interview.getOneLineContent(),
-                interview.getImageUrl()
+                graduateInterview.getInterviewId(),
+                graduateInterview.getGeneration(),
+                graduateInterview.getPart().toString(),
+                graduateInterview.getName(),
+                graduateInterview.getOneLineContent(),
+                graduateInterview.getImageUrl()
         );
     }
 }

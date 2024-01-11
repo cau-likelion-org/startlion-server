@@ -1,6 +1,6 @@
 package com.startlion.startlionserver.dto.response.interviewanswer;
 
-import com.startlion.startlionserver.domain.entity.InterviewContent;
+import com.startlion.startlionserver.domain.entity.GraduateInterviewContent;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record InterviewAnswerResponse(
@@ -16,7 +16,7 @@ public record InterviewAnswerResponse(
 
 ) {
 
-    public static InterviewAnswerResponse of(InterviewContent interviewContent) {
+    public static InterviewAnswerResponse of(GraduateInterviewContent interviewContent) {
         return new InterviewAnswerResponse(
                 interviewContent.getInterviewAnswerId(),
                 interviewContent.getQuestion(),

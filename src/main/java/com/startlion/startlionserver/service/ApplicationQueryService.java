@@ -2,15 +2,18 @@ package com.startlion.startlionserver.service;
 
 
 import com.startlion.startlionserver.domain.entity.Application;
-import com.startlion.startlionserver.dto.response.application.ApplicationListGetResponse;
-import com.startlion.startlionserver.dto.response.application.ApplicationListWithSubmittedResponse;
-import com.startlion.startlionserver.repository.ApplicationJpaRepository;
+import com.startlion.startlionserver.dto.response.application.ApplicationGetResponse;
+import com.startlion.startlionserver.dto.response.application.ApplicationResponse;
+import com.startlion.startlionserver.dto.response.application.ApplicationsGetResponse;
+import com.startlion.startlionserver.dto.response.application.ApplyApplicationGetResponse;
+import com.startlion.startlionserver.dto.response.partQuestion.PartQuestionResponse;
+import com.startlion.startlionserver.dto.response.question.CommonQuestionResponse;
+import com.startlion.startlionserver.global.exception.AccessDeniedException;
+import com.startlion.startlionserver.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,46 +21,41 @@ import java.util.stream.Collectors;
 public class ApplicationQueryService {
 
     private final ApplicationJpaRepository applicationJpaRepository;
+    private final UserJpaRepository userJpaRepository;
+    private final PartQuestionJpaRepository partQuestionJpaRepository;
+    private final CommonQuestionJpaRepository commonQuestionRepository;
+    private final CurrentGenerationRepository currentGenerationRepository;
 
-    public ApplicationListWithSubmittedResponse getApplicationList(Long userId) {
-        List<Application> applications = applicationJpaRepository.findByUserUserId(userId);
+    public ApplicationGetResponse getApplication(Long applicationId, Long userId) {
+        val application = applicationJpaRepository.findByIdOrThrow(applicationId);
+        checkApplicationOwner(application, userId);
+        val currentGeneration = currentGenerationRepository.findAll()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("현재 진행중인 세대가 없습니다."))
+                .getGeneration();
 
-        // applications 리스트를 순회하면서 status가 "Y"인 application이 있는지 확인
-        boolean isSubmittedExists = checkIsSubmitted(applications);
+        val partQuestion = partQuestionJpaRepository.findByPartAndGenerationOrThrow(application.getPart(), currentGeneration);
+        val commonQuestion = commonQuestionRepository.findByGenerationOrThrow(currentGeneration);
 
-        // boolean을 String으로 변환
-        String isSubmitted = boolToString(isSubmittedExists);
-
-        // 지원서 리스트 가져오기
-        List<ApplicationListGetResponse> applicationList = loadApplicationList(applications);
-
-        // null값 지원서
-        ApplicationListGetResponse defaultApplication = ApplicationListGetResponse.of(null,null,null,null,null);
-
-
-        return new ApplicationListWithSubmittedResponse(isSubmitted, applicationList, defaultApplication);
+        return ApplicationGetResponse.of(
+                ApplicationResponse.of(application),
+                CommonQuestionResponse.of(commonQuestion),
+                PartQuestionResponse.of(partQuestion));
+    }
+    public ApplicationsGetResponse getApplications(Long userId) {
+        val user = userJpaRepository.findByIdOrThrow(userId);
+        val applyApplicationsResponse =  applicationJpaRepository.findByUser(user)
+                .stream()
+                .map(ApplyApplicationGetResponse::of)
+                .toList();
+        return ApplicationsGetResponse.of(applyApplicationsResponse);
     }
 
-    // 제출된 지원서 있는지 체크
-    private boolean checkIsSubmitted(List<Application> applications){
-        return applications.stream()
-                .anyMatch(application -> "Y".equals(application.getStatus()));
-    }
-
-    // boolean을 String으로 변환
-    private String boolToString(boolean bool){
-        return bool ? "Y" : "N";
-    }
-
-    // 지원서 리스트 불러오기
-    private List<ApplicationListGetResponse> loadApplicationList(List<Application> applications){
-        return applications.stream()
-                .map(application -> ApplicationListGetResponse.of(
-                        application.getApplicationId(),
-                        application.getGeneration().getCommonQuestionId(),
-                        application.getName(),
-                        application.getPart().getPartId(),
-                        application.getStatus()))
-                .collect(Collectors.toList());
+    private void checkApplicationOwner(Application application, Long userId){
+        val user =  userJpaRepository.findByIdOrThrow(userId);
+        if (user.equals(application.getUser())) {
+            throw new AccessDeniedException("해당 지원서의 소유자가 아닙니다.");
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.startlion.startlionserver.domain.entity;
 
+import com.startlion.startlionserver.domain.enums.IntervieweePart;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import static jakarta.persistence.EnumType.STRING;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Interview {
+public class GraduateInterview {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

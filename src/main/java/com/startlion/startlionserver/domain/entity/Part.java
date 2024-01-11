@@ -11,7 +11,6 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table
 public class Part {
 
     @Id

@@ -1,11 +1,11 @@
 package com.startlion.startlionserver.service;
 
-import com.startlion.startlionserver.domain.entity.Interview;
+import com.startlion.startlionserver.domain.entity.GraduateInterview;
 import com.startlion.startlionserver.dto.response.interview.InterviewDetailResponse;
 import com.startlion.startlionserver.dto.response.interview.InterviewResponse;
 import com.startlion.startlionserver.dto.response.interviewanswer.InterviewAnswerResponse;
-import com.startlion.startlionserver.repository.InterviewAnswerJpaRepository;
-import com.startlion.startlionserver.repository.InterviewJpaRepository;
+import com.startlion.startlionserver.repository.GraduateInterviewContentJpaRepository;
+import com.startlion.startlionserver.repository.GraduateInterviewJpaRepository;
 import com.startlion.startlionserver.repository.InterviewQueryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +21,14 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class InterviewService {
 
-    private final InterviewJpaRepository interviewJpaRepository;
-    private final InterviewAnswerJpaRepository interviewAnswerJpaRepository;
+    private final GraduateInterviewJpaRepository graduateInterviewJpaRepository;
+    private final GraduateInterviewContentJpaRepository graduateInterviewContentJpaRepository;
     private final InterviewQueryRepository interviewQueryRepository;
 
     public InterviewDetailResponse getInterviewById(Long interviewId) {
         val interview = getById(interviewId);
 
-          List<InterviewAnswerResponse> interviewAnswerResponses = interviewAnswerJpaRepository.findByInterview(interview)
+          List<InterviewAnswerResponse> interviewAnswerResponses = graduateInterviewContentJpaRepository.findByGraduateInterview(interview)
                   .stream()
                   .map(InterviewAnswerResponse::of)
                   .toList();
@@ -43,12 +43,12 @@ public class InterviewService {
 
     @Transactional
     public void updateInterviewImageUrl(Long interviewId, String imageUrl) {
-        Interview interview = getById(interviewId);
-        interview.updateImageUrl(imageUrl);
+        GraduateInterview graduateInterview = getById(interviewId);
+        graduateInterview.updateImageUrl(imageUrl);
     }
 
-    protected Interview getById(Long interviewId) {
-        return interviewJpaRepository.findById(interviewId)
+    protected GraduateInterview getById(Long interviewId) {
+        return graduateInterviewJpaRepository.findById(interviewId)
                 .orElseThrow(() -> new EntityNotFoundException("해당하는 인터뷰가 없습니다."));
     }
 }

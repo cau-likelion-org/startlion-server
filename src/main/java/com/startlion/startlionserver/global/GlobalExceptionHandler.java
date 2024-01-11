@@ -1,9 +1,10 @@
 package com.startlion.startlionserver.global;
 
 import com.startlion.startlionserver.dto.response.ErrorResponse;
+import com.startlion.startlionserver.global.enums.CustomCode;
+import com.startlion.startlionserver.global.exception.AccessDeniedException;
 import com.startlion.startlionserver.global.exception.EmailAlreadyInUseException;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,14 +17,22 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<Void> handleEntityNotFoundException(EntityNotFoundException e) {
-        return ResponseEntity.notFound().build();
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ErrorResponse.of(CustomCode.SL_40000.toString(), e.getMessage()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleIllegalArgumentException(IllegalArgumentException e) {
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse(CustomCode.SL_40000.toString(), e.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public  ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(ErrorResponse.of(CustomCode.SL_43000.toString(), e.getMessage()));
     }
 
     // application email 중복 검사 예외 처리

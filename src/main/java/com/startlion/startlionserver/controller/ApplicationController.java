@@ -1,14 +1,19 @@
 package com.startlion.startlionserver.controller;
 
-import com.startlion.startlionserver.dto.request.application.ApplicationPage1PutRequest;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage2PutRequest;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage3PutRequest;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage4PutRequest;
-import com.startlion.startlionserver.service.ApplicationUpdateService;
+import com.startlion.startlionserver.dto.request.application.ApplicationPage1Request;
+import com.startlion.startlionserver.dto.request.application.ApplicationPage2Request;
+import com.startlion.startlionserver.dto.request.application.ApplicationPage3Request;
+import com.startlion.startlionserver.dto.request.application.ApplicationPage4Request;
+import com.startlion.startlionserver.dto.response.application.ApplicationGetResponse;
+import com.startlion.startlionserver.dto.response.application.ApplicationsGetResponse;
+import com.startlion.startlionserver.service.ApplicationCommandService;
+import com.startlion.startlionserver.service.ApplicationQueryService;
 import com.startlion.startlionserver.util.UserUtil;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -19,66 +24,67 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class ApplicationController implements ApplicationApi {
 
-    private final ApplicationUpdateService applicationService;
-    private static final Long CURRENT_GENERATION = 12L;
+    private final ApplicationQueryService applicationQueryService;
+    private final ApplicationCommandService applicationCommandService;
+
 
     @Override
-    @GetMapping("/{applicationId}")
-    public Object getApplication(
-            @PathVariable(required = false) Long applicationId,
-            @RequestParam(required = false) Integer page,
-            Principal principal) {
-        if (applicationId == null || applicationId == 0) {
-            return applicationService.getApplicationPersonalInformation();
-        } else {
-            return applicationService.getById(applicationId, page, UserUtil.getUserId(principal));
-        }
+    public ResponseEntity<ApplicationsGetResponse> getApplications(Principal principal) {
+        val response = applicationQueryService.getApplications(UserUtil.getUserId(principal));
+        return ResponseEntity.ok(response);
     }
 
-    // 지원서 저장하기의 경우 받아야 하는 Body 정보가 다르기 때문에, 4개의 API로 나누었습니다.
-    // 지원서 저장하기 1페이지
+    @Override
+    public ResponseEntity<ApplicationGetResponse> getApplication(Long applicationId, Principal principal) {
+        val response = applicationQueryService.getApplication(applicationId, UserUtil.getUserId(principal));
+        return ResponseEntity.ok(response);
+    }
+
     @Override
     @PostMapping
-    public ResponseEntity<String> postApplicationPage1(@RequestBody ApplicationPage1PutRequest request, Principal principal){
-        Long applicationId = applicationService.createApplicationPage1(request, CURRENT_GENERATION, UserUtil.getUserId(principal));
-        URI uri = URI.create("/application/" + applicationId);
-        return ResponseEntity.created(uri).body("Application ID: " + applicationId);
+    public ResponseEntity<Void> createApplication(
+            @RequestBody ApplicationPage1Request request,
+            Principal principal){
+        val applicationId = applicationCommandService.createApplication(request, UserUtil.getUserId(principal));
+        return ResponseEntity.created(URI.create(applicationId.toString())).build();
+
     }
 
     @Override
-    @PutMapping("/{applicationId}/page1")
-    public ResponseEntity<String> updateApplicationPage1(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage1PutRequest request, Principal principal){
-        URI uri = URI.create("/application/" + applicationService.updateApplicationPage1(applicationId, request, CURRENT_GENERATION, UserUtil.getUserId(principal)));
-        return ResponseEntity.created(uri).body("지원서 1페이지 저장 완료");
-    }
-
-    // 지원서 저장하기 2페이지
-    @Override
-    @PutMapping("/{applicationId}/page2")
-    public ResponseEntity<String> updateApplicationPage2(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage2PutRequest request, Principal principal){
-        URI uri = URI.create("/application/" + applicationService.updateApplicationPage2(applicationId, request, UserUtil.getUserId(principal)));
-        return ResponseEntity.created(uri).body("지원서 2페이지 저장 완료");
-    }
-
-    // 지원서 저장하기 3페이지
-    @Override
-    @PutMapping("/{applicationId}/page3")
-    public ResponseEntity<String> updateApplicationPage3(
+    @PatchMapping("/{applicationId}/page2")
+    public ResponseEntity<Void> updateApplicationPage2(
             @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
-            @RequestBody ApplicationPage3PutRequest request, Principal principal){
-        URI uri = URI.create("/application/" + applicationService.updateApplicationPage3(applicationId, request, UserUtil.getUserId(principal)));
-        return ResponseEntity.created(uri).body("지원서 3페이지 저장 완료");
+            @RequestBody ApplicationPage2Request request,
+            Principal principal){
+        applicationCommandService.updateApplicationPage2(applicationId, request, UserUtil.getUserId(principal));
+        return ResponseEntity.noContent().build();
     }
 
-    // 지원서 저장하기 4페이지 -> 제출
     @Override
-    @PutMapping("/{applicationId}/page4")
-    public ResponseEntity<String> updateApplicationPage4(@PathVariable @Parameter(description = "지원서 ID") Long applicationId,
-                                                         @RequestBody ApplicationPage4PutRequest request,
-                                                         @RequestParam(required = false) Boolean isSubmit,
-                                                         Principal principal){
-//        val userId = UserUtil.getUserId(principal);
-//        URI uri = URI.create("/application/" + applicationService.updateApplicationPage4(applicationId, request, userId, isSubmit));
+    @PatchMapping("/{applicationId}/page3")
+    public ResponseEntity<Void> updateApplicationPage3(
+            @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
+            @RequestBody ApplicationPage3Request request, Principal principal){
+        applicationCommandService.updateApplicationPage3(applicationId, request, UserUtil.getUserId(principal));
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    @PatchMapping("/{applicationId}/page4")
+    public ResponseEntity<Void> updateApplicationPage4(
+            @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
+            @RequestBody ApplicationPage4Request request,
+            Principal principal){
+        applicationCommandService.updateApplicationPage4(applicationId, request, UserUtil.getUserId(principal));
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    @PatchMapping("/{applicationId}/submit")
+    public ResponseEntity<Void> submitApplication(
+            @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
+            Principal principal){
+        applicationCommandService.submitApplication(applicationId, UserUtil.getUserId(principal));
         return ResponseEntity.noContent().build();
     }
 

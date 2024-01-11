@@ -1,4 +1,4 @@
-package com.startlion.startlionserver.domain.entity;
+package com.startlion.startlionserver.domain.enums;
 
 public enum IntervieweePart {
     PM,

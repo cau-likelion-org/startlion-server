@@ -14,14 +14,10 @@ public class Curriculum {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long curriculum;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "part_id")
     private Part partId;
-
-    @Column(nullable = false)
-    private Long generation;
-
+    private long generation;
     @Column(length = 300)
     private String content;
 }

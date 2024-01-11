@@ -1,11 +1,11 @@
 package com.startlion.startlionserver.domain.entity;
 
-import com.startlion.startlionserver.domain.PathType;
+import com.startlion.startlionserver.domain.enums.PathType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import net.minidev.json.annotate.JsonIgnore;
 
 @Entity
 @Getter
@@ -13,20 +13,17 @@ import net.minidev.json.annotate.JsonIgnore;
 public class PathToKnow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     private Long PathToKnowId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "application_id")
-    @JsonIgnore
-    private Application application;
-
+    private Long applicationId;
     @Enumerated(EnumType.STRING)
     private PathType pathType;
-
     private String etcDetail;
 
-    public void updateApplication(Application application) {
-        this.application = application;
+    @Builder
+
+    private PathToKnow(Long applicationId, PathType pathType, String etcDetail) {
+        this.applicationId = applicationId;
+        this.pathType = pathType;
+        this.etcDetail = etcDetail;
     }
 }

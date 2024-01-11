@@ -1,158 +1,144 @@
 package com.startlion.startlionserver.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.startlion.startlionserver.domain.BaseTimeEntity;
+import com.startlion.startlionserver.domain.enums.ApplyPart;
+import com.startlion.startlionserver.domain.enums.Gender;
+import com.startlion.startlionserver.domain.enums.Semester;
+import com.startlion.startlionserver.domain.enums.SubmitStatus;
+import com.startlion.startlionserver.dto.request.application.ApplicationPage1Request;
+import com.startlion.startlionserver.dto.request.application.ApplicationPage2Request;
+import com.startlion.startlionserver.dto.request.application.ApplicationPage3Request;
+import com.startlion.startlionserver.dto.request.application.ApplicationPage4Request;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)  @Getter
 public class Application extends BaseTimeEntity {
 
+    private static final boolean DEFAULT_AGREEMENT = true;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long applicationId;
 
-    @OneToOne(mappedBy = "application")
-    @JsonIgnore // 무한 참조 에러 방지
-    private Answer answer;
+    private boolean isPersonalInformationAgreed = DEFAULT_AGREEMENT;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "generation")
-    @JsonIgnore // 무한 참조 에러 방지
-    private CommonQuestion generation; // generation이라고 매핑했지만 실제로는 CommonQuestion의 id를 가리킴
-
-    // application page 1 start
-    @ColumnDefault("false")
-    private Boolean isAgreed;
-
     @Column(length = 30)
-    @ColumnDefault("''")
     private String name;
-
-    @Column(length = 1)
-    @ColumnDefault("''")
-    private String gender;
-
-    @ColumnDefault("0")
-    private Integer studentNum;
-
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+    private int generation;
+    private String studentNumber;
     @Column(length = 30)
-    @ColumnDefault("''")
     private String major;
-
     @Column(length = 30)
     private String multiMajor;
-
-    @ColumnDefault("''")
-    private String semester;
-
-    @ColumnDefault("''")
+    @Enumerated(EnumType.STRING)
+    private Semester semester;
     private String phone;
-
-    @Column(length = 100)
-    @ColumnDefault("''")
     private String email;
+    @Enumerated(EnumType.STRING)
+    private ApplyPart part;
+    @Column(columnDefinition = "TEXT")
+    private String portfolioUrl;
+    private SubmitStatus status;
+    private String availableInterviewTime;
 
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "applicationId") // application 저장 시, pathToKnows도 함께 저장
-    @JsonIgnore // 무한 참조 에러 방지
-    private List<PathToKnow> pathToKnows = new ArrayList<>();
+    @Column(columnDefinition = "TEXT")
+    private String commonAnswer1;
+    @Column(columnDefinition = "TEXT")
+    private String commonAnswer2;
+    @Column(columnDefinition = "TEXT")
+    private String commonAnswer3;
+    @Column(columnDefinition = "TEXT")
+    private String commonAnswer4;
+    @Column(columnDefinition = "TEXT")
+    private String commonAnswer5;
+    @Column(columnDefinition = "TEXT")
+    private String partAnswer1;
+    @Column(columnDefinition = "TEXT")
+    private String partAnswer2;
+    @Column(columnDefinition = "TEXT")
+    private String partAnswer3;
+    @Column(columnDefinition = "TEXT")
+    private String partAnswer4;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "part_id")
-    @JsonIgnore // 무한 참조 에러 방지
-    private Part part;
-    // application page 1 end
-
-    @ColumnDefault("''")
-    private String portfolio;
-
-    @OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
-    private List<InterviewTime> interviewTimes = new ArrayList<>();
-
-    @ColumnDefault("'N'")
-    private String status;
-
-    //builder
     @Builder
-    public Application(Answer answer, User user, CommonQuestion generation, boolean isAgreed, String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnows, Part part, String portfolio, List<InterviewTime> interviewTimes, String status){
-        this.answer = answer;
+    private Application(boolean isPersonalInformationAgreed,
+                       User user,
+                       String name,
+                       Gender gender,
+                       String studentNumber,
+                       String major,
+                       String multiMajor,
+                       Semester semester,
+                       String phone,
+                       String email,
+                       ApplyPart part,
+                       int generation
+    ) {
+        this.isPersonalInformationAgreed = isPersonalInformationAgreed;
         this.user = user;
-        this.generation = generation;
-        this.isAgreed = isAgreed;
         this.name = name;
         this.gender = gender;
-        this.studentNum = studentNum;
+        this.studentNumber = studentNumber;
         this.major = major;
         this.multiMajor = multiMajor;
         this.semester = semester;
         this.phone = phone;
         this.email = email;
-        this.pathToKnows = pathToKnows;
         this.part = part;
-        this.portfolio = portfolio;
-        this.interviewTimes = interviewTimes;
-        this.status = status;
-    }
-
-    public void updateApplication(boolean isAgreed, User user,String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnows, Part part, String status, CommonQuestion generation){
-        this.isAgreed = isAgreed;
-        this.name = name;
-        this.gender = gender;
-        this.studentNum = studentNum;
-        this.major = major;
-        this.multiMajor = multiMajor;
-        this.semester = semester;
-        this.phone = phone;
-        this.email = email;
-        this.pathToKnows = pathToKnows;
-        for(PathToKnow pathToKnow : this.pathToKnows){
-            pathToKnow.updateApplication(this);
-        }
-        this.part = part;
-        this.status = status;
-        this.generation = generation;
-        this.user = user;
-    }
-
-    public void setAnswer(Answer answer) {
-        this.answer = answer;
-    }
-
-    public void updateInterview(List<InterviewTime> interviewTimes, String status) {
-        this.interviewTimes.clear();
-        this.interviewTimes.addAll(interviewTimes);
-        this.status = status; // interview가 있다면 제출한 것이므로 status = 'Y'
-    }
-
-    public void updatePortfolio(String portfolio) {
-        this.portfolio = portfolio;
-    }
-
-    public void updateCommonQuestion(CommonQuestion generation) {
+        this.status = SubmitStatus.N;
         this.generation = generation;
     }
 
-    public List<List<Integer>> getInterviewTimes() {
-        return this.interviewTimes.stream()
-                .map(InterviewTime::getTime)
-                .collect(Collectors.toList());
+    public static Application create(ApplicationPage1Request request, User user, int generation) {
+        return Application.builder()
+                .isPersonalInformationAgreed(request.isPersonalInformationAgreed())
+                .email(request.email())
+                .gender(request.gender())
+                .major(request.major())
+                .multiMajor(request.multiMajor())
+                .part(ApplyPart.valueOf(request.part()))
+                .name(request.name())
+                .phone(request.phone())
+                .semester(Semester.valueOf(request.semester()))
+                .studentNumber(request.studentNumber())
+                .user(user)
+                .generation(generation)
+                .build();
     }
 
-    public void isCompleteAnswer() {
-
+    public void updateApplicationPage2(ApplicationPage2Request request) {
+        this.commonAnswer1 = request.commonAnswer1();
+        this.commonAnswer2 = request.commonAnswer2();
+        this.commonAnswer3 = request.commonAnswer3();
+        this.commonAnswer4 = request.commonAnswer4();
+        this.commonAnswer5 = request.commonAnswer5();
     }
+
+    public void updateApplicationPage3(ApplicationPage3Request request) {
+        this.partAnswer1 = request.partAnswer1();
+        this.partAnswer2 = request.partAnswer2();
+        this.partAnswer3 = request.partAnswer3();
+        this.partAnswer4 = request.partAnswer4();
+        this.portfolioUrl = request.portfolioUrl();
+    }
+
+    public void updateApplicationPage4(ApplicationPage4Request request) {
+        this.availableInterviewTime = request.availableInterviewTime();
+    }
+
+    public void completeApplication() {
+        this.status = SubmitStatus.Y;
+    }
+
 }
 

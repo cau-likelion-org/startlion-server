@@ -1,49 +1,19 @@
 package com.startlion.startlionserver.dto.response.application;
 
-import com.startlion.startlionserver.domain.entity.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Generated;
+import com.startlion.startlionserver.dto.response.partQuestion.PartQuestionResponse;
+import com.startlion.startlionserver.dto.response.question.CommonQuestionResponse;
 
-import java.util.List;
+public record ApplicationGetResponse(
+        ApplicationResponse application,
+        CommonQuestionResponse commonQuestion,
+        PartQuestionResponse partQuestion
+) {
 
-
-@Data
-@AllArgsConstructor
-public class ApplicationGetResponse {
-    private Answer answer;
-
-    private CommonQuestion generation;
-
-    private Boolean isAgreed;
-
-    private String name;
-
-    private String gender;
-
-    private Integer studentNum;
-
-    private String major;
-
-    private String multiMajor;
-
-    private String semester;
-
-    private String phone;
-
-    private String email;
-
-    private List<PathToKnow> pathToKnows;
-
-    private Part part;
-
-    private String portfolio;
-
-    private List<List<Integer>> interview;
-
-    private String status;
-
-    public static ApplicationGetResponse of(Application application){
-        return new ApplicationGetResponse(application.getAnswer(), application.getGeneration(), application.getIsAgreed(), application.getName(), application.getGender(), application.getStudentNum(), application.getMajor(), application.getMultiMajor(), application.getSemester(), application.getPhone(), application.getEmail(), application.getPathToKnows(), application.getPart(), application.getPortfolio(), application.getInterviewTimes(), application.getStatus());
+    public static ApplicationGetResponse of(
+            ApplicationResponse applicationResponse,
+            CommonQuestionResponse commonQuestionResponse,
+            PartQuestionResponse partQuestionResponse
+    ) {
+        return new ApplicationGetResponse(applicationResponse, commonQuestionResponse, partQuestionResponse);
     }
 }
