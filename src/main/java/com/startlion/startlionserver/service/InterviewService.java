@@ -9,6 +9,7 @@ import com.startlion.startlionserver.repository.InterviewJpaRepository;
 import com.startlion.startlionserver.repository.InterviewQueryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +26,7 @@ public class InterviewService {
     private final InterviewQueryRepository interviewQueryRepository;
 
     public InterviewDetailResponse getInterviewById(Long interviewId) {
-         Interview interview = interviewJpaRepository.findById(interviewId)
-                 .orElseThrow( () -> new IllegalArgumentException("해당하는 인터뷰가 없습니다."));
+        val interview = getById(interviewId);
 
           List<InterviewAnswerResponse> interviewAnswerResponses = interviewAnswerJpaRepository.findByInterview(interview)
                   .stream()
