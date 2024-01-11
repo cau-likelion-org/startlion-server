@@ -36,6 +36,9 @@ public interface ApplicationApi {
     ResponseEntity<String> updateApplicationPage3(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage3PutRequest request, Principal principal);
 
     @Operation(summary = "지원서 저장하기 4페이지 -> 제출")
-    ResponseEntity<String> updateApplicationPage4(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage4PutRequest request, Principal principal);
+    ResponseEntity<String> updateApplicationPage4(@PathVariable @Parameter(description = "지원서 ID") Long applicationId,
+                                                  @RequestBody ApplicationPage4PutRequest request,
+                                                  @RequestParam(required = false) Boolean isSubmit,
+                                                  Principal principal);
 
 }

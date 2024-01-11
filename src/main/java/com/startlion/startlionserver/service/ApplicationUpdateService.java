@@ -21,7 +21,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ApplicationService {
+public class ApplicationUpdateService {
 
     private final ApplicationJpaRepository applicationJpaRepository;
     private final CommonQuestionJpaRepository commonQuestionRepository;
@@ -71,13 +71,13 @@ public class ApplicationService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 CommonQuestion이 없습니다. id=" + generationId));
 
         // userId로 User 객체 찾기
-        User user = userJpaRepository.findById(userId)
+        val user = userJpaRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 User가 없습니다. id=" + userId));
 
         // part 문자열로 part 가져옴
-        Part part = getPartByKoreanName(request.getPart()); // part 문자열로 part 객체 가져옴
+        val part = getPartByKoreanName(request.getPart()); // part 문자열로 part 객체 가져옴
         // 지원서 업데이트
-        Application application = updateApplicationInfo(request, generationId, user, part);
+        val application = updateApplicationInfo(request, generationId, user, part);
         // application 생성될 때, answer도 함께 생성
         createAnswer(application);
         // path to know 저장
@@ -179,8 +179,12 @@ public class ApplicationService {
 
     // 지원서 4페이지 저장(제출)
     @Transactional
-    public Long updateApplicationPage4(Long applicationId, ApplicationPage4PutRequest request, Long userId) {
+    public Long updateApplicationPage4(Long applicationId, ApplicationPage4PutRequest request, Long userId, Boolean isSubmit) {
         Application application = getApplicationById(applicationId);
+
+        if (isSubmit == true) {
+            isCompleteApplication(application);
+        }
 
         checkApplicationOwner(application, userId);
         deleteInterviewTimes(application);
@@ -270,5 +274,9 @@ public class ApplicationService {
     private Part getPartByKoreanName(String koreanName) {
         return partJpaRepository.findByKoreanName(koreanName)
                 .orElseThrow(() -> new IllegalArgumentException("해당 한글 파트 이름을 가진 파트가 존재하지 않습니다."));
+    }
+
+    private void isCompleteApplication(Application application) {
+        application.getAnswer();
     }
 }

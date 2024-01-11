@@ -4,11 +4,10 @@ import com.startlion.startlionserver.dto.request.application.ApplicationPage1Put
 import com.startlion.startlionserver.dto.request.application.ApplicationPage2PutRequest;
 import com.startlion.startlionserver.dto.request.application.ApplicationPage3PutRequest;
 import com.startlion.startlionserver.dto.request.application.ApplicationPage4PutRequest;
-import com.startlion.startlionserver.service.ApplicationService;
+import com.startlion.startlionserver.service.ApplicationUpdateService;
 import com.startlion.startlionserver.util.UserUtil;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +19,7 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class ApplicationController implements ApplicationApi {
 
-    private final ApplicationService applicationService;
+    private final ApplicationUpdateService applicationService;
     private static final Long CURRENT_GENERATION = 12L;
 
     @Override
@@ -76,10 +75,11 @@ public class ApplicationController implements ApplicationApi {
     @PutMapping("/{applicationId}/page4")
     public ResponseEntity<String> updateApplicationPage4(@PathVariable @Parameter(description = "지원서 ID") Long applicationId,
                                                          @RequestBody ApplicationPage4PutRequest request,
+                                                         @RequestParam(required = false) Boolean isSubmit,
                                                          Principal principal){
-        val userId = UserUtil.getUserId(principal);
-        URI uri = URI.create("/application/" + applicationService.updateApplicationPage4(applicationId, request, userId));
-        return ResponseEntity.created(uri).body("지원서 제출 완료");
+//        val userId = UserUtil.getUserId(principal);
+//        URI uri = URI.create("/application/" + applicationService.updateApplicationPage4(applicationId, request, userId, isSubmit));
+        return ResponseEntity.noContent().build();
     }
 
 }

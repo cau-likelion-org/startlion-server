@@ -107,7 +107,6 @@ public class Application extends BaseTimeEntity {
         this.status = status;
     }
 
-
     public void updateApplication(boolean isAgreed, User user,String name, String gender, Integer studentNum, String major, String multiMajor, String semester, String phone, String email, List<PathToKnow> pathToKnows, Part part, String status, CommonQuestion generation){
         this.isAgreed = isAgreed;
         this.name = name;
@@ -150,6 +149,10 @@ public class Application extends BaseTimeEntity {
         return this.interviewTimes.stream()
                 .map(InterviewTime::getTime)
                 .collect(Collectors.toList());
+    }
+
+    public void isCompleteAnswer() {
+
     }
 }
 

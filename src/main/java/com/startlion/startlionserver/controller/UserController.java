@@ -1,7 +1,7 @@
 package com.startlion.startlionserver.controller;
 
 import com.startlion.startlionserver.dto.response.application.ApplicationListWithSubmittedResponse;
-import com.startlion.startlionserver.service.UserService;
+import com.startlion.startlionserver.service.ApplicationQueryService;
 import com.startlion.startlionserver.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -17,7 +17,7 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class UserController implements UserApi {
 
-    private final UserService userService;
+    private final ApplicationQueryService userService;
 
     @GetMapping("/me")
     public ResponseEntity<ApplicationListWithSubmittedResponse> getApplicationList(

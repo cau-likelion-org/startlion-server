@@ -6,6 +6,7 @@ import com.startlion.startlionserver.dto.response.interview.InterviewResponse;
 import com.startlion.startlionserver.dto.response.interviewanswer.InterviewAnswerResponse;
 import com.startlion.startlionserver.repository.InterviewAnswerJpaRepository;
 import com.startlion.startlionserver.repository.InterviewJpaRepository;
+import com.startlion.startlionserver.repository.InterviewQueryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class InterviewService {
 
     private final InterviewJpaRepository interviewJpaRepository;
     private final InterviewAnswerJpaRepository interviewAnswerJpaRepository;
+    private final InterviewQueryRepository interviewQueryRepository;
 
     public InterviewDetailResponse getInterviewById(Long interviewId) {
          Interview interview = interviewJpaRepository.findById(interviewId)
@@ -34,26 +36,18 @@ public class InterviewService {
     }
 
     public List<InterviewResponse> getInterviews(String part) {
-        List<Interview> interviews;
-
-        if (part == null || part.equalsIgnoreCase("ALL")) {
-            interviews = interviewJpaRepository.findAll();
-        } else {
-            interviews = interviewJpaRepository.findByPart(part);
-        }
-
-        return interviews.stream()
+            return interviewQueryRepository.findAllByPart(part).stream()
                 .map(InterviewResponse::of)
                 .collect(Collectors.toList());
     }
 
     @Transactional
     public void updateInterviewImageUrl(Long interviewId, String imageUrl) {
-        Interview interview = findById(interviewId);
+        Interview interview = getById(interviewId);
         interview.updateImageUrl(imageUrl);
     }
 
-    protected Interview findById(Long interviewId) {
+    protected Interview getById(Long interviewId) {
         return interviewJpaRepository.findById(interviewId)
                 .orElseThrow(() -> new EntityNotFoundException("해당하는 인터뷰가 없습니다."));
     }

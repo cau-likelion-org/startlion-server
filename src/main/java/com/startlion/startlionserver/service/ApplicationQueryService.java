@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UserService {
+public class ApplicationQueryService {
 
     private final ApplicationJpaRepository applicationJpaRepository;
 

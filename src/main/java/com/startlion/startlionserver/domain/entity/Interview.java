@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static jakarta.persistence.EnumType.STRING;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -20,8 +22,8 @@ public class Interview {
     @Column(nullable = false)
     private Long generation;
 
-    @Column(length = 30)
-    private String part;
+    @Enumerated(STRING)
+    private IntervieweePart part;
 
     @Column(length = 30)
     private String major;
