@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -29,13 +28,17 @@ public class ApplicationController implements ApplicationApi {
 
 
     @Override
+    @GetMapping
     public ResponseEntity<ApplicationsGetResponse> getApplications(Principal principal) {
         val response = applicationQueryService.getApplications(UserUtil.getUserId(principal));
         return ResponseEntity.ok(response);
     }
 
     @Override
-    public ResponseEntity<ApplicationGetResponse> getApplication(Long applicationId, Principal principal) {
+    @GetMapping("/{applicationId}")
+    public ResponseEntity<ApplicationGetResponse> getApplication(
+            @PathVariable Long applicationId,
+            Principal principal) {
         val response = applicationQueryService.getApplication(applicationId, UserUtil.getUserId(principal));
         return ResponseEntity.ok(response);
     }
