@@ -6,8 +6,10 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.startlion.startlionserver.domain.entity.Interview;
 import com.startlion.startlionserver.domain.entity.IntervieweePart;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.startlion.startlionserver.domain.entity.QInterview.interview;
@@ -30,13 +32,9 @@ public class InterviewQueryRepository {
         }
 
         if (part.equals(IntervieweePart.DEV.toString())) {
-            return interview.part.in(
-                    IntervieweePart.FE.toString(),
-                    IntervieweePart.BE.toString(),
-                    IntervieweePart.DEV.toString());
+            val parts = Arrays.asList(IntervieweePart.BE, IntervieweePart.FE, IntervieweePart.DEV);
+            return interview.part.in(parts);
         }
-        return interview.part.eq(part);
+        return interview.part.eq(IntervieweePart.valueOf(part));
     }
-
-
 }

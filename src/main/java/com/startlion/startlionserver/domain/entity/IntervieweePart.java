@@ -6,5 +6,4 @@ public enum IntervieweePart {
     BE,
     DESIGN,
     DEV;
-
 }
