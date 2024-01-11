@@ -31,10 +31,6 @@ public class InterviewQueryRepository {
             return null;
         }
 
-        if (part.equals(IntervieweePart.DEV.toString())) {
-            val parts = Arrays.asList(IntervieweePart.BE, IntervieweePart.FE, IntervieweePart.DEV);
-            return interview.part.in(parts);
-        }
         return interview.part.eq(IntervieweePart.valueOf(part));
     }
 }
