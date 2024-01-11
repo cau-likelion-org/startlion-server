@@ -25,9 +25,6 @@ public record InterviewDetailResponse(
         @Schema(description = "인터뷰 대상자 전공")
         String major,
 
-        @Schema(description = "인터뷰 목록 페이지에서 사용하는 섬네일 텍스트")
-        String thumbnailText,
-
         @Schema(description = "인터뷰 대상자 image url")
         String imageUrl,
         List<InterviewAnswerResponse> interviewAnswers
@@ -40,7 +37,6 @@ public record InterviewDetailResponse(
                 interview.getPart().toString(),
                 interview.getName(),
                 interview.getMajor(),
-                interview.getOneLineAnswer(),
                 interview.getImageUrl(),
                 interviewAnswers
         );
