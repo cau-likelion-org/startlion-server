@@ -1,10 +1,7 @@
 package com.startlion.startlionserver.domain.entity;
 
 import com.startlion.startlionserver.domain.BaseTimeEntity;
-import com.startlion.startlionserver.domain.enums.ApplyPart;
-import com.startlion.startlionserver.domain.enums.Gender;
-import com.startlion.startlionserver.domain.enums.Semester;
-import com.startlion.startlionserver.domain.enums.SubmitStatus;
+import com.startlion.startlionserver.domain.enums.*;
 import com.startlion.startlionserver.dto.request.application.ApplicationPage1Request;
 import com.startlion.startlionserver.dto.request.application.ApplicationPage2Request;
 import com.startlion.startlionserver.dto.request.application.ApplicationPage3Request;
@@ -104,6 +101,11 @@ public class Application extends BaseTimeEntity {
      */
     private String availableInterviewTime;
 
+    @Enumerated(EnumType.STRING)
+    private PathType pathToKnow;
+
+    private String etcDetail;
+
     @Column(columnDefinition = "TEXT")
     private String commonAnswer1;
     @Column(columnDefinition = "TEXT")
@@ -135,7 +137,9 @@ public class Application extends BaseTimeEntity {
                        String phone,
                        String email,
                        ApplyPart part,
-                       int generation
+                       int generation,
+                        PathType pathToKnow,
+                        String etcDetail
     ) {
         this.isPersonalInformationAgreed = isPersonalInformationAgreed;
         this.user = user;
@@ -150,6 +154,8 @@ public class Application extends BaseTimeEntity {
         this.part = part;
         this.status = SubmitStatus.N;
         this.generation = generation;
+        this.pathToKnow = pathToKnow;
+        this.etcDetail = etcDetail;
     }
 
     public static Application create(ApplicationPage1Request request, User user, int generation) {
@@ -165,10 +171,12 @@ public class Application extends BaseTimeEntity {
                 .studentNumber(request.studentNumber())
                 .user(user)
                 .generation(generation)
+                .pathToKnow(PathType.valueOf(request.pathToKnow()))
                 .build();
     }
 
     public void updateApplicationPage1(ApplicationPage1Request request) {
+        validateSubmitStatus();
         this.email = request.email();
         this.gender = request.gender();
         this.major = request.major();
@@ -182,6 +190,7 @@ public class Application extends BaseTimeEntity {
     }
 
     public void updateApplicationPage2(ApplicationPage2Request request) {
+        validateSubmitStatus();
         this.commonAnswer1 = request.commonAnswer1();
         this.commonAnswer2 = request.commonAnswer2();
         this.commonAnswer3 = request.commonAnswer3();
@@ -190,6 +199,7 @@ public class Application extends BaseTimeEntity {
     }
 
     public void updateApplicationPage3(ApplicationPage3Request request) {
+        validateSubmitStatus();
         this.partAnswer1 = request.partAnswer1();
         this.partAnswer2 = request.partAnswer2();
         this.partAnswer3 = request.partAnswer3();
@@ -198,10 +208,12 @@ public class Application extends BaseTimeEntity {
     }
 
     public void updateApplicationPage4(ApplicationPage4Request request) {
+        validateSubmitStatus();
         this.availableInterviewTime = request.availableInterviewTime();
     }
 
     public void completeApplication() {
+        validateSubmitStatus();
         isCompleteAnswer();
         this.status = SubmitStatus.Y;
     }
@@ -215,6 +227,12 @@ public class Application extends BaseTimeEntity {
         Assert.notNull(this.phone, "전화번호가 입력되지 않았습니다.");
         Assert.notNull(this.semester, "학기가 입력되지 않았습니다.");
         Assert.notNull(this.part, "지원 파트가 입력되지 않았습니다.");
+    }
+
+    private void validateSubmitStatus() {
+        if (this.status == SubmitStatus.Y) {
+            throw new IllegalArgumentException("이미 제출된 지원서입니다.");
+        }
     }
 }
 

@@ -43,7 +43,7 @@ public class ApplicationReadController implements ApplicationReadApi {
 
     @Override
     @GetMapping("/{applicationId}/page2")
-    public ResponseEntity<ApplicationPage2GetResponse> getApplicationPage2ById(Long applicationId, Principal principal) {
+    public ResponseEntity<ApplicationPage2Response> getApplicationPage2ById(Long applicationId, Principal principal) {
         val response = applicationQueryService.getApplicationPage2(applicationId, UserUtil.getUserId(principal));
         return ResponseEntity.ok(response);
 
@@ -51,7 +51,7 @@ public class ApplicationReadController implements ApplicationReadApi {
 
     @Override
     @GetMapping("/{applicationId}/page3")
-    public ResponseEntity<ApplicationPage3GetResponse> getApplicationPage3ById(Long applicationId, Principal principal) {
+    public ResponseEntity<ApplicationPage3Response> getApplicationPage3ById(Long applicationId, Principal principal) {
         val response = applicationQueryService.getApplicationPage3(applicationId, UserUtil.getUserId(principal));
         return ResponseEntity.ok(response);
     }

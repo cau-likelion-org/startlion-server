@@ -53,7 +53,7 @@ public interface ApplicationReadApi {
                     @ApiResponse(responseCode = "404", description = "지원서 페이지 2 정보 없음")
             }
     )
-    ResponseEntity<ApplicationPage2GetResponse> getApplicationPage2ById(
+    ResponseEntity<ApplicationPage2Response> getApplicationPage2ById(
             @PathVariable Long applicationId,
             Principal principal);
 
@@ -65,7 +65,7 @@ public interface ApplicationReadApi {
                     @ApiResponse(responseCode = "404", description = "지원서 페이지 3 정보 없음")
             }
     )
-    ResponseEntity<ApplicationPage3GetResponse> getApplicationPage3ById(
+    ResponseEntity<ApplicationPage3Response> getApplicationPage3ById(
             @PathVariable Long applicationId,
             Principal principal);
 

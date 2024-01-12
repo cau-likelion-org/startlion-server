@@ -25,7 +25,7 @@ public record ApplicationPage1Request(
 
         @Email
         @Schema(description = "이메일", example = "puang@gmail.com") String email,
-        @Schema(description = "알게 된 경로") List<String> pathToKnows,
+        @Schema(description = "알게 된 경로") String pathToKnow,
         @Schema(description = "기타 선택시에 알게 된 경로", example = "인터넷 검색") String etcDetail,
         @Schema(description = "파트", example = "기획") String part
 ) {
