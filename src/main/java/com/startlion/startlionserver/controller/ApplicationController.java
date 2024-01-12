@@ -33,7 +33,7 @@ public class ApplicationController implements ApplicationApi {
     }
 
     @Override
-    @PatchMapping("{applicationId}")
+    @PatchMapping("{applicationId}/page1")
     public ResponseEntity<Void> updateApplicationPage1(
             @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
             @RequestBody ApplicationPage1Request request,
