@@ -6,6 +6,7 @@ import com.startlion.startlionserver.dto.request.application.ApplicationPage3Req
 import com.startlion.startlionserver.dto.request.application.ApplicationPage4Request;
 import com.startlion.startlionserver.dto.response.application.ApplicationGetResponse;
 import com.startlion.startlionserver.dto.response.application.ApplicationIdResponse;
+import com.startlion.startlionserver.dto.response.application.ApplicationPage1Response;
 import com.startlion.startlionserver.dto.response.application.ApplicationsGetResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,9 +22,19 @@ import java.security.Principal;
 @Tag(name = "[Application] 지원서 관련 API")
 public interface ApplicationApi {
 
+    @Operation(summary = "지원서 저장 API")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "지원서 저장 성공"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음"),
+                    @ApiResponse(responseCode = "404", description = "지원서 정보 없음")
+            }
+    )
+    ResponseEntity<ApplicationPage1Response> createApplication(
+            @RequestBody ApplicationPage1Request request,
+            Principal principal);
 
-
-    @Operation(summary = "지원서 저장하기 1페이지")
+    @Operation(summary = "지원서 업데이트 1페이지")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "지원서 저장하기 성공"),
@@ -31,7 +42,7 @@ public interface ApplicationApi {
                     @ApiResponse(responseCode = "404", description = "지원서 정보 없음")
             }
     )
-    ResponseEntity<ApplicationIdResponse> createApplication(
+    ResponseEntity<Void> updateApplicationPage1(
             @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
             @RequestBody ApplicationPage1Request request,
             Principal principal);
@@ -43,7 +54,7 @@ public interface ApplicationApi {
                     @ApiResponse(responseCode = "404", description = "지원서 정보 없음")
             }
     )
-    @Operation(summary = "지원서 저장하기 2페이지")
+    @Operation(summary = "지원서 업데이트 2페이지")
     ResponseEntity<Void> updateApplicationPage2(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage2Request request, Principal principal);
 
     @ApiResponses(
@@ -53,7 +64,7 @@ public interface ApplicationApi {
                     @ApiResponse(responseCode = "404", description = "지원서 정보 없음")
             }
     )
-    @Operation(summary = "지원서 저장하기 3페이지")
+    @Operation(summary = "지원서 업데이트 3페이지")
     ResponseEntity<Void> updateApplicationPage3(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage3Request request, Principal principal);
 
     @ApiResponses(
@@ -64,7 +75,7 @@ public interface ApplicationApi {
             }
     )
 
-    @Operation(summary = "지원서 저장하기 4페이지 -> 제출")
+    @Operation(summary = "지원서 업데이트 4페이지")
     ResponseEntity<Void> updateApplicationPage4(@PathVariable @Parameter(description = "지원서 ID") Long applicationId,
                                                   @RequestBody ApplicationPage4Request request,
                                                   Principal principal);

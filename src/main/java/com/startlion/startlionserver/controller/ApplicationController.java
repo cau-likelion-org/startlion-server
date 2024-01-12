@@ -4,9 +4,7 @@ import com.startlion.startlionserver.dto.request.application.ApplicationPage1Req
 import com.startlion.startlionserver.dto.request.application.ApplicationPage2Request;
 import com.startlion.startlionserver.dto.request.application.ApplicationPage3Request;
 import com.startlion.startlionserver.dto.request.application.ApplicationPage4Request;
-import com.startlion.startlionserver.dto.response.application.ApplicationGetResponse;
-import com.startlion.startlionserver.dto.response.application.ApplicationIdResponse;
-import com.startlion.startlionserver.dto.response.application.ApplicationsGetResponse;
+import com.startlion.startlionserver.dto.response.application.ApplicationPage1Response;
 import com.startlion.startlionserver.service.ApplicationCommandService;
 import com.startlion.startlionserver.service.ApplicationQueryService;
 import com.startlion.startlionserver.util.UserUtil;
@@ -23,28 +21,35 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class ApplicationController implements ApplicationApi {
 
-    private final ApplicationQueryService applicationQueryService;
     private final ApplicationCommandService applicationCommandService;
 
+    @Override
+    @PostMapping
+    public ResponseEntity<ApplicationPage1Response> createApplication(
+            @RequestBody ApplicationPage1Request request,
+            Principal principal) {
+        val response = applicationCommandService.createApplication(request, UserUtil.getUserId(principal));
+        return ResponseEntity.ok(response);
+    }
 
     @Override
-    @PutMapping("{applicationId}")
-    public ResponseEntity<ApplicationIdResponse> createApplication(
+    @PatchMapping("{applicationId}")
+    public ResponseEntity<Void> updateApplicationPage1(
             @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
             @RequestBody ApplicationPage1Request request,
-            Principal principal){
-        val id = applicationCommandService.createApplication(request, UserUtil.getUserId(principal), applicationId);
-        ApplicationIdResponse response = new ApplicationIdResponse(id);
-        return ResponseEntity.ok(response);
+            Principal principal) {
+        applicationCommandService.updateApplicationPage1(applicationId, request, UserUtil.getUserId(principal));
+        return ResponseEntity.noContent().build();
 
     }
+
 
     @Override
     @PatchMapping("/{applicationId}/page2")
     public ResponseEntity<Void> updateApplicationPage2(
             @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
             @RequestBody ApplicationPage2Request request,
-            Principal principal){
+            Principal principal) {
         applicationCommandService.updateApplicationPage2(applicationId, request, UserUtil.getUserId(principal));
         return ResponseEntity.noContent().build();
     }
@@ -53,7 +58,7 @@ public class ApplicationController implements ApplicationApi {
     @PatchMapping("/{applicationId}/page3")
     public ResponseEntity<Void> updateApplicationPage3(
             @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
-            @RequestBody ApplicationPage3Request request, Principal principal){
+            @RequestBody ApplicationPage3Request request, Principal principal) {
         applicationCommandService.updateApplicationPage3(applicationId, request, UserUtil.getUserId(principal));
         return ResponseEntity.noContent().build();
     }
@@ -63,7 +68,7 @@ public class ApplicationController implements ApplicationApi {
     public ResponseEntity<Void> updateApplicationPage4(
             @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
             @RequestBody ApplicationPage4Request request,
-            Principal principal){
+            Principal principal) {
         applicationCommandService.updateApplicationPage4(applicationId, request, UserUtil.getUserId(principal));
         return ResponseEntity.noContent().build();
     }
@@ -72,7 +77,7 @@ public class ApplicationController implements ApplicationApi {
     @PatchMapping("/{applicationId}/submit")
     public ResponseEntity<Void> submitApplication(
             @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
-            Principal principal){
+            Principal principal) {
         applicationCommandService.submitApplication(applicationId, UserUtil.getUserId(principal));
         return ResponseEntity.noContent().build();
     }

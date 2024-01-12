@@ -7,6 +7,7 @@ import com.startlion.startlionserver.dto.request.application.ApplicationPage1Req
 import com.startlion.startlionserver.dto.request.application.ApplicationPage2Request;
 import com.startlion.startlionserver.dto.request.application.ApplicationPage3Request;
 import com.startlion.startlionserver.dto.request.application.ApplicationPage4Request;
+import com.startlion.startlionserver.dto.response.application.ApplicationPage1Response;
 import com.startlion.startlionserver.global.exception.AccessDeniedException;
 import com.startlion.startlionserver.repository.ApplicationJpaRepository;
 import com.startlion.startlionserver.repository.CurrentGenerationRepository;
@@ -30,7 +31,7 @@ public class ApplicationCommandService {
     private final PathToKnowJpaRepository pathToKnowJpaRepository;
     // method 변수가 되는 것이 아니라 전역 변수가 되어버림.
 
-    public Long createApplication(ApplicationPage1Request request, Long userId, Long applicationId) {
+    public ApplicationPage1Response createApplication(ApplicationPage1Request request, Long userId) {
 
         val currentGeneration = currentGenerationRepository.findAll()
                 .stream()
@@ -42,18 +43,19 @@ public class ApplicationCommandService {
             throw new IllegalArgumentException("개인정보 수집 및 이용에 동의해주세요.");
         }
 
-        if (applicationId == 0) {
-            val user = userJpaRepository.findByIdOrThrow(userId);
-            val application = Application.create(request, user, currentGeneration);
-            applicationJpaRepository.save(application);
-            savePathToKnows(request.pathToKnows(), application.getApplicationId(), request.etcDetail());
-            return application.getApplicationId();
-        }
+        val user = userJpaRepository.findByIdOrThrow(userId);
+        val application = Application.create(request, user, currentGeneration);
+        applicationJpaRepository.save(application);
+        savePathToKnows(request.pathToKnows(), application.getApplicationId(), request.etcDetail());
+        return ApplicationPage1Response.of(application, request.pathToKnows());
+    }
 
+    public void updateApplicationPage1(Long applicationId, ApplicationPage1Request request, Long userId) {
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
+        checkApplicationOwner(application, userId);
         application.updateApplicationPage1(request);
         pathToKnowJpaRepository.deleteAllByApplicationId(applicationId);
-        return application.getApplicationId();
+        savePathToKnows(request.pathToKnows(), applicationId, request.etcDetail());
     }
 
     public void updateApplicationPage2(Long applicationId, ApplicationPage2Request request, Long userId) {

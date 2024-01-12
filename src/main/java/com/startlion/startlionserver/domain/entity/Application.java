@@ -14,6 +14,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.Assert;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)  @Getter
@@ -30,25 +31,77 @@ public class Application extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    /*
+   이름 (필수)
+    */
     @Column(length = 30)
     private String name;
+
+    /*
+    성별 (필수)
+    */
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    /*
+    기수 (필수)
+    */
     private int generation;
+
+    /*
+   학번 (필수)
+   */
     private String studentNumber;
+
+    /*
+    전공 (필수)
+     */
     @Column(length = 30)
     private String major;
+
+    /*
+    다중 전공 (선택)
+     */
     @Column(length = 30)
     private String multiMajor;
+
+    /*
+    학기 (필수)
+     */
     @Enumerated(EnumType.STRING)
     private Semester semester;
+
+    /*
+    휴대폰 번호 (필수)
+     */
     private String phone;
+
+    /*
+    이메일 (필수)
+     */
     private String email;
+
+    /*
+    지원파트 (필수)
+     */
     @Enumerated(EnumType.STRING)
     private ApplyPart part;
+
+    /*
+    포트폴리오 Url (선택)
+     */
     @Column(columnDefinition = "TEXT")
     private String portfolioUrl;
+
+    /*
+    제출 상태
+     */
     private SubmitStatus status;
+
+    /*
+    인터뷰 가능 시간
+     */
     private String availableInterviewTime;
 
     @Column(columnDefinition = "TEXT")
@@ -149,8 +202,19 @@ public class Application extends BaseTimeEntity {
     }
 
     public void completeApplication() {
+        isCompleteAnswer();
         this.status = SubmitStatus.Y;
     }
 
+    private void isCompleteAnswer() {
+        Assert.notNull(this.name, "이름이 입력되지 않았습니다.");
+        Assert.notNull(this.gender, "성별이 입력되지 않았습니다.");
+        Assert.notNull(this.email, "성별이 입력되지 않았습니다.");
+        Assert.notNull(this.major, "전공이 입력되지 않았습니다.");
+        Assert.notNull(this.studentNumber, "학번이 입력되지 않았습니다.");
+        Assert.notNull(this.phone, "전화번호가 입력되지 않았습니다.");
+        Assert.notNull(this.semester, "학기가 입력되지 않았습니다.");
+        Assert.notNull(this.part, "지원 파트가 입력되지 않았습니다.");
+    }
 }
 
