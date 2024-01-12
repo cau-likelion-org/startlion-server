@@ -56,6 +56,7 @@ public class ApplicationCommandService {
 
     public void updateApplicationPage3(Long applicationId, ApplicationPage3Request request, Long userId) {
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
+        checkApplicationOwner(application, userId);
         application.updateApplicationPage3(request);
     }
 
