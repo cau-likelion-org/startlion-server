@@ -21,25 +21,7 @@ import java.security.Principal;
 @Tag(name = "[Application] 지원서 관련 API")
 public interface ApplicationApi {
 
-    @Operation(summary = "지원서 목록 가져오기")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "지원서 목록 가져오기 성공"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
-                    @ApiResponse(responseCode = "404", description = "지원서 목록 없음")
-            }
-    )
-    ResponseEntity<ApplicationsGetResponse> getApplications(Principal principal);
 
-    @Operation(summary = "지원서 정보 가져오기")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "지원서 정보 가져오기 성공"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
-                    @ApiResponse(responseCode = "404", description = "지원서 정보 없음")
-            }
-    )
-    ResponseEntity<ApplicationGetResponse> getApplication (@PathVariable(required = false) Long applicationId, Principal principal);
 
     @Operation(summary = "지원서 저장하기 1페이지")
     @ApiResponses(

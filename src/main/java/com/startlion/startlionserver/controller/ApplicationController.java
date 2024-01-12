@@ -28,20 +28,6 @@ public class ApplicationController implements ApplicationApi {
 
 
     @Override
-    @GetMapping
-    public ResponseEntity<ApplicationsGetResponse> getApplications(Principal principal) {
-        val response = applicationQueryService.getApplications(UserUtil.getUserId(principal));
-        return ResponseEntity.ok(response);
-    }
-
-    @Override
-    @GetMapping("{applicationId}")
-    public ResponseEntity<ApplicationGetResponse> getApplication(Long applicationId, Principal principal) {
-        val response = applicationQueryService.getApplication(applicationId, UserUtil.getUserId(principal));
-        return ResponseEntity.ok(response);
-    }
-
-    @Override
     @PutMapping("{applicationId}")
     public ResponseEntity<ApplicationIdResponse> createApplication(
             @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
