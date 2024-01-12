@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PathToKnowJpaRepository extends JpaRepository<PathToKnow, Long> {
-    List<PathToKnowJpaRepository> findByApplicationId(Long applicationId);
+    List<PathToKnow> findByApplicationId(Long applicationId);
 
     void deleteAllByApplicationId(Long applicationId);
 }

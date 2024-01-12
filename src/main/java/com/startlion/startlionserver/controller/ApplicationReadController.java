@@ -29,14 +29,20 @@ public class ApplicationReadController implements ApplicationReadApi {
 
 
     @Override
-    @GetMapping("{applicationId}")
+    @GetMapping("/{applicationId}")
     public ResponseEntity<ApplicationGetResponse> getApplicationById(Long applicationId, Principal principal) {
         val response = applicationQueryService.getApplication(applicationId, UserUtil.getUserId(principal));
         return ResponseEntity.ok(response);
     }
 
     @Override
-    @GetMapping("{applicationId}/page2")
+    @GetMapping("/{applicationId}/page1")
+    public ResponseEntity<ApplicationPage1Response> getApplicationPage1ById(Long applicationId, Principal principal) {
+        return null;
+    }
+
+    @Override
+    @GetMapping("{/applicationId}/page2")
     public ResponseEntity<ApplicationPage2GetResponse> getApplicationPage2ById(Long applicationId, Principal principal) {
         val response = applicationQueryService.getApplicationPage2(applicationId, UserUtil.getUserId(principal));
         return ResponseEntity.ok(response);
@@ -44,14 +50,14 @@ public class ApplicationReadController implements ApplicationReadApi {
     }
 
     @Override
-    @GetMapping("{applicationId}/page3")
+    @GetMapping("{/applicationId}/page3")
     public ResponseEntity<ApplicationPage3GetResponse> getApplicationPage3ById(Long applicationId, Principal principal) {
         val response = applicationQueryService.getApplicationPage3(applicationId, UserUtil.getUserId(principal));
         return ResponseEntity.ok(response);
     }
 
     @Override
-    @GetMapping
+    @GetMapping("{/applicationId}/page4")
     public ResponseEntity<ApplicationPage4Response> getApplicationPage4ById(Long applicationId, Principal principal) {
         val response = applicationQueryService.getApplicationPage4(applicationId, UserUtil.getUserId(principal));
         return ResponseEntity.ok(response);

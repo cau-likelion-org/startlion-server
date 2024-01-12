@@ -12,7 +12,10 @@ import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.startlion.startlionserver.dto.response.question.CommonQuestionResponse.*;
+import static java.util.Arrays.stream;
 
 @Service
 @RequiredArgsConstructor
@@ -24,11 +27,16 @@ public class ApplicationQueryService {
     private final PartQuestionJpaRepository partQuestionJpaRepository;
     private final CommonQuestionJpaRepository commonQuestionRepository;
     private final CurrentGenerationRepository currentGenerationRepository;
+    private final PathToKnowJpaRepository pathToKnowJpaRepository;
 
     public ApplicationPage1Response getApplicationPage1(Long applicationId, Long userId) {
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
+        val pathToKnow = pathToKnowJpaRepository.findByApplicationId(applicationId);
         checkApplicationOwner(application, userId);
-        return ApplicationPage1Response.of(application);
+        List<String> pathToKnows = pathToKnow.stream()
+                .map(p ->  p.getPathType().getName())
+                .toList();
+        return ApplicationPage1Response.of(application, pathToKnows);
     }
 
     public ApplicationPage2GetResponse getApplicationPage2(Long applicationId, Long userId) {
