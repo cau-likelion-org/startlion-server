@@ -4,10 +4,7 @@ import com.startlion.startlionserver.dto.request.application.ApplicationPage1Req
 import com.startlion.startlionserver.dto.request.application.ApplicationPage2Request;
 import com.startlion.startlionserver.dto.request.application.ApplicationPage3Request;
 import com.startlion.startlionserver.dto.request.application.ApplicationPage4Request;
-import com.startlion.startlionserver.dto.response.application.ApplicationGetResponse;
-import com.startlion.startlionserver.dto.response.application.ApplicationIdResponse;
 import com.startlion.startlionserver.dto.response.application.ApplicationPage1Response;
-import com.startlion.startlionserver.dto.response.application.ApplicationsGetResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

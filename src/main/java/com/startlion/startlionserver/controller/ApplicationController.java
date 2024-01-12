@@ -6,7 +6,6 @@ import com.startlion.startlionserver.dto.request.application.ApplicationPage3Req
 import com.startlion.startlionserver.dto.request.application.ApplicationPage4Request;
 import com.startlion.startlionserver.dto.response.application.ApplicationPage1Response;
 import com.startlion.startlionserver.service.ApplicationCommandService;
-import com.startlion.startlionserver.service.ApplicationQueryService;
 import com.startlion.startlionserver.util.UserUtil;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;

@@ -5,8 +5,6 @@ import com.startlion.startlionserver.domain.enums.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
-import java.util.List;
-
 
 @Builder
 @Schema(description = "지원서 페이지 1 응답")
@@ -32,10 +30,10 @@ public record ApplicationPage1Response(
         @Schema(description = "지원 파트")
         String part,
         @Schema(description = "알게 된 경로")
-        List<String> pathToKnow
+        String pathToKnow
 ) {
 
-    public static ApplicationPage1Response of(Application application, List<String> pathToKnow) {
+    public static ApplicationPage1Response of(Application application) {
         return ApplicationPage1Response.builder()
                 .applicationId(application.getApplicationId())
                 .name(application.getName())
@@ -47,7 +45,7 @@ public record ApplicationPage1Response(
                 .phone(application.getPhone())
                 .email(application.getEmail())
                 .part(application.getPart().getName())
-                .pathToKnow(pathToKnow)
+                .pathToKnow(application.getPathToKnow().getName())
                 .build();
     }
 }

@@ -27,16 +27,11 @@ public class ApplicationQueryService {
     private final PartQuestionJpaRepository partQuestionJpaRepository;
     private final CommonQuestionJpaRepository commonQuestionRepository;
     private final CurrentGenerationRepository currentGenerationRepository;
-    private final PathToKnowJpaRepository pathToKnowJpaRepository;
 
     public ApplicationPage1Response getApplicationPage1(Long applicationId, Long userId) {
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
-        val pathToKnow = pathToKnowJpaRepository.findByApplicationId(applicationId);
         checkApplicationOwner(application, userId);
-        List<String> pathToKnows = pathToKnow.stream()
-                .map(p ->  p.getPathType().getName())
-                .toList();
-        return ApplicationPage1Response.of(application, pathToKnows);
+        return ApplicationPage1Response.of(application);
     }
 
     public ApplicationPage2Response getApplicationPage2(Long applicationId, Long userId) {
