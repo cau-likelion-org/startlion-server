@@ -63,7 +63,7 @@ public class ApplicationQueryService {
     public ApplicationGetResponse getApplication(Long applicationId, Long userId) {
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
         checkApplicationOwner(application, userId);
-        val partQuestion = partQuestionJpaRepository.findByPartAndGenerationOrThrow(application.getPart(), currentGeneration);
+        val partQuestion = partQuestionJpaRepository.findByPartAndGenerationOrThrow(application.getPart().toString(), currentGeneration);
         val commonQuestion = commonQuestionRepository.findByGenerationOrThrow(currentGeneration);
 
         return ApplicationGetResponse.of(

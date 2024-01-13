@@ -23,6 +23,7 @@ public interface ApplicationReadApi {
     )
     ResponseEntity<ApplicationsGetResponse> getApplications(Principal principal);
 
+    @Deprecated
     @Operation(summary = "지원서 정보 가져오기")
     @ApiResponses(
             value = {
