@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 @Schema(description = "Application Page 1 Request")
 public record ApplicationPage1Request(
         @NotNull(message = "개인정보 제공 이용 동의여부는 필수 항목입니다.")
-        @Schema(description = "개인정보 제공 이용 동의여부", example = "true") boolean isPersonalInformationAgreed,
+        @Schema(description = "개인정보 제공 이용 동의여부", example = "true") boolean isAgreed,
         @NotNull(message = "성함은 필수 항목입니다.")
         @Schema(description = "성함", example = "홍길동") String name,
         @NotNull(message = "성별은 필수 항목입니다.")

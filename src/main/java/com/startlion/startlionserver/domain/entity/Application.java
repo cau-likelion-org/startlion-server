@@ -186,7 +186,7 @@ public class Application extends BaseTimeEntity {
         this.phone = request.phone();
         this.semester = Semester.valueOf(request.semester());
         this.studentNumber = request.studentNumber();
-        this.isPersonalInformationAgreed = request.isPersonalInformationAgreed();
+        this.isPersonalInformationAgreed = request.isAgreed();
     }
 
     public void updateApplicationPage2(ApplicationPage2Request request) {

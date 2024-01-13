@@ -28,7 +28,7 @@ public class ApplicationCommandService {
 
     public ApplicationPage1Response createApplication(ApplicationPage1Request request, Long userId) {
 
-        if (!request.isPersonalInformationAgreed()) {
+        if (!request.isAgreed()) {
             throw new IllegalArgumentException("개인정보 수집 및 이용에 동의해주세요.");
         }
 
