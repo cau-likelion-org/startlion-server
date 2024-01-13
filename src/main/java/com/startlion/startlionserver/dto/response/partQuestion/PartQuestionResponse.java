@@ -13,15 +13,20 @@ public record PartQuestionResponse(
         @Schema(description = "파트별 질문 2")
         String partQuestion2,
         @Schema(description = "파트별 질문 3")
-        String partQuestion3
+        String partQuestion3,
+
+        @Schema(description = "파트별 질문 4")
+        String partQuestion4
 ) {
 
     public static PartQuestionResponse of(PartQuestion partQuestion) {
         return new PartQuestionResponse(
                 partQuestion.getQuestionId(),
-                partQuestion.getPart().getName(),
+                partQuestion.getPart(),
                 partQuestion.getPartQuestion1(),
                 partQuestion.getPartQuestion2(),
-                partQuestion.getPartQuestion3());
+                partQuestion.getPartQuestion3(),
+                partQuestion.getPartQuestion4())
+        ;
     }
 }
