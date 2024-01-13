@@ -11,6 +11,7 @@ import com.startlion.startlionserver.repository.ApplicationJpaRepository;
 import com.startlion.startlionserver.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,15 +22,11 @@ public class ApplicationCommandService {
 
     private final UserJpaRepository userJpaRepository;
     private final ApplicationJpaRepository applicationJpaRepository;
-    private final CurrentGenerationRepository currentGenerationRepository;
+
+    @Value("${current-generation}")
+    private int currentGeneration;
 
     public ApplicationPage1Response createApplication(ApplicationPage1Request request, Long userId) {
-
-        val currentGeneration = currentGenerationRepository.findAll()
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("현재 진행중인 기수가 없습니다."))
-                .getGeneration();
 
         if (!request.isPersonalInformationAgreed()) {
             throw new IllegalArgumentException("개인정보 수집 및 이용에 동의해주세요.");

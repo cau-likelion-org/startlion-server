@@ -152,7 +152,7 @@ public class Application extends BaseTimeEntity {
         this.phone = phone;
         this.email = email;
         this.part = part;
-        this.status = SubmitStatus.N;
+        this.status = SubmitStatus.PROGRESSING;
         this.generation = generation;
         this.pathToKnow = pathToKnow;
         this.etcDetail = etcDetail;
@@ -215,7 +215,7 @@ public class Application extends BaseTimeEntity {
     public void completeApplication() {
         validateSubmitStatus();
         isCompleteAnswer();
-        this.status = SubmitStatus.Y;
+        this.status = SubmitStatus.COMPLETE;
     }
 
     private void isCompleteAnswer() {
@@ -230,7 +230,7 @@ public class Application extends BaseTimeEntity {
     }
 
     private void validateSubmitStatus() {
-        if (this.status == SubmitStatus.Y) {
+        if (this.status == SubmitStatus.COMPLETE) {
             throw new IllegalArgumentException("이미 제출된 지원서입니다.");
         }
     }

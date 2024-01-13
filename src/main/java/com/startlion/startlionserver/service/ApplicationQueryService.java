@@ -8,6 +8,7 @@ import com.startlion.startlionserver.global.exception.AccessDeniedException;
 import com.startlion.startlionserver.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +28,9 @@ public class ApplicationQueryService {
     private final UserJpaRepository userJpaRepository;
     private final PartQuestionJpaRepository partQuestionJpaRepository;
     private final CommonQuestionJpaRepository commonQuestionRepository;
-    private final CurrentGenerationRepository currentGenerationRepository;
+
+    @Value("${current-generation}")
+    private int currentGeneration;
 
     public ApplicationPage1Response getApplicationPage1(Long applicationId, Long userId) {
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
@@ -60,7 +63,6 @@ public class ApplicationQueryService {
     public ApplicationGetResponse getApplication(Long applicationId, Long userId) {
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
         checkApplicationOwner(application, userId);
-        val currentGeneration = getCurrentGeneration();
         val partQuestion = partQuestionJpaRepository.findByPartAndGenerationOrThrow(application.getPart(), currentGeneration);
         val commonQuestion = commonQuestionRepository.findByGenerationOrThrow(currentGeneration);
 
@@ -76,14 +78,6 @@ public class ApplicationQueryService {
                 .map(ApplyApplicationGetResponse::of)
                 .toList();
         return ApplicationsGetResponse.of(applyApplicationsResponse);
-    }
-
-    private int getCurrentGeneration() {
-        return currentGenerationRepository.findAll()
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("현재 진행중인 세대가 없습니다."))
-                .getGeneration();
     }
 
     private void checkApplicationOwner(Application application, Long userId){
