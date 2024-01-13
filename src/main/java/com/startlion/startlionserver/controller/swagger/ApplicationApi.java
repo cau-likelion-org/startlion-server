@@ -35,7 +35,7 @@ public interface ApplicationApi {
     @Operation(summary = "지원서 업데이트 1페이지")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "지원서 저장하기 성공"),
+                    @ApiResponse(responseCode = "204", description = "지원서 저장하기 성공"),
                     @ApiResponse(responseCode = "403", description = "권한 없음", content = @Content),
                     @ApiResponse(responseCode = "404", description = "지원서 정보 없음", content = @Content)
             }
@@ -82,6 +82,14 @@ public interface ApplicationApi {
                                                   @RequestBody ApplicationPage4Request request,
                                                   Principal principal);
 
+
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "204", description = "지원서 제출하기 성공"),
+                    @ApiResponse(responseCode = "403", description = "권한 없음", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "지원서 정보 없음", content = @Content)
+            }
+    )
     @Operation(summary = "지원서 제출하기")
     ResponseEntity<Void> submitApplication(
             @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
