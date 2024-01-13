@@ -13,7 +13,6 @@ public class PartQuestion {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionId;
-    @Enumerated(EnumType.STRING)
     private String part;
     @Column(nullable = false)
     private int generation;
