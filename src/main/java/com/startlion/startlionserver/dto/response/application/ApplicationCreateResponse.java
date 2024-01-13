@@ -4,10 +4,9 @@ import com.startlion.startlionserver.domain.entity.Application;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
-
 @Builder
-@Schema(description = "지원서 페이지 1 응답")
-public record ApplicationPage1Response(
+@Schema(description = "지원서 저장 응답")
+public record ApplicationCreateResponse(
         @Schema(description = "개인 정보 수집 동의여부") boolean isAgreed,
         @Schema(description = "지원서 ID") Long applicationId,
         @Schema(description = "이름") String name,
@@ -22,13 +21,13 @@ public record ApplicationPage1Response(
         @Schema(description = "알게 된 경로") String pathToKnow
 ) {
 
-    public static ApplicationPage1Response of(Application application) {
-        return ApplicationPage1Response.builder()
-                .isAgreed(application.isPersonalInformationAgreed())
+    public static ApplicationCreateResponse of(Application application) {
+        return ApplicationCreateResponse.builder()
+                .isAgreed(false)
                 .applicationId(application.getApplicationId())
-                .name(application.getName())
-                .gender(application.getGender().getName())
-                .studentNum(application.getStudentNumber())
+                .name("")
+                .gender("")
+                .studentNum(null)
                 .major(application.getMajor())
                 .multiMajor(application.getMultiMajor())
                 .semester(application.getSemester().getName())

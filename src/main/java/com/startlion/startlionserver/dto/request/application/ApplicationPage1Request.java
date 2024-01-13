@@ -1,6 +1,5 @@
 package com.startlion.startlionserver.dto.request.application;
 
-import com.startlion.startlionserver.domain.enums.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +11,7 @@ public record ApplicationPage1Request(
         @NotNull(message = "성함은 필수 항목입니다.")
         @Schema(description = "성함", example = "홍길동") String name,
         @NotNull(message = "성별은 필수 항목입니다.")
-        @Schema(description = "성별", example = "M/F") Gender gender,
+        @Schema(description = "성별", example = "male/femail") String gender,
         @NotNull(message = "학번은 필수 항목입니다.")
         @Schema(description = "학번", example = "20190315") String studentNumber,
         @NotNull(message = "전공은 필수 항목입니다.")

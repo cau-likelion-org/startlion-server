@@ -2,15 +2,9 @@ package com.startlion.startlionserver.domain.entity;
 
 import com.startlion.startlionserver.domain.BaseTimeEntity;
 import com.startlion.startlionserver.domain.enums.*;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage1Request;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage2Request;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage3Request;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage4Request;
+import com.startlion.startlionserver.dto.request.application.*;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.util.Assert;
 
 @Entity
@@ -158,17 +152,18 @@ public class Application extends BaseTimeEntity {
         this.etcDetail = etcDetail;
     }
 
-    public static Application create(ApplicationPage1Request request, User user, int generation) {
+    public static Application create(ApplicationCreateRequest request, User user, int generation) {
         return Application.builder()
+                .isPersonalInformationAgreed(false)
                 .email(request.email())
-                .gender(request.gender())
+                .gender(Gender.DEFAULT)
                 .major(request.major())
                 .multiMajor(request.multiMajor())
                 .part(ApplyPart.valueOf(request.part()))
-                .name(request.name())
+                .name("")
                 .phone(request.phone())
                 .semester(Semester.valueOf(request.semester()))
-                .studentNumber(request.studentNumber())
+                .studentNumber(null)
                 .user(user)
                 .generation(generation)
                 .pathToKnow(PathType.valueOf(request.pathToKnow()))
@@ -178,7 +173,7 @@ public class Application extends BaseTimeEntity {
     public void updateApplicationPage1(ApplicationPage1Request request) {
         validateSubmitStatus();
         this.email = request.email();
-        this.gender = request.gender();
+        this.gender = Gender.valueOf(request.gender());
         this.major = request.major();
         this.multiMajor = request.multiMajor();
         this.part = ApplyPart.valueOf(request.part());

@@ -1,10 +1,8 @@
 package com.startlion.startlionserver.controller;
 
 import com.startlion.startlionserver.controller.swagger.ApplicationApi;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage1Request;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage2Request;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage3Request;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage4Request;
+import com.startlion.startlionserver.dto.request.application.*;
+import com.startlion.startlionserver.dto.response.application.ApplicationCreateResponse;
 import com.startlion.startlionserver.dto.response.application.ApplicationPage1Response;
 import com.startlion.startlionserver.service.ApplicationCommandService;
 import com.startlion.startlionserver.util.UserUtil;
@@ -25,8 +23,8 @@ public class ApplicationController implements ApplicationApi {
 
     @Override
     @PostMapping
-    public ResponseEntity<ApplicationPage1Response> createApplication(
-            @RequestBody ApplicationPage1Request request,
+    public ResponseEntity<ApplicationCreateResponse> createApplication(
+            @RequestBody ApplicationCreateRequest request,
             Principal principal) {
         val response = applicationCommandService.createApplication(request, UserUtil.getUserId(principal));
         return ResponseEntity.ok(response);

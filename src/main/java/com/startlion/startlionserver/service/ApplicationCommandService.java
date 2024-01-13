@@ -1,12 +1,10 @@
 package com.startlion.startlionserver.service;
 
 import com.startlion.startlionserver.domain.entity.Application;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage1Request;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage2Request;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage3Request;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage4Request;
-import com.startlion.startlionserver.dto.response.application.ApplicationPage1Response;
+import com.startlion.startlionserver.dto.request.application.*;
+import com.startlion.startlionserver.dto.response.application.ApplicationCreateResponse;
 import com.startlion.startlionserver.global.exception.AccessDeniedException;
+import com.startlion.startlionserver.global.exception.PersonalInfoApproveException;
 import com.startlion.startlionserver.repository.ApplicationJpaRepository;
 import com.startlion.startlionserver.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,19 +24,17 @@ public class ApplicationCommandService {
     @Value("${current-generation}")
     private int currentGeneration;
 
-    public ApplicationPage1Response createApplication(ApplicationPage1Request request, Long userId) {
-
-        if (!request.isAgreed()) {
-            throw new IllegalArgumentException("개인정보 수집 및 이용에 동의해주세요.");
-        }
-
+    public ApplicationCreateResponse createApplication(ApplicationCreateRequest request, Long userId) {
         val user = userJpaRepository.findByIdOrThrow(userId);
         val application = Application.create(request, user, currentGeneration);
         applicationJpaRepository.save(application);
-        return ApplicationPage1Response.of(application);
+        return ApplicationCreateResponse.of(application);
     }
 
     public void updateApplicationPage1(Long applicationId, ApplicationPage1Request request, Long userId) {
+        if (!request.isAgreed()) {
+            throw new PersonalInfoApproveException("개인정보 수집 및 이용에 동의해주세요.");
+        }
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
         checkApplicationOwner(application, userId);
         application.updateApplicationPage1(request);

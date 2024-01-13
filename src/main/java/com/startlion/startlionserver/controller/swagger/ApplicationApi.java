@@ -1,10 +1,7 @@
 package com.startlion.startlionserver.controller.swagger;
 
-import com.startlion.startlionserver.dto.request.application.ApplicationPage1Request;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage2Request;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage3Request;
-import com.startlion.startlionserver.dto.request.application.ApplicationPage4Request;
-import com.startlion.startlionserver.dto.response.application.ApplicationPage1Response;
+import com.startlion.startlionserver.dto.request.application.*;
+import com.startlion.startlionserver.dto.response.application.ApplicationCreateResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,8 +25,8 @@ public interface ApplicationApi {
                     @ApiResponse(responseCode = "404", description = "지원서 정보 없음", content = @Content)
             }
     )
-    ResponseEntity<ApplicationPage1Response> createApplication(
-            @RequestBody ApplicationPage1Request request,
+    ResponseEntity<ApplicationCreateResponse> createApplication(
+            @RequestBody ApplicationCreateRequest request,
             Principal principal);
 
     @Operation(summary = "지원서 업데이트 1페이지")

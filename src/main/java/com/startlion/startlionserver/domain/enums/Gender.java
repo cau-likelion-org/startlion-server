@@ -1,6 +1,15 @@
 package com.startlion.startlionserver.domain.enums;
 
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum Gender {
-    M,
-    F
+    DEFAULT(""),
+    M("male"),
+    F("female");
+
+    private final String name;
 }
