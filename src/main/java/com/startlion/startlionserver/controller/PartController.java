@@ -1,6 +1,7 @@
-package com.startlion.startlionserver.controller.swagger;
+package com.startlion.startlionserver.controller;
 
 
+import com.startlion.startlionserver.controller.swagger.PartApi;
 import com.startlion.startlionserver.dto.response.part.PartResponse;
 import com.startlion.startlionserver.service.PartService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/part")
 @RequiredArgsConstructor
-public class PartController {
+public class PartController implements PartApi {
 
     private final PartService partService;
 

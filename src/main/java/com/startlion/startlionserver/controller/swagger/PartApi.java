@@ -13,6 +13,6 @@ public interface PartApi {
 
     @GetMapping("/{partName}")
     ResponseEntity<PartResponse> getPart(
-            @Parameter(description = "파트 이름", example = "BE, FE, DESIGN, PLAN 중 하나")
+            @Parameter(description = "파트 이름", example = "BE/FE/DESIGN/PLAN")
             @PathVariable String partName);
 }
