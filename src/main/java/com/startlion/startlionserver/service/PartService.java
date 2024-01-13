@@ -1,7 +1,6 @@
 package com.startlion.startlionserver.service;
 
 
-import com.startlion.startlionserver.domain.enums.ApplyPart;
 import com.startlion.startlionserver.dto.response.part.PartResponse;
 import com.startlion.startlionserver.repository.CommonQuestionJpaRepository;
 import com.startlion.startlionserver.repository.CurriculumJpaRepository;
@@ -27,9 +26,10 @@ public class PartService {
     @Value("${current-generation}")
     private int currentGeneration;
 
-    public PartResponse getPartByName(String name) {
-        val part = partJpaRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("해당하는 파트가 없습니다."));
-        val partQuestion = partQuestionJpaRepository.findByPartAndGenerationOrThrow(ApplyPart.valueOf(name), currentGeneration);
+    // partName : BE, FE, DESIGN, PLAN
+    public PartResponse getPartByName(String partName) {
+        val part = partJpaRepository.findByName(partName).orElseThrow(() -> new EntityNotFoundException("해당하는 파트가 없습니다."));
+        val partQuestion = partQuestionJpaRepository.findByPartAndGenerationOrThrow(partName, currentGeneration);
         val commonQuestion = commonQuestionJpaRepository.findByGeneration(currentGeneration).orElseThrow(() -> new EntityNotFoundException("해당하는 공통 질문이 없습니다."));
         val curriculum = curriculumJpaRepository.findByPartOrThrow(part);
     return PartResponse.of(part, partQuestion, curriculum, commonQuestion);

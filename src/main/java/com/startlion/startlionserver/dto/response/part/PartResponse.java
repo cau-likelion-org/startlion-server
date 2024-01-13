@@ -15,7 +15,7 @@ import java.util.List;
 public record PartResponse(
 
         @Schema(description = "파트 이름", example = "기획")
-        String part,
+        String partName,
         @Schema(description = "파트 내용", example = "기획 파트는 기획을 합니다.")
         String partContent,
         @Schema(description = "파트 타입", example = "기획")
@@ -26,7 +26,11 @@ public record PartResponse(
         String curriculumContents,
         @Schema(description = "파트 기수", example = "12")
         Long curriculumGeneration,
+
+        @Schema(description = "공통 질문", example = "공통 질문")
         List<String> commonQuestions,
+
+        @Schema(description = "파트별 질문", example = "파트별 질문")
         List<String> partQuestions
 ) {
 
@@ -35,24 +39,16 @@ public record PartResponse(
                                   Curriculum curriculum,
                                   CommonQuestion commonQuestion
                                   ) {
-        return new PartResponse(
-                part.getName(),
-                part.getPartContent(),
-                part.getTypeOfTalent(),
-                part.getImageUrl(),
-                curriculum.getContent(),
-                part.getGeneration(),
-                List.of(
-                        commonQuestion.getCommonQuestion1(),
-                        commonQuestion.getCommonQuestion2(),
-                        commonQuestion.getCommonQuestion3(),
-                        commonQuestion.getCommonQuestion4(),
-                        commonQuestion.getCommonQuestion5()),
-                List.of(
-                        partQuestion.getPartQuestion1(),
-                        partQuestion.getPartQuestion2(),
-                        partQuestion.getPartQuestion3(),
-                        partQuestion.getPartQuestion4())
-        );
+        return PartResponse.builder()
+                .partName(part.getName())
+                .partContent(part.getPartContent())
+                .typeOfTalent(part.getTypeOfTalent())
+                .imageUrl(part.getImageUrl())
+                .curriculumContents(curriculum.getContent())
+                .curriculumGeneration(curriculum.getGeneration())
+                .commonQuestions(List.of(commonQuestion.getCommonQuestion1(), commonQuestion.getCommonQuestion2(), commonQuestion.getCommonQuestion3(), commonQuestion.getCommonQuestion4(), commonQuestion.getCommonQuestion5()))
+                .partQuestions(List.of(partQuestion.getPartQuestion1(), partQuestion.getPartQuestion2(), partQuestion.getPartQuestion3()))
+                .build()
+           ;
     }
 }

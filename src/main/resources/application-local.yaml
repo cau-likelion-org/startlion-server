@@ -58,5 +58,4 @@ springdoc:
     groups:
       enabled: true
 
-global:
-  generation: 12
+current-generation: 12

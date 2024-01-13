@@ -15,6 +15,7 @@ public class Part {
     @Column(nullable = false)
     private Long partId;
 
+    // BE FE DESIGN PLAN
     @Column(nullable = false)
     private String name;
 
@@ -32,4 +33,5 @@ public class Part {
 
     @Column(nullable = false)
     private Long generation;
+
 }

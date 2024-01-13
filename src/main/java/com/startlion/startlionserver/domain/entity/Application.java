@@ -11,13 +11,14 @@ import org.springframework.util.Assert;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)  @Getter
 public class Application extends BaseTimeEntity {
 
-    private static final boolean DEFAULT_AGREEMENT = true;
+    private static final int DEFAULT_ANSWER_LIMIT = 700;
+    private static final int PLAN_PART_ANSWER_LIMIT = 1000;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long applicationId;
 
-    private boolean isPersonalInformationAgreed = DEFAULT_AGREEMENT;
+    private boolean isPersonalInformationAgreed;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -119,6 +120,16 @@ public class Application extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String partAnswer4;
 
+    private int commonAnswer1Limit = DEFAULT_ANSWER_LIMIT;
+    private int commonAnswer2Limit = DEFAULT_ANSWER_LIMIT;
+    private int commonAnswer3Limit = DEFAULT_ANSWER_LIMIT;
+    private int commonAnswer4Limit = DEFAULT_ANSWER_LIMIT;
+    private int commonAnswer5Limit = DEFAULT_ANSWER_LIMIT;
+    private int partAnswer1Limit = DEFAULT_ANSWER_LIMIT;
+    private int partAnswer2Limit = DEFAULT_ANSWER_LIMIT;
+    private int partAnswer3Limit = DEFAULT_ANSWER_LIMIT;
+    private int partAnswer4Limit = DEFAULT_ANSWER_LIMIT;
+
     @Builder
     private Application(boolean isPersonalInformationAgreed,
                        User user,
@@ -182,6 +193,13 @@ public class Application extends BaseTimeEntity {
         this.semester = Semester.valueOf(request.semester());
         this.studentNumber = request.studentNumber();
         this.isPersonalInformationAgreed = request.isAgreed();
+
+        if (ApplyPart.valueOf(request.part()) == ApplyPart.PLAN) {
+            this.partAnswer1Limit = PLAN_PART_ANSWER_LIMIT;
+            this.partAnswer2Limit = PLAN_PART_ANSWER_LIMIT;
+            this.partAnswer3Limit = PLAN_PART_ANSWER_LIMIT;
+            this.partAnswer4Limit = PLAN_PART_ANSWER_LIMIT;
+        }
     }
 
     public void updateApplicationPage2(ApplicationPage2Request request) {

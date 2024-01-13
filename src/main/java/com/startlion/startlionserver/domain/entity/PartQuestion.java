@@ -1,6 +1,5 @@
 package com.startlion.startlionserver.domain.entity;
 
-import com.startlion.startlionserver.domain.enums.ApplyPart;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,7 +14,7 @@ public class PartQuestion {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionId;
     @Enumerated(EnumType.STRING)
-    private ApplyPart part;
+    private String part;
     @Column(nullable = false)
     private int generation;
     @Column(columnDefinition = "TEXT")
@@ -28,7 +27,7 @@ public class PartQuestion {
     private String partQuestion4;
 
     @Builder
-    private PartQuestion(ApplyPart part, int generation, String partQuestion1, String partQuestion2, String partQuestion3, String partQuestion4) {
+    private PartQuestion(String part, int generation, String partQuestion1, String partQuestion2, String partQuestion3, String partQuestion4) {
         this.part = part;
         this.generation = generation;
         this.partQuestion1 = partQuestion1;

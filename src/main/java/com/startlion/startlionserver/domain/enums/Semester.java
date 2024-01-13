@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Semester {
+    DEFAULT(""),
     FIRST("1-1"),
     SECOND("1-2"),
     THIRD("2-1"),
