@@ -10,7 +10,6 @@ import lombok.Builder;
 public record ApplicationPage3Response(
         @Schema(description = "파트", example = "기획")
         String part,
-
         @Schema(description = "파트별 질문 1 답변", example = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
                 "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
                 "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris " +
@@ -30,7 +29,9 @@ public record ApplicationPage3Response(
                 "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
                 "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris " +
                 "nisi ut aliquip ex ea commodo consequat.")
-        String partAnswer4
+        String partAnswer4,
+
+        String portfolioUrl
 ) {
 
     public static ApplicationPage3Response of(Application application) {

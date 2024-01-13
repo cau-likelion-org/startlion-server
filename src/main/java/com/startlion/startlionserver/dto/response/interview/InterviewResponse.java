@@ -14,7 +14,7 @@ public record InterviewResponse(
 
         @Schema(description = "인터뷰 대상자 이름", example = "홍길동") String name,
 
-        @Schema(description = "인터뷰 목록 페이지에서 사용하는 섬네일 텍스트") String thumbnailText,
+        @Schema(description = "인터뷰 목록 페이지에서 사용하는 섬네일 텍스트") String oneLineContent,
 
         @Schema(description = "인터뷰 대상자 imageUrl") String imageUrl
 ) {
