@@ -245,6 +245,7 @@ public class Application extends BaseTimeEntity {
         this.availableInterviewTime1 = availableInterviewTime1;
         this.availableInterviewTime2 = availableInterviewTime2;
         this.availableInterviewTime3 = availableInterviewTime3;
+        this.lastCheck = request.lastCheck();
     }
 
     public void completeApplication() {
