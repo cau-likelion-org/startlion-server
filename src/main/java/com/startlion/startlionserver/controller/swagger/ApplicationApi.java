@@ -7,6 +7,7 @@ import com.startlion.startlionserver.dto.request.application.ApplicationPage4Req
 import com.startlion.startlionserver.dto.response.application.ApplicationPage1Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,8 +24,8 @@ public interface ApplicationApi {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "지원서 저장 성공"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
-                    @ApiResponse(responseCode = "404", description = "지원서 정보 없음")
+                    @ApiResponse(responseCode = "403", description = "권한 없음", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "지원서 정보 없음", content = @Content)
             }
     )
     ResponseEntity<ApplicationPage1Response> createApplication(
@@ -35,8 +36,8 @@ public interface ApplicationApi {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "지원서 저장하기 성공"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
-                    @ApiResponse(responseCode = "404", description = "지원서 정보 없음")
+                    @ApiResponse(responseCode = "403", description = "권한 없음", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "지원서 정보 없음", content = @Content)
             }
     )
     ResponseEntity<Void> updateApplicationPage1(
@@ -47,28 +48,32 @@ public interface ApplicationApi {
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "204", description = "지원서 저장하기 성공"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
-                    @ApiResponse(responseCode = "404", description = "지원서 정보 없음")
+                    @ApiResponse(responseCode = "403", description = "권한 없음", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "지원서 정보 없음", content = @Content)
             }
     )
     @Operation(summary = "지원서 업데이트 2페이지")
-    ResponseEntity<Void> updateApplicationPage2(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage2Request request, Principal principal);
+    ResponseEntity<Void> updateApplicationPage2(
+            @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
+            @RequestBody ApplicationPage2Request request, Principal principal);
 
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "204", description = "지원서 3page 저장하기 성공"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
-                    @ApiResponse(responseCode = "404", description = "지원서 정보 없음")
+                    @ApiResponse(responseCode = "403", description = "권한 없음", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "지원서 정보 없음", content = @Content)
             }
     )
     @Operation(summary = "지원서 업데이트 3페이지")
-    ResponseEntity<Void> updateApplicationPage3(@PathVariable @Parameter(description = "지원서 ID") Long applicationId, @RequestBody ApplicationPage3Request request, Principal principal);
+    ResponseEntity<Void> updateApplicationPage3(
+            @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
+            @RequestBody ApplicationPage3Request request, Principal principal);
 
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "204", description = "지원서 저장하기 성공"),
-                    @ApiResponse(responseCode = "403", description = "권한 없음"),
-                    @ApiResponse(responseCode = "404", description = "지원서 정보 없음")
+                    @ApiResponse(responseCode = "403", description = "권한 없음", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "지원서 정보 없음", content = @Content)
             }
     )
 
