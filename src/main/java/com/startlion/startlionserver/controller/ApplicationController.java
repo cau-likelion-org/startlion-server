@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping(value = "/application")
+@RequestMapping(value = "/api/application")
 @RequiredArgsConstructor
 public class ApplicationController implements ApplicationApi {
 
@@ -33,7 +33,7 @@ public class ApplicationController implements ApplicationApi {
     }
 
     @Override
-    @PatchMapping("{applicationId}/page1")
+    @PatchMapping("/{applicationId}/page1")
     public ResponseEntity<Void> updateApplicationPage1(
             @PathVariable @Parameter(description = "지원서 ID") Long applicationId,
             @RequestBody ApplicationPage1Request request,

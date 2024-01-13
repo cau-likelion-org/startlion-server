@@ -15,7 +15,7 @@ public class InterviewFileUploadController implements InterviewFileUploadApi {
     private final InterviewFileUploadService interviewFileUploadService;
 
     @Override
-    @PostMapping("{interviewId}/file")
+    @PostMapping("/{interviewId}/file")
     public ResponseEntity<String> uploadFile(@RequestPart MultipartFile file, @PathVariable Long interviewId) {
         interviewFileUploadService.uploadFile(file, interviewId);
         return ResponseEntity.noContent().build();

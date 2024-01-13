@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 
-@RequestMapping("/application")
+@RequestMapping("/api/application")
 @RequiredArgsConstructor
 @RestController
 public class ApplicationReadController implements ApplicationReadApi {
