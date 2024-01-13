@@ -1,5 +1,6 @@
 package com.startlion.startlionserver.controller;
 
+import com.startlion.startlionserver.controller.swagger.ApplicationApi;
 import com.startlion.startlionserver.dto.request.application.ApplicationPage1Request;
 import com.startlion.startlionserver.dto.request.application.ApplicationPage2Request;
 import com.startlion.startlionserver.dto.request.application.ApplicationPage3Request;

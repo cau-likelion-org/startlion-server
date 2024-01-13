@@ -1,14 +1,16 @@
-package com.startlion.startlionserver.controller;
+package com.startlion.startlionserver.controller.swagger;
 
 import com.startlion.startlionserver.dto.response.application.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.security.Principal;
 
+@Tag(name = "[Application] 지원서 조회 API")
 public interface ApplicationReadApi {
 
     @Operation(summary = "지원서 목록 가져오기")

@@ -1,6 +1,7 @@
 package com.startlion.startlionserver.controller;
 
 
+import com.startlion.startlionserver.controller.swagger.InterviewApi;
 import com.startlion.startlionserver.dto.response.interview.InterviewDetailResponse;
 import com.startlion.startlionserver.dto.response.interview.InterviewResponse;
 import com.startlion.startlionserver.service.InterviewService;

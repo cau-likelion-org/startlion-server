@@ -8,7 +8,6 @@ import com.startlion.startlionserver.dto.request.application.ApplicationPage4Req
 import com.startlion.startlionserver.dto.response.application.ApplicationPage1Response;
 import com.startlion.startlionserver.global.exception.AccessDeniedException;
 import com.startlion.startlionserver.repository.ApplicationJpaRepository;
-import com.startlion.startlionserver.repository.CurrentGenerationRepository;
 import com.startlion.startlionserver.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -23,7 +22,6 @@ public class ApplicationCommandService {
     private final UserJpaRepository userJpaRepository;
     private final ApplicationJpaRepository applicationJpaRepository;
     private final CurrentGenerationRepository currentGenerationRepository;
-    // method 변수가 되는 것이 아니라 전역 변수가 되어버림.
 
     public ApplicationPage1Response createApplication(ApplicationPage1Request request, Long userId) {
 

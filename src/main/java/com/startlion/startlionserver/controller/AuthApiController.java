@@ -1,6 +1,7 @@
 package com.startlion.startlionserver.controller;
 
 import com.startlion.startlionserver.config.auth.AuthValueConfig;
+import com.startlion.startlionserver.controller.swagger.AuthApi;
 import com.startlion.startlionserver.dto.response.auth.OAuthResponse;
 import com.startlion.startlionserver.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;

@@ -28,7 +28,7 @@ public class InterviewService {
     public InterviewDetailResponse getInterviewById(Long interviewId) {
         val interview = getById(interviewId);
 
-          List<InterviewAnswerResponse> interviewAnswerResponses = graduateInterviewContentJpaRepository.findByGraduateInterview(interview)
+          val interviewAnswerResponses = graduateInterviewContentJpaRepository.findByGraduateInterview(interview)
                   .stream()
                   .map(InterviewAnswerResponse::of)
                   .toList();

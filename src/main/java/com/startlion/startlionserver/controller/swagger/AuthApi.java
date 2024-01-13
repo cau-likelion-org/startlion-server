@@ -1,4 +1,4 @@
-package com.startlion.startlionserver.controller;
+package com.startlion.startlionserver.controller.swagger;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

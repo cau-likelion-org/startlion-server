@@ -16,7 +16,7 @@ public class Curriculum {
     private Long curriculum;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "part_id")
-    private Part partId;
+    private Part part;
     private long generation;
     @Column(length = 300)
     private String content;

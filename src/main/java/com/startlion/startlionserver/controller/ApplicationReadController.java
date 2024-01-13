@@ -1,6 +1,7 @@
 package com.startlion.startlionserver.controller;
 
 
+import com.startlion.startlionserver.controller.swagger.ApplicationReadApi;
 import com.startlion.startlionserver.dto.response.application.*;
 import com.startlion.startlionserver.service.ApplicationQueryService;
 import com.startlion.startlionserver.util.UserUtil;
@@ -31,7 +32,7 @@ public class ApplicationReadController implements ApplicationReadApi {
 
     @Override
     @GetMapping("/{applicationId}")
-    public ResponseEntity<ApplicationGetResponse> getApplicationById(Long applicationId, Principal principal) {
+    public ResponseEntity<ApplicationGetResponse> getApplicationById(@PathVariable Long applicationId, Principal principal) {
         val response = applicationQueryService.getApplication(applicationId, UserUtil.getUserId(principal));
         return ResponseEntity.ok(response);
     }

@@ -1,5 +1,6 @@
 package com.startlion.startlionserver.controller;
 
+import com.startlion.startlionserver.controller.swagger.InterviewFileUploadApi;
 import com.startlion.startlionserver.service.InterviewFileUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -4,7 +4,6 @@ package com.startlion.startlionserver.service;
 import com.startlion.startlionserver.domain.entity.Application;
 import com.startlion.startlionserver.dto.response.application.*;
 import com.startlion.startlionserver.dto.response.partQuestion.PartQuestionResponse;
-import com.startlion.startlionserver.dto.response.question.CommonQuestionResponse;
 import com.startlion.startlionserver.global.exception.AccessDeniedException;
 import com.startlion.startlionserver.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -14,13 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.startlion.startlionserver.dto.response.question.CommonQuestionResponse.*;
-import static java.util.Arrays.stream;
+import static com.startlion.startlionserver.dto.response.question.CommonQuestionResponse.of;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ApplicationQueryService {
+
+    private static final int FIRST_DAY_LAST_INTERVIEW_INDEX = 11;
+    private static final int SECOND_DAY_LAST_INTERVIEW_INDEX = 23;
 
     private final ApplicationJpaRepository applicationJpaRepository;
     private final UserJpaRepository userJpaRepository;
@@ -49,7 +50,11 @@ public class ApplicationQueryService {
     public ApplicationPage4Response getApplicationPage4(Long applicationId, Long userId) {
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
         checkApplicationOwner(application, userId);
-        return ApplicationPage4Response.of(application);
+        val availableTimes = List.of(application.getAvailableInterviewTime().split(","));
+        val firstDays = availableTimes.subList(0, FIRST_DAY_LAST_INTERVIEW_INDEX);
+        val secondDays = availableTimes.subList(FIRST_DAY_LAST_INTERVIEW_INDEX+1, SECOND_DAY_LAST_INTERVIEW_INDEX);
+        val thirdDays =  availableTimes.subList(SECOND_DAY_LAST_INTERVIEW_INDEX+1, availableTimes.size()-1);
+        return ApplicationPage4Response.of(firstDays, secondDays, thirdDays);
     }
 
     public ApplicationGetResponse getApplication(Long applicationId, Long userId) {

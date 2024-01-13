@@ -55,3 +55,5 @@ springdoc:
     path: /api-docs/json
     groups:
       enabled: true
+
+current-generation: 12

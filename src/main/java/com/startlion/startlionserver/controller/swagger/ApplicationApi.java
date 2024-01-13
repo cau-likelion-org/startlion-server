@@ -1,4 +1,4 @@
-package com.startlion.startlionserver.controller;
+package com.startlion.startlionserver.controller.swagger;
 
 import com.startlion.startlionserver.dto.request.application.ApplicationPage1Request;
 import com.startlion.startlionserver.dto.request.application.ApplicationPage2Request;

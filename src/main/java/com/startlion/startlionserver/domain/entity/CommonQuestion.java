@@ -13,7 +13,6 @@ public class CommonQuestion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     private Long commonQuestionId;
 
     @Column(nullable = false, unique = true)
