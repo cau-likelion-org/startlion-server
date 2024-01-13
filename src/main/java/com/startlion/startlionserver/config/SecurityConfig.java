@@ -4,7 +4,6 @@ package com.startlion.startlionserver.config;
 import com.startlion.startlionserver.config.jwt.CustomJwtAuthenticationEntryPoint;
 import com.startlion.startlionserver.config.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,7 +34,7 @@ public class SecurityConfig {
             "/login",
             "/application",
             "/api/interviews/**",
-            "/api/parts/**",
+            "/api/part/**",
 
             "/swagger-resources/**",
             "/favicon.ico",
