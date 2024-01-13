@@ -4,6 +4,7 @@ import com.startlion.startlionserver.dto.response.ErrorResponse;
 import com.startlion.startlionserver.global.enums.CustomCode;
 import com.startlion.startlionserver.global.exception.AccessDeniedException;
 import com.startlion.startlionserver.global.exception.EmailAlreadyInUseException;
+import com.startlion.startlionserver.global.exception.UnauthorizedException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +31,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public  ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(ErrorResponse.of(CustomCode.SL_43000.toString(), e.getMessage()));
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(ErrorResponse.of(CustomCode.SL_41000.toString(), e.getMessage()));
     }
 
     // application email 중복 검사 예외 처리

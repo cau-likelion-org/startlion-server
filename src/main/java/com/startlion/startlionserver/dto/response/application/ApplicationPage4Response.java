@@ -10,20 +10,20 @@ import java.util.List;
 @Builder
 public record ApplicationPage4Response(
         @Schema(description = "처음 일자 면접 가능한 시간")
-        List<String> firstDay,
+        List<Integer> firstDay,
         @Schema(description = "두번째 일자 면접 가능한 시간")
-        List<String> secondDay,
+        List<Integer> secondDay,
         @Schema(description = "세번째 일자 면접 가능한 시간")
-        List<String> thirdDay
+        List<Integer> thirdDay
 ) {
     public static ApplicationPage4Response of(
             List<String> firstDay,
             List<String> secondDay,
             List<String> thirdDay) {
         return ApplicationPage4Response.builder()
-                .firstDay(firstDay)
-                .secondDay(secondDay)
-                .thirdDay(thirdDay)
+                .firstDay(firstDay.stream().map(Integer::parseInt).toList())
+                .secondDay(secondDay.stream().map(Integer::parseInt).toList())
+                .thirdDay(thirdDay.stream().map(Integer::parseInt).toList())
                 .build();
     }
 }

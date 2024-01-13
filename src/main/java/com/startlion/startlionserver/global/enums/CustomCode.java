@@ -7,6 +7,7 @@ public enum CustomCode {
     SL_40002,
     SL_40003,
     SL_44000,
-    SL_43000
+    SL_43000,
+    SL_41000;
 
 }
