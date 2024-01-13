@@ -28,8 +28,6 @@ public record ApplicationResponse(
         String portfolioUrl,
         @Schema(description = "지원서 상태")
         String status,
-        @Schema(description = "가능한 인터뷰 시간", example = "0 0 1 0 0 0 1 0 0 1 0 1 0 0 0 1 0 0 1 0 1 0 1 1 1 1")
-        String availableInterviewTime,
         @Schema(description = "공통 질문 1 답변")
         String commonAnswer1,
         @Schema(description = "공통 질문 2 답변")
@@ -62,7 +60,6 @@ public record ApplicationResponse(
                 application.getEmail(),
                 application.getPortfolioUrl(),
                 application.getStatus().toString(),
-                application.getAvailableInterviewTime(),
                 application.getCommonAnswer1(),
                 application.getCommonAnswer2(),
                 application.getCommonAnswer3(),

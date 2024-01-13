@@ -53,10 +53,9 @@ public class ApplicationQueryService {
     public ApplicationPage4Response getApplicationPage4(Long applicationId, Long userId) {
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
         checkApplicationOwner(application, userId);
-        val availableTimes = List.of(application.getAvailableInterviewTime().split(","));
-        val firstDays = availableTimes.subList(0, FIRST_DAY_LAST_INTERVIEW_INDEX);
-        val secondDays = availableTimes.subList(FIRST_DAY_LAST_INTERVIEW_INDEX+1, SECOND_DAY_LAST_INTERVIEW_INDEX);
-        val thirdDays =  availableTimes.subList(SECOND_DAY_LAST_INTERVIEW_INDEX+1, availableTimes.size()-1);
+        val firstDays = List.of(application.getAvailableInterviewTime1().split(","));
+        val secondDays = List.of(application.getAvailableInterviewTime2().split(","));
+        val thirdDays =  List.of(application.getAvailableInterviewTime3().split(","));
         return ApplicationPage4Response.of(firstDays, secondDays, thirdDays);
     }
 

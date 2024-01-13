@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.util.Assert;
 
+import java.util.stream.Collectors;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)  @Getter
 public class Application extends BaseTimeEntity {
@@ -94,7 +96,9 @@ public class Application extends BaseTimeEntity {
     /*
     인터뷰 가능 시간
      */
-    private String availableInterviewTime;
+    private String availableInterviewTime1;
+    private String availableInterviewTime2;
+    private String availableInterviewTime3;
 
     @Enumerated(EnumType.STRING)
     private PathType pathToKnow;
@@ -119,6 +123,8 @@ public class Application extends BaseTimeEntity {
     private String partAnswer3;
     @Column(columnDefinition = "TEXT")
     private String partAnswer4;
+
+    private boolean lastCheck = false;
 
     private int commonAnswer1Limit = DEFAULT_ANSWER_LIMIT;
     private int commonAnswer2Limit = DEFAULT_ANSWER_LIMIT;
@@ -222,7 +228,23 @@ public class Application extends BaseTimeEntity {
 
     public void updateApplicationPage4(ApplicationPage4Request request) {
         validateSubmitStatus();
-        this.availableInterviewTime = request.availableInterviewTime();
+        val availableInterviewTime1 = request.firstDay()
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(","));
+
+        val availableInterviewTime2 = request.secondDay()
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(","));
+
+        val availableInterviewTime3 = request.thirdDay()
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(","));
+        this.availableInterviewTime1 = availableInterviewTime1;
+        this.availableInterviewTime2 = availableInterviewTime2;
+        this.availableInterviewTime3 = availableInterviewTime3;
     }
 
     public void completeApplication() {
