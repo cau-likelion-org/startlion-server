@@ -12,7 +12,7 @@ public record ApplicationPage1Request(
         @NotNull(message = "성함은 필수 항목입니다.")
         @Schema(description = "성함", example = "홍길동") String name,
         @NotNull(message = "성별은 필수 항목입니다.")
-        @Schema(description = "성별", example = "M") Gender gender,
+        @Schema(description = "성별", example = "M/F") Gender gender,
         @NotNull(message = "학번은 필수 항목입니다.")
         @Schema(description = "학번", example = "20190315") String studentNumber,
         @NotNull(message = "전공은 필수 항목입니다.")
