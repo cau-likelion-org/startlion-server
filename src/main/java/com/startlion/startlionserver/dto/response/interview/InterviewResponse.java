@@ -1,7 +1,6 @@
 package com.startlion.startlionserver.dto.response.interview;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.startlion.startlionserver.domain.entity.GraduateInterview;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -18,7 +17,6 @@ public record InterviewResponse(
         @Schema(description = "인터뷰 목록 페이지에서 사용하는 섬네일 텍스트") String oneLineContent,
 
         @Schema(description = "인터뷰 대상자 imageUrl")
-        @JsonProperty("imgUrl")
         String imageUrl
 ) {
 
