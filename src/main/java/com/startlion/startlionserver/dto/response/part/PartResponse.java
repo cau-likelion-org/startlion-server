@@ -40,7 +40,7 @@ public record PartResponse(
                                   CommonQuestion commonQuestion
                                   ) {
         return PartResponse.builder()
-                .partName(part.getName())
+                .partName(part.getKoreanName())
                 .partContent(part.getPartContent())
                 .typeOfTalent(part.getTypeOfTalent())
                 .imageUrl(part.getImageUrl())
