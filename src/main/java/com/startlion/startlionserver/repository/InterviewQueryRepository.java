@@ -29,6 +29,14 @@ public class InterviewQueryRepository {
             return null;
         }
 
+        if (part == "ALL") {
+            return graduateInterview.part.eq(IntervieweePart.PM)
+                    .or(graduateInterview.part.eq(IntervieweePart.FE))
+                    .or(graduateInterview.part.eq(IntervieweePart.BE))
+                    .or(graduateInterview.part.eq(IntervieweePart.DESIGN))
+                    .or(graduateInterview.part.eq(IntervieweePart.DEV));
+        }
+
         return graduateInterview.part.eq(IntervieweePart.valueOf(part));
     }
 }

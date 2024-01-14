@@ -19,6 +19,8 @@ public class InterviewController implements InterviewApi {
 
     private final InterviewService interviewService;
 
+
+    // ALL, DEV, DESIGN, BE, FE, PM
     @GetMapping
     public ResponseEntity<List<InterviewResponse>> getInterviews(@RequestParam(required = false) String part) {
         val response = interviewService.getInterviews(part);

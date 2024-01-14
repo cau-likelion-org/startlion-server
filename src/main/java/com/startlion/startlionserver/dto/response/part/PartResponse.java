@@ -1,5 +1,6 @@
 package com.startlion.startlionserver.dto.response.part;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.startlion.startlionserver.domain.entity.CommonQuestion;
 import com.startlion.startlionserver.domain.entity.Curriculum;
 import com.startlion.startlionserver.domain.entity.Part;
@@ -21,6 +22,7 @@ public record PartResponse(
         @Schema(description = "파트 타입", example = "기획")
         String typeOfTalent,
         @Schema(description = "파트 이미지 url", example = "https://startlion.s3.ap-northeast-2.amazonaws.com/part/plan.png")
+        @JsonProperty("imgUrl")
         String imageUrl,
         @Schema(description = "커리큘럼 내용", example = "기획 파트는 기획을 합니다.")
         String curriculumContents,
