@@ -15,14 +15,15 @@ public class Part {
     @Column(nullable = false)
     private Long partId;
 
-    // BE FE DESIGN PLAN
+    // BE FE DESIGN PM
     @Column(nullable = false)
     private String name;
 
+    // 백엔드 프론트엔드 디자인 기획
     @Column(nullable = false)
     private String koreanName;
 
-    @Column(length = 200)
+    @Column(columnDefinition = "TEXT")
     private String partContent;
 
     @Column(length = 200)

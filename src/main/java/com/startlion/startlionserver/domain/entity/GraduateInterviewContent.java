@@ -18,10 +18,10 @@ public class GraduateInterviewContent {
     @JoinColumn(name = "interview_id")
     private GraduateInterview graduateInterview;
 
-    @Column(length = 400)
+    @Column(columnDefinition = "TEXT")
     private String question;
 
-    @Column(length = 400)
+    @Column(columnDefinition = "TEXT")
     private String answer;
 
     @Column

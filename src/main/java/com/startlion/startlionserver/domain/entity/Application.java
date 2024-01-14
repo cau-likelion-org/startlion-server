@@ -10,7 +10,8 @@ import org.springframework.util.Assert;
 import java.util.stream.Collectors;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)  @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Application extends BaseTimeEntity {
 
     private static final int DEFAULT_ANSWER_LIMIT = 700;
@@ -20,6 +21,9 @@ public class Application extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long applicationId;
 
+    /*
+    개인정보 이용 동의 여부 (필수)
+    */
     private boolean isPersonalInformationAgreed;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -100,9 +104,15 @@ public class Application extends BaseTimeEntity {
     private String availableInterviewTime2;
     private String availableInterviewTime3;
 
+    /*
+    알게 된 경로 (필수)
+    */
     @Enumerated(EnumType.STRING)
     private PathType pathToKnow;
 
+    /*
+    기타 선택했을 때, 알게 된 경로
+    */
     private String etcDetail;
 
     @Column(columnDefinition = "TEXT")

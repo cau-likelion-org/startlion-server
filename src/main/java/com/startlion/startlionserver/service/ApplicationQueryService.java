@@ -21,9 +21,6 @@ import static com.startlion.startlionserver.dto.response.question.CommonQuestion
 @Transactional(readOnly = true)
 public class ApplicationQueryService {
 
-    private static final int FIRST_DAY_LAST_INTERVIEW_INDEX = 11;
-    private static final int SECOND_DAY_LAST_INTERVIEW_INDEX = 23;
-
     private final ApplicationJpaRepository applicationJpaRepository;
     private final UserJpaRepository userJpaRepository;
     private final PartQuestionJpaRepository partQuestionJpaRepository;
