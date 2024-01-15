@@ -25,7 +25,7 @@ public class AuthApiController implements AuthApi {
     private final AuthValueConfig valueConfig;
 
     @Override
-    @GetMapping("/login")
+    @GetMapping("/sign-in")
     public ResponseEntity<Void> getGoogleAuthUrl(HttpServletResponse response) throws Exception {
 
         val reqUrl = valueConfig.getGoogleLoginUrl()

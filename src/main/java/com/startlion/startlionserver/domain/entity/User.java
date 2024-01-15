@@ -23,13 +23,14 @@ public class User extends BaseTimeEntity {
 
     private String password; // 단방향 암호화 필요
 
-    @Column(length = 30)
     private String username;
 
     private String socialId;
 
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
+    @Column(columnDefinition = "TEXT")
     private String refreshToken;
 
     private LocalDateTime expiredIn;
