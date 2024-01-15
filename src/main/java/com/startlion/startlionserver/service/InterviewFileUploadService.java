@@ -17,13 +17,13 @@ import java.util.UUID;
 public class InterviewFileUploadService {
 
     private final S3Service s3Service;
-    private final InterviewService interviewService;
+    private final GraduateInterviewService graduateInterviewService;
 
     public void uploadFile(MultipartFile file, Long interviewId) {
         try {
             val fileName = generateFileName();
             val imageUrl = s3Service.upload(fileName, file);
-            interviewService.updateInterviewImageUrl(interviewId, imageUrl);
+            graduateInterviewService.updateInterviewImageUrl(interviewId, imageUrl);
         } catch (RuntimeException | IOException e) {
             throw new RuntimeException("파일 업로드에 실패했습니다.");
         }

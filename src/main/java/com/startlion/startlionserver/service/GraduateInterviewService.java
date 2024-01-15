@@ -7,7 +7,6 @@ import com.startlion.startlionserver.dto.response.interview.InterviewResponse;
 import com.startlion.startlionserver.dto.response.interviewanswer.InterviewAnswerResponse;
 import com.startlion.startlionserver.repository.GraduateInterviewContentJpaRepository;
 import com.startlion.startlionserver.repository.GraduateInterviewJpaRepository;
-import com.startlion.startlionserver.repository.InterviewQueryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -15,20 +14,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class InterviewService {
+public class GraduateInterviewService {
 
     private final GraduateInterviewJpaRepository graduateInterviewJpaRepository;
     private final GraduateInterviewContentJpaRepository graduateInterviewContentJpaRepository;
-    private final InterviewQueryRepository interviewQueryRepository;
 
     public InterviewDetailResponse getInterviewById(Long interviewId) {
-        val interview = getById(interviewId);
-
+          val interview = getById(interviewId);
           val interviewAnswerResponses = graduateInterviewContentJpaRepository.findByGraduateInterview(interview)
                   .stream()
                   .map(InterviewAnswerResponse::of)
@@ -37,7 +35,7 @@ public class InterviewService {
     }
 
     public List<InterviewResponse> getInterviews(String part) {
-            if (part == "ALL") {
+            if (Objects.equals(part, "ALL")) {
                 return graduateInterviewJpaRepository.findAll().stream()
                         .map(InterviewResponse::of)
                         .collect(Collectors.toList());
