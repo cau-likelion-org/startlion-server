@@ -1,6 +1,7 @@
 package com.startlion.startlionserver.service;
 
 import com.startlion.startlionserver.domain.entity.GraduateInterview;
+import com.startlion.startlionserver.domain.enums.IntervieweePart;
 import com.startlion.startlionserver.dto.response.interview.InterviewDetailResponse;
 import com.startlion.startlionserver.dto.response.interview.InterviewResponse;
 import com.startlion.startlionserver.dto.response.interviewanswer.InterviewAnswerResponse;
@@ -40,10 +41,12 @@ public class InterviewService {
                 return graduateInterviewJpaRepository.findAll().stream()
                         .map(InterviewResponse::of)
                         .collect(Collectors.toList());
+            } else {
+                return graduateInterviewJpaRepository.findAllByPart(IntervieweePart.valueOf(part)).stream()
+                        .map(InterviewResponse::of)
+                        .collect(Collectors.toList());
             }
-            return interviewQueryRepository.findAllByPart(part).stream()
-                .map(InterviewResponse::of)
-                .collect(Collectors.toList());
+
     }
 
     @Transactional
