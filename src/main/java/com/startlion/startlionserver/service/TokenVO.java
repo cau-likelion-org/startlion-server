@@ -1,13 +1,13 @@
 package com.startlion.startlionserver.service;
 
 
+import lombok.Builder;
+
 public record TokenVO(
         String accessToken,
         String refreshToken
 ) {
-
-    public TokenVO(String accessToken, String refreshToken) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
+    public static TokenVO of(String accessToken, String refreshToken) {
+        return new TokenVO(accessToken, refreshToken);
     }
 }

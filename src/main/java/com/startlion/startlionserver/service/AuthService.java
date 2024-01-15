@@ -35,7 +35,7 @@ public class AuthService {
     @Transactional
     public OAuthResponse authenticateUser(String authCode) throws Exception {
 
-        GoogleOAuthRequest googleOAuthRequest = GoogleOAuthRequest
+        val googleOAuthRequest = GoogleOAuthRequest
                 .builder()
                 .clientId(valueConfig.getGoogleClientId())
                 .clientSecret(valueConfig.getGoogleClientSecret())
@@ -45,7 +45,6 @@ public class AuthService {
                 .build();
 
         RestTemplate restTemplate = new RestTemplate();
-
         ResponseEntity<GoogleLoginResponse> apiResponse = restTemplate.postForEntity(valueConfig.getGoogleAuthUrl() + "/token", googleOAuthRequest, GoogleLoginResponse.class);
 
         GoogleLoginResponse googleLoginResponse = apiResponse.getBody();
@@ -59,13 +58,15 @@ public class AuthService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(resultJson);
         val email = jsonNode.get("email").asText();
-        val socialId = "google";
-        val username = jsonNode.get("name").asText();
-        val imageUrl = jsonNode.get("picture").asText();
-        val newUser = User.create(email, username, socialId, imageUrl);
+
+        val newUser = User.create(
+                email,
+                jsonNode.get("name").asText(),
+                "google",
+                jsonNode.get("picture").asText());
 
         User user = userRepository.findByEmail(email).orElseGet(() -> userRepository.save(newUser));
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, null);
+        val authentication = new UsernamePasswordAuthenticationToken(user, null, null);
         val tokenVO = generateToken(authentication);
         user.updateRefreshToken(tokenVO.refreshToken());
         return OAuthResponse.of(tokenVO.accessToken(), tokenVO.refreshToken());
@@ -74,6 +75,6 @@ public class AuthService {
 private TokenVO generateToken(Authentication authentication){
         val accessToken = jwtTokenProvider.generateToken(authentication,ACCESS_TOKEN_EXPIRATION);
         val refreshToken = jwtTokenProvider.generateToken(authentication,REFRESH_TOKEN_EXPIRATION);
-        return new TokenVO(accessToken,refreshToken);
+        return TokenVO.of(accessToken, refreshToken);
         }
 }

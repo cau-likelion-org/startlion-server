@@ -12,7 +12,6 @@ public class Part {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     private Long partId;
 
     // BE FE DESIGN PM
@@ -26,7 +25,6 @@ public class Part {
     @Column(columnDefinition = "TEXT")
     private String partContent;
 
-    @Column(length = 200)
     private String typeOfTalent;
 
     @Column(columnDefinition = "TEXT")
