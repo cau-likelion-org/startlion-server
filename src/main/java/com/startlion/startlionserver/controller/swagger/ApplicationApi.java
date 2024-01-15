@@ -1,10 +1,12 @@
 package com.startlion.startlionserver.controller.swagger;
 
 import com.startlion.startlionserver.dto.request.application.*;
+import com.startlion.startlionserver.dto.response.ErrorResponse;
 import com.startlion.startlionserver.dto.response.application.ApplicationCreateResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,12 +31,14 @@ public interface ApplicationApi {
             @RequestBody ApplicationCreateRequest request,
             Principal principal);
 
-    @Operation(summary = "지원서 업데이트 1페이지")
+    @Operation(summary = "지원서 1페이지 정보를 저장합니다.")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "204", description = "지원서 저장하기 성공"),
                     @ApiResponse(responseCode = "403", description = "권한 없음", content = @Content),
-                    @ApiResponse(responseCode = "404", description = "지원서 정보 없음", content = @Content)
+                    @ApiResponse(responseCode = "404", description = "지원서 정보 없음", content = @Content),
+                    @ApiResponse(responseCode = "500", description = "알 수 없는 서버 에러", content = @Content(contentSchema = @Schema(implementation = ErrorResponse.class)
+                    ))
             }
     )
     ResponseEntity<Void> updateApplicationPage1(
