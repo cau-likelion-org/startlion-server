@@ -36,6 +36,11 @@ public class InterviewService {
     }
 
     public List<InterviewResponse> getInterviews(String part) {
+            if (part == "ALL") {
+                return graduateInterviewJpaRepository.findAll().stream()
+                        .map(InterviewResponse::of)
+                        .collect(Collectors.toList());
+            }
             return interviewQueryRepository.findAllByPart(part).stream()
                 .map(InterviewResponse::of)
                 .collect(Collectors.toList());
