@@ -1,0 +1,12 @@
+// get from http-client.private.env.json
+PATCH {{host}}/api/application/1/page3
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "commonAnswer1": "공통질문1",
+  "commonAnswer2": "공통질문2",
+  "commonAnswer3": "공통질문3",
+  "commonAnswer4": "공통질문4",
+  "commonAnswer5": "공통질문5"
+}

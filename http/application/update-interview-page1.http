@@ -1,0 +1,43 @@
+// get from http-client.private.env.json
+PATCH {{host}}/api/application/1/page4
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "firstDay": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "secondDay": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "thirdDay": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ]
+}

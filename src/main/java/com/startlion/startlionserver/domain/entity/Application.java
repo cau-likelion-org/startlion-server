@@ -211,7 +211,7 @@ public class Application extends BaseTimeEntity {
         this.studentNumber = request.studentNumber();
         this.isPersonalInformationAgreed = request.isAgreed();
 
-        if (ApplyPart.valueOf(request.part()) == ApplyPart.PLAN) {
+        if (ApplyPart.valueOf(request.part()) == ApplyPart.PM) {
             this.partAnswer1Limit = PLAN_PART_ANSWER_LIMIT;
             this.partAnswer2Limit = PLAN_PART_ANSWER_LIMIT;
             this.partAnswer3Limit = PLAN_PART_ANSWER_LIMIT;

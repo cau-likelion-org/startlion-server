@@ -1,0 +1,18 @@
+POST {{host}}/api/application
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "isAgreed": true,
+  "name": "홍길동",
+  "gender": "male/femail",
+  "studentNumber": "20190315",
+  "major": "소프트웨어학부",
+  "multiMajor": "수학",
+  "semester": "3-2",
+  "phone": "010-1234-5678",
+  "email": "puang@gmail.com",
+  "pathToKnow": "string",
+  "etcDetail": "인터넷 검색",
+  "part": "PM"
+}

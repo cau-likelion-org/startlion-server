@@ -10,6 +10,6 @@ public enum ApplyPart {
     BE("백엔드"),
     FE("프론트엔드"),
     DESIGN("디자인"),
-    PLAN("기획");
+    PM("기획");
     private final String name;
 }
