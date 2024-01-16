@@ -95,6 +95,7 @@ public class Application extends BaseTimeEntity {
     /*
     제출 상태
      */
+    @Enumerated(EnumType.STRING)
     private SubmitStatus status;
 
     /*
