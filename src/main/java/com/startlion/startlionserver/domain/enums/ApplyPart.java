@@ -12,4 +12,13 @@ public enum ApplyPart {
     DESIGN("디자인"),
     PM("기획");
     private final String name;
+
+    public static ApplyPart of(String name) {
+        for (ApplyPart applyPart : ApplyPart.values()) {
+            if (applyPart.name.equals(name)) {
+                return applyPart;
+            }
+        }
+        return DEFAULT;
+    }
 }

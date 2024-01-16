@@ -187,31 +187,31 @@ public class Application extends BaseTimeEntity {
                 .gender(Gender.DEFAULT)
                 .major(request.major())
                 .multiMajor(request.multiMajor())
-                .part(ApplyPart.valueOf(request.part()))
+                .part(ApplyPart.of(request.part()))
                 .name("")
                 .phone(request.phone())
-                .semester(Semester.valueOf(request.semester()))
+                .semester(Semester.of(request.semester()))
                 .studentNumber(null)
                 .user(user)
                 .generation(generation)
-                .pathToKnow(PathType.valueOf(request.pathToKnow()))
+                .pathToKnow(PathType.of(request.pathToKnow()))
                 .build();
     }
 
     public void updateApplicationPage1(ApplicationPage1Request request) {
         validateSubmitStatus();
         this.email = request.email();
-        this.gender = Gender.valueOf(request.gender());
+        this.gender = Gender.of(request.gender());
         this.major = request.major();
         this.multiMajor = request.multiMajor();
-        this.part = ApplyPart.valueOf(request.part());
+        this.part = ApplyPart.of(request.part());
         this.name = request.name();
         this.phone = request.phone();
-        this.semester = Semester.valueOf(request.semester());
+        this.semester = Semester.of(request.semester());
         this.studentNumber = request.studentNumber();
         this.isPersonalInformationAgreed = request.isAgreed();
 
-        if (ApplyPart.valueOf(request.part()) == ApplyPart.PM) {
+        if (ApplyPart.of(request.part()) == ApplyPart.PM) {
             this.partAnswer1Limit = PLAN_PART_ANSWER_LIMIT;
             this.partAnswer2Limit = PLAN_PART_ANSWER_LIMIT;
             this.partAnswer3Limit = PLAN_PART_ANSWER_LIMIT;

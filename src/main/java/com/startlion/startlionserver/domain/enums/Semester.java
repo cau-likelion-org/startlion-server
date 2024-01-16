@@ -22,4 +22,13 @@ public enum Semester {
 
     private final String name;
 
+    public static Semester of(String name) {
+        for (Semester semester : Semester.values()) {
+            if (semester.name.equals(name)) {
+                return semester;
+            }
+        }
+        return DEFAULT;
+    }
+
 }

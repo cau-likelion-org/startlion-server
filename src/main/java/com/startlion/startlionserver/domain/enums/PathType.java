@@ -14,4 +14,13 @@ public enum PathType {
     ETC("기타");
 
     private final String name;
+
+    public static PathType of(String name) {
+        for (PathType pathType : PathType.values()) {
+            if (pathType.name.equals(name)) {
+                return pathType;
+            }
+        }
+        return ETC;
+    }
 }
