@@ -66,7 +66,7 @@ public class AuthService {
                 jsonNode.get("picture").asText());
 
         User user = userRepository.findByEmail(email).orElseGet(() -> userRepository.save(newUser));
-        val authentication = new UsernamePasswordAuthenticationToken(user, null, null);
+        val authentication = new UsernamePasswordAuthenticationToken(user.getUserId(), null, null);
         val tokenVO = generateToken(authentication);
         user.updateRefreshToken(tokenVO.refreshToken());
         return OAuthResponse.of(tokenVO.accessToken(), tokenVO.refreshToken());

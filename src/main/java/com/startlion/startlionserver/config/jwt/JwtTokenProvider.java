@@ -1,6 +1,5 @@
 package com.startlion.startlionserver.config.jwt;
 
-import com.startlion.startlionserver.domain.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -31,22 +30,11 @@ public class JwtTokenProvider {
 
     public String generateToken(Authentication authentication, Long tokenExpirationTime) {
         final Date now = new Date();
-        User user = (User) authentication.getPrincipal();
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         // refreshToken을 제외한 필드만 가진 객체 생성
         Map<String, Object> claims = new HashMap<>();
-        claims.put("id", user.getUserId());
-        claims.put("createdAt", user.getCreatedAt().format(formatter));
-        claims.put("updatedAt", user.getUpdatedAt().format(formatter));
-        claims.put("userId", user.getUserId());
-        claims.put("email", user.getEmail());
-        claims.put("username", user.getUsername());
-        claims.put("socialId", user.getSocialId());
-        claims.put("imageUrl", user.getImageUrl());
-        claims.put("expiredIn", user.getExpiredIn());
-
+        claims.put("id", authentication.getPrincipal());
 
 
         return Jwts.builder()
