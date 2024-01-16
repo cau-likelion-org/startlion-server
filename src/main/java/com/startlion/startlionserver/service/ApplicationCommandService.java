@@ -3,7 +3,6 @@ package com.startlion.startlionserver.service;
 import com.startlion.startlionserver.domain.entity.Application;
 import com.startlion.startlionserver.dto.request.application.*;
 import com.startlion.startlionserver.dto.response.application.ApplicationCreateResponse;
-import com.startlion.startlionserver.global.exception.AccessDeniedException;
 import com.startlion.startlionserver.global.exception.PersonalInfoApproveException;
 import com.startlion.startlionserver.repository.ApplicationJpaRepository;
 import com.startlion.startlionserver.repository.UserJpaRepository;
@@ -36,7 +35,7 @@ public class ApplicationCommandService {
             throw new PersonalInfoApproveException("개인정보 수집 및 이용에 동의해주세요.");
         }
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
-        checkApplicationOwner(application, userId);
+        // checkApplicationOwner(application, userId);
         application.updateApplicationPage1(request);
     }
 
@@ -47,28 +46,28 @@ public class ApplicationCommandService {
 
     public void updateApplicationPage3(Long applicationId, ApplicationPage3Request request, final long userId) {
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
-        checkApplicationOwner(application, userId);
+        // checkApplicationOwner(application, userId);
         application.updateApplicationPage3(request);
     }
 
     public void updateApplicationPage4(Long applicationId, ApplicationPage4Request request, final long userId) {
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
-        checkApplicationOwner(application, userId);
+        // checkApplicationOwner(application, userId);
         application.updateApplicationPage4(request);
     }
 
     public void submitApplication(Long applicationId, long userId) {
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
-        checkApplicationOwner(application, userId);
+        // checkApplicationOwner(application, userId);
         application.completeApplication();
     }
 
     // 본인의 지원서인지 체크
-    private void checkApplicationOwner(final Application application, final long userId){
-        val user =  userJpaRepository.findByIdOrThrow(userId);
-        if (user.equals(application.getUser())) {
-            throw new AccessDeniedException("해당 지원서의 소유자가 아닙니다.");
-        }
-    }
+//    private void checkApplicationOwner(final Application application, final long userId){
+//        val user =  userJpaRepository.findByIdOrThrow(userId);
+//        if (user.equals(application.getUser())) {
+//            throw new AccessDeniedException("해당 지원서의 소유자가 아닙니다.");
+//        }
+//    }
 
 }
