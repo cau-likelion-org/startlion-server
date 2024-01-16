@@ -1,11 +1,12 @@
 package com.startlion.startlionserver.service;
 
 
-import com.startlion.startlionserver.domain.entity.Application;
 import com.startlion.startlionserver.dto.response.application.*;
 import com.startlion.startlionserver.dto.response.partQuestion.PartQuestionResponse;
-import com.startlion.startlionserver.global.exception.AccessDeniedException;
-import com.startlion.startlionserver.repository.*;
+import com.startlion.startlionserver.repository.ApplicationJpaRepository;
+import com.startlion.startlionserver.repository.CommonQuestionJpaRepository;
+import com.startlion.startlionserver.repository.PartQuestionJpaRepository;
+import com.startlion.startlionserver.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,25 +32,25 @@ public class ApplicationQueryService {
 
     public ApplicationPage1Response getApplicationPage1(Long applicationId, Long userId) {
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
-        checkApplicationOwner(application, userId);
+       // checkApplicationOwner(application, userId);
         return ApplicationPage1Response.of(application);
     }
 
     public ApplicationPage2Response getApplicationPage2(Long applicationId, Long userId) {
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
-        checkApplicationOwner(application, userId);
+        //checkApplicationOwner(application, userId);
         return ApplicationPage2Response.of(application);
     }
 
     public ApplicationPage3Response getApplicationPage3(Long applicationId, Long userId) {
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
-        checkApplicationOwner(application, userId);
+       // checkApplicationOwner(application, userId);
         return ApplicationPage3Response.of(application);
     }
 
     public ApplicationPage4Response getApplicationPage4(Long applicationId, Long userId) {
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
-        checkApplicationOwner(application, userId);
+        //checkApplicationOwner(application, userId);
         val firstDays = List.of(application.getAvailableInterviewTime1().split(","));
         val secondDays = List.of(application.getAvailableInterviewTime2().split(","));
         val thirdDays =  List.of(application.getAvailableInterviewTime3().split(","));
@@ -58,7 +59,7 @@ public class ApplicationQueryService {
 
     public ApplicationGetResponse getApplication(Long applicationId, Long userId) {
         val application = applicationJpaRepository.findByIdOrThrow(applicationId);
-        checkApplicationOwner(application, userId);
+      //  checkApplicationOwner(application, userId);
         val partQuestion = partQuestionJpaRepository.findByPartAndGenerationOrThrow(application.getPart().toString(), currentGeneration);
         val commonQuestion = commonQuestionRepository.findByGenerationOrThrow(currentGeneration);
 
@@ -76,10 +77,10 @@ public class ApplicationQueryService {
         return ApplicationsGetResponse.of(applyApplicationsResponse);
     }
 
-    private void checkApplicationOwner(Application application, Long userId){
-        val user =  userJpaRepository.findByIdOrThrow(userId);
-        if (user.equals(application.getUser())) {
-            throw new AccessDeniedException("해당 지원서의 소유자가 아닙니다.");
-        }
-    }
+//    private void checkApplicationOwner(Application application, Long userId){
+//        val user =  userJpaRepository.findByIdOrThrow(userId);
+//        if (userId.equals(application.getUser().getUserId())) {
+//            throw new AccessDeniedException("해당 지원서의 소유자가 아닙니다.");
+//        }
+//    }
 }
