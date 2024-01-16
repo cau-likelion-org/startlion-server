@@ -45,7 +45,8 @@ public class AuthService {
                 .build();
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<GoogleLoginResponse> apiResponse = restTemplate.postForEntity(valueConfig.getGoogleAuthUrl() + "/token", googleOAuthRequest, GoogleLoginResponse.class);
+        ResponseEntity<GoogleLoginResponse> apiResponse = restTemplate.postForEntity(
+                valueConfig.getGoogleAuthUrl() + "/token", googleOAuthRequest, GoogleLoginResponse.class);
 
         GoogleLoginResponse googleLoginResponse = apiResponse.getBody();
 
@@ -58,14 +59,22 @@ public class AuthService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(resultJson);
         val email = jsonNode.get("email").asText();
+        final boolean isExistUser = userRepository.existsByEmail(email);
 
-        val newUser = User.create(
-                email,
-                jsonNode.get("name").asText(),
-                "google",
-                jsonNode.get("picture").asText());
+        if (!isExistUser) {
+            val newUser = User.create(
+                    email,
+                    jsonNode.get("name").asText(),
+                    "google",
+                    jsonNode.get("picture").asText());
+            userRepository.save(newUser);
+            val authentication = new UsernamePasswordAuthenticationToken(newUser.getUserId(), null, null);
+            val tokenVO = generateToken(authentication);
+            newUser.updateRefreshToken(tokenVO.refreshToken());
+            return OAuthResponse.of(tokenVO.accessToken(), tokenVO.refreshToken());
+        }
 
-        User user = userRepository.findByEmail(email).orElseGet(() -> userRepository.save(newUser));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new Exception("존재하지 않는 유저입니다."));
         val authentication = new UsernamePasswordAuthenticationToken(user.getUserId(), null, null);
         val tokenVO = generateToken(authentication);
         user.updateRefreshToken(tokenVO.refreshToken());

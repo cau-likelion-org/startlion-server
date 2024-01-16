@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface UserJpaRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
+    boolean existsByEmail(String email);
 
     default User findByIdOrThrow(long id) {
         return findById(id).orElseThrow(() -> new UnauthorizedException("인증되지 않은 유저입니다."));
